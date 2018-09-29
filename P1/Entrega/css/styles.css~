@@ -18,6 +18,20 @@ div {
   padding: 0;
 }
 
+div form input[type=search] {
+  color: rgb(169,169,169);
+  width: 35%;
+}
+
+div form input[type=submit] {
+  width: 6%;
+  text-align: center;
+}
+
+div form select {
+  width: 56.4%;
+}
+
 div ul {
   float: left;
   margin: 0;
@@ -96,6 +110,13 @@ div ul li p {
   width: 75%;
   margin: 0;
   padding: 0;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+.filmPic {
+  height: 33%;
+  width: 24.2%;
 }
 
 .foot {

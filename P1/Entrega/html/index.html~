@@ -31,6 +31,31 @@
 
     <!-- Pagina actual -->
     <div class="content">
+      <form>
+        <input type="search" name="SearchFilm" value="Search Film" onfocus="this.value=''">
+        <input type="submit" value="Go">
+        <select name="CategorySearch">
+        <option selected value="0">Select a category</option>
+        <option value="1">Action</option>
+        <option value="2">Adventure</option>
+        <option value="3">Animation</option>
+        <option value="4">Comedy</option>
+        <option value="5">Crime</option>
+        <option value="6">Drama</option>
+        <option value="7">Family</option>
+        <option value="8">Fantasy</option>
+        <option value="9">History</option>
+        <option value="10">Horror</option>
+        <option value="11">Music</option>
+        <option value="12">Mistery</option>
+        <option value="13">Romance</option>
+        <option value="14">Sci-Fi</option>
+        <option value="15">Sport</option>
+        <option value="16">Superhero</option>
+        <option value="17">Thriller</option>
+        <option value="18">War</option>
+      </select>
+      </form>
       <img class="filmPic" src="../pics/goldfinger.jpg" alt="goldfinger">
       <img class="filmPic" src="../pics/IT.jpg" alt="IT2">
       <img class="filmPic" src="../pics/avatar.jpg" alt="avatar">
@@ -41,6 +66,15 @@
       <img class="filmPic" src="../pics/shutterisland.jpg" alt="shutterisland">
       <img class="filmPic" src="../pics/starwars.jpg" alt="starwars">
       <img class="filmPic" src="../pics/theincredibles2.jpg" alt="theincredibles2">
+      <img class="filmPic" src="../pics/celda211.jpg" alt="celda211">
+      <img class="filmPic" src="../pics/dunkerque.jpg" alt="dunkerque">
+      <img class="filmPic" src="../pics/ellobo.jpg" alt="ellobo">
+      <img class="filmPic" src="../pics/grantorino.jpg" alt="grantorino">
+      <img class="filmPic" src="../pics/infiltrados.jpg" alt="infiltrados">
+      <img class="filmPic" src="../pics/interestelar.jpg" alt="infiltrados">
+      <img class="filmPic" src="../pics/malditosbastardos.jpg" alt="malditosbastardos">
+      <img class="filmPic" src="../pics/origen.jpg" alt="origen">
+      <img class="filmPic" src="../pics/toystory3.jpg" alt="toystory3">
     </div>
     
     <!-- Pie de pagina-->
