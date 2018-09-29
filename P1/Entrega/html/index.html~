@@ -8,7 +8,7 @@
     <!-- Barra de menu -->
     <div class="upperBar">
       <a class="logoButton" href=index.html>
-        <img src="../pics/logo.png" alt="logo">
+        <img class="logoButton" src="../pics/logo.png" alt="logo">
       </a>
       <a class="buttonTop" href="index.html">My cart</a>
       <a class="buttonTop" href="register.html">Register</a>
@@ -18,25 +18,24 @@
     <!-- Barra lateral -->
     <div class="sideList">
       <ul>
-        <li>2019</li>
-        <li>2018</li>
-        <li>2017</li>
-        <li>2016</li>
-        <li>2015</li>
-        <li>2014</li>
-        <li>2013</li>
-        <li>2012 and before</li>
+        <li><p>2019</p></li>
+        <li><p>2018</p></li>
+        <li><p>2017</p></li>
+        <li><p>2016</p></li>
+        <li><p>2015</p></li>
+        <li><p>2014</p></li>
+        <li><p>2013</p></li>
+        <li><p>2012 and before</p></li>
       </ul>
     </div>
 
     <!-- Pagina actual -->
     <div class="content">
-      <p>Contenido</p>
     </div>
     
     <!-- Pie de pagina-->
     <div class="foot">
-      <p><span class="left">Your trusted online film shop </span><span class="right">&copy;2018/2019</span></p>
+      <p>Your trusted online film shop &copy;2018/2019</p>
     </div>
   </body>
 </html>

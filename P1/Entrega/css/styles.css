@@ -31,19 +31,16 @@ div ul li {
   text-align: center;
   float: left;
   margin: 0;
-  width: 99%;
-  height: 12.5%;
+  width: 100%;
+  height: 12.23%;
   position: relative;
+  border-style: solid;
+  border-width: thin;
 }
 
-span.right {
-  display: block;
-  float: right;
-}
-
-span.left {
-  display: block;
-  float: left;
+div ul li p {
+  vertical-align: middle;
+  font-size: 24px;
 }
 
 /*classes*/
@@ -63,7 +60,9 @@ span.left {
   background-color: rgb(255, 255, 255);
   border: none;
   color: red;
-  padding: 1% 1%;
+  width: 90px;
+  height: 18px;
+  margin: 10px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
@@ -74,14 +73,14 @@ span.left {
 
 .logoButton {
   float: left;
-  width: 40%;
+  width: 400px;
   height: 100%;
 }
 
 .sideList {
   background-color: red;
-  width: 30%;
-  height: 79%;
+  width: 25%;
+  height: 77%;
   float: left;
   position: relative;
   min-height: 600px;
@@ -92,18 +91,20 @@ span.left {
 .content {
   background-color: rgb(32,32,32);
   float: right;
-  height: 79%;
+  height: 77%;
   min-height: 600px;
-  width: 70%;
+  width: 75%;
   margin: 0;
   padding: 0;
 }
 
 .foot {
-  background-color: rgb(0, 0, 0);
+  background-color: black;
+  text-align: center;
   float: bottom;
+  position: absolute;
+  bottom: 0;
   width: 100%;
-  height: 3%;
   color: red;
   margin: 0;
   padding: 0;
