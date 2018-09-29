@@ -28,7 +28,7 @@ div form input[type=submit] {
   text-align: center;
 }
 
-div select {
+div form select {
   width: 56.2%;
 }
 
@@ -63,7 +63,7 @@ div ul li p {
   float: top;
   width: 100%;
   height: 18%;
-  min-height: 100px;
+  min-height: 130px;
   list-style-type: none;
   overflow: hidden;
   margin: 0;
@@ -119,6 +119,12 @@ div ul li p {
   width: 24.2%;
 }
 
+.loggedText {
+  color: white;
+  text-align: right;
+  margin-right: 50px;
+}
+
 .foot {
   background-color: black;
   text-align: center;
@@ -129,4 +135,42 @@ div ul li p {
   color: red;
   margin: 0;
   padding: 0;
+}
+
+.detailPic {
+  margin-left: 10%;
+  margin-top: 5%;
+  height: 70%;
+  width: 40%;
+  float: left;
+}
+
+.detailInfo {
+  background-color: black;
+  color: red;
+  margin-right: 10%;
+  margin-top: 5%;
+  height: 70%;
+  width: 40%;
+  float: right;
+}
+
+.info {
+  margin-left: 20px;
+}
+
+.buttonDown {
+  background-color: rgb(255, 255, 255);
+  border: none;
+  color: red;
+  width: 90px;
+  height: 18px;
+  margin-right: 10%;
+  margin-top: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 12px;
+  float: right;
 }
