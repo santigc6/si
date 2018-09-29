@@ -28,7 +28,7 @@ div form input[type=submit] {
   text-align: center;
 }
 
-div form select {
+div select {
   width: 56.2%;
 }
 
@@ -115,7 +115,7 @@ div ul li p {
 }
 
 .filmPic {
-  height: 33%;
+  height: 32%;
   width: 24.2%;
 }
 
