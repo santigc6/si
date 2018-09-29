@@ -6,27 +6,37 @@
 
   <body>
     <!-- Barra de menu -->
-    <header>
-      <ul>
-        <li>
-          <a href=index.html>
-            <img src="../pics/logo.png" alt="logo" style="width:250px;height:50px;border:0;">
-          </a>
-        </li>
-        <li><a href="#home">My cart</a></li>
-        <li><a href="#news">Register</a></li>
-        <li><a href="#contact">Sign in</a></li>
-      </ul>
-    </header>
+    <div class="upperBar">
+      <a class="logoButton" href=index.html>
+        <img src="../pics/logo.png" alt="logo">
+      </a>
+      <a class="buttonTop" href="index.html">My cart</a>
+      <a class="buttonTop" href="register.html">Register</a>
+      <a class="buttonTop" href="index.html">Sign in</a>
+    </div>
 
     <!-- Barra lateral -->
-    <aside>
-      
-    </aside>
+    <div class="sideList">
+      <ul>
+        <li>2019</li>
+        <li>2018</li>
+        <li>2017</li>
+        <li>2016</li>
+        <li>2015</li>
+        <li>2014</li>
+        <li>2013</li>
+        <li>2012 and before</li>
+      </ul>
+    </div>
 
     <!-- Pagina actual -->
-    <iframe src="">
-      
-    </iframe>
+    <div class="content">
+      <p>Contenido</p>
+    </div>
+    
+    <!-- Pie de pagina-->
+    <div class="foot">
+      <p><span class="left">Your trusted online film shop </span><span class="right">&copy;2018/2019</span></p>
+    </div>
   </body>
 </html>
