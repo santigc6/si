@@ -29,7 +29,7 @@ div form input[type=submit] {
 }
 
 div form select {
-  width: 56.4%;
+  width: 56.2%;
 }
 
 div ul {
