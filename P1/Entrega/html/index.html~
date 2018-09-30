@@ -14,6 +14,7 @@
       <a class="buttonTop" href="index.html">My cart</a>
       <a class="buttonTop" href="register.html">Register</a>
       <a class="buttonTop" href="index.html">Sign in</a>
+      <a class="buttonTopExt" href="register.html">Shopping history</a>
     </div>
 
     <!-- Barra lateral -->

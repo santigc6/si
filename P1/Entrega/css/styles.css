@@ -57,6 +57,10 @@ div ul li p {
   font-size: 24px;
 }
 
+table th {
+  font-weight: bold;
+}
+
 input[type=text], select, textarea {
   width: 95%;
   padding: 12px;
@@ -95,6 +99,21 @@ label {
   color: red;
   width: 90px;
   height: 18px;
+  margin: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 12px;
+  float: right;
+}
+
+.buttonTopExt {
+  background-color: rgb(255, 255, 255);
+  border: none;
+  color: red;
+  width: 90px;
+  height: 36px;
   margin: 10px;
   text-align: center;
   text-decoration: none;
@@ -145,15 +164,13 @@ label {
 }
 
 .foot {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
   background-color: black;
   text-align: center;
-  float: bottom;
-  position: absolute;
-  bottom: 0;
-  width: 100%;
   color: red;
-  margin: 0;
-  padding: 0;
 }
 
 .detailPic {
@@ -192,6 +209,22 @@ label {
   font-size: 16px;
   border-radius: 12px;
   float: right;
+}
+
+.title {
+  font-size: 42px;
+  color: white;
+  text-align: center;
+}
+
+.shoppingHist {
+  font-size: 36px;
+  background-color: black;
+  color: red;
+  margin-left: auto;
+  margin-right: auto;
+  border-collapse: separate;
+  border-spacing: 20px 0;
 }
 
 .width-25 {
