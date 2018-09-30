@@ -33,7 +33,7 @@
     <!-- Pagina actual -->
     <div class="content">
       <p class="title">Purchase history.</p>
-      <table class="shoppingHist">
+      <table>
         <tr>
           <th>Film</th>
           <th>Price</th>

@@ -57,6 +57,10 @@ div ul li p {
   font-size: 24px;
 }
 
+table th {
+  font-weight: bold;
+}
+
 /*classes*/
 .upperBar {
   background-color: rgb(0, 0, 0);
@@ -76,6 +80,21 @@ div ul li p {
   color: red;
   width: 90px;
   height: 18px;
+  margin: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 12px;
+  float: right;
+}
+
+.buttonTopExt {
+  background-color: rgb(255, 255, 255);
+  border: none;
+  color: red;
+  width: 90px;
+  height: 36px;
   margin: 10px;
   text-align: center;
   text-decoration: none;
@@ -171,4 +190,20 @@ div ul li p {
   font-size: 16px;
   border-radius: 12px;
   float: right;
+}
+
+.title {
+  font-size: 42px;
+  color: white;
+  text-align: center;
+}
+
+.shoppingHist {
+  font-size: 36px;
+  background-color: black;
+  color: red;
+  margin-left: auto;
+  margin-right: auto;
+  border-collapse: separate;
+  border-spacing: 50px 0;
 }
