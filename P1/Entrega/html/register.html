@@ -32,13 +32,43 @@
 
     <!-- Pagina actual -->
     <div class="content">
-      <ul>
-        <p>Username: <input type="search" name="Username" value="Username" onfocus="this.value=''"></p>
-        <p>Password: <input type="search" name="Password" value="Password" onfocus="this.value=''"></p>
-        <p>E-mail: <input type="search" name="E-mail" value="E-mail" onfocus="this.value=''"></p>
-        <p>Credit card: <input type="search" name="Credit card" value="Credit card" onfocus="this.value=''"></p>
-        <a class="buttonTop" href="index.html">Confirm</a>
-      </ul>
+      <form action="index.html">
+        <div class="row">
+          <div class="width-25">
+            <label for="Username">Username:</label>
+          </div>
+          <div class="width-75">
+            <input type="text" name="Username" value="Username" onfocus="this.value=''">
+          </div>
+        </div>
+        <div class="row">
+          <div class="width-25">
+            <label for="Password">Password:</label>
+          </div>
+          <div class="width-75">
+            <input type="text" name="Password" value="Password" onfocus="this.value=''">
+          </div>
+        </div>
+        <div class="row">
+          <div class="width-25">
+            <label for="E-mail">E-mail:</label>
+          </div>
+          <div class="width-75">
+            <input type="text" name="E-mail" value="E-mail" onfocus="this.value=''">
+          </div>
+        </div>
+        <div class="row">
+          <div class="width-25">
+            <label for="Credit card">Credit card:</label>
+          </div>
+          <div class="width-75">
+            <input type="text" name="Credit card" value="Credit card" onfocus="this.value=''">
+          </div>
+        </div>
+        <div class="row">
+          <input type="submit" value="Confirm">
+        </div>
+      </form>
     </div>
     
     <!-- Pie de pagina-->
