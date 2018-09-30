@@ -126,15 +126,13 @@ div ul li p {
 }
 
 .foot {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
   background-color: black;
   text-align: center;
-  float: bottom;
-  position: absolute;
-  bottom: 0;
-  width: 100%;
   color: red;
-  margin: 0;
-  padding: 0;
 }
 
 .detailPic {

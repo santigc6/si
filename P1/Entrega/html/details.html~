@@ -45,7 +45,9 @@
     
     <!-- Pie de pagina-->
     <div class="foot">
-      <p>Your trusted online film shop &copy;2018/2019</p>
+      <footer class="foot">
+        <p>Your trusted online film shop &copy;2018/2019</p>
+      </footer>
     </div>
   </body>
 </html>
