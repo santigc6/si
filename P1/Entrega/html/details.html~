@@ -8,12 +8,12 @@
   <body>
     <!-- Barra de menu -->
     <div class="upperBar">
-      <a class="logoButton" href=index.html>
+      <a class="logoButton" href=../index.html>
         <img class="logoButton" src="../pics/logo.png" alt="logo">
       </a>
       <p class="loggedText">Logged as user13</p>
-      <a class="buttonTop" href="index.html">My cart</a>
-      <a class="buttonTop" href="index.html">Log out</a>
+      <a class="buttonTop" href="../index.html">My cart</a>
+      <a class="buttonTop" href="../index.html">Log out</a>
     </div>
 
     <!-- Barra lateral -->
@@ -40,14 +40,12 @@
         <p class="info"><b>Acquired: </b>No.</p>
         <p class="info"><b>Categories: </b>Action, adventure, Sci-Fi.</p>
       </div>
-      <a class="buttonDown" href="index.html">Add to cart</a>
+      <a class="buttonDown" href="../index.html">Add to cart</a>
     </div>
     
     <!-- Pie de pagina-->
     <div class="foot">
-      <footer class="foot">
-        <p>Your trusted online film shop &copy;2018/2019</p>
-      </footer>
+      <p>Your trusted online film shop &copy;2018/2019</p>
     </div>
   </body>
 </html>

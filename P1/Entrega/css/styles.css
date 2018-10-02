@@ -23,6 +23,11 @@ div form input[type=search] {
   width: 35%;
 }
 
+div form input[type=text] {
+  color: rgb(169,169,169);
+  width: 35%;
+}
+
 div form input[type=submit] {
   width: 6%;
   text-align: center;
@@ -215,11 +220,12 @@ label {
 }
 
 .register {
+  display: block;
   margin: 10% 30%;
 }
 
 .registerLabel {
-  font-size: 85%;
+  font-size: 100%;
 }
 
 .registerInput {
@@ -228,6 +234,7 @@ label {
 
 .registerSubmit {
   background-color: rgb(255, 255, 255);
+  text-align: center;
   border: none;
   color: red;
   width: 60px;
@@ -237,17 +244,5 @@ label {
   font-size: 16px;
   border-radius: 12px;
   float: right;
-  padding: 0px 60px 0px 0px;
+  padding: 0px 85px 0px 30px;
 }
-
-/*.width-25 {
-  float: left;
-  width: 25%;
-  margin-top: 6px;
-}
-
-.width-75 {
-  float: left;
-  width: 75%;
-  margin-top: 6px;
-}*/
