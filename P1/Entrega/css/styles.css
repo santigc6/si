@@ -61,19 +61,6 @@ table th {
   font-weight: bold;
 }
 
-input[type=text], select, textarea {
-  width: 95%;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  resize: vertical;
-}
-
-input[type=submit] {
-  margin: 10px;
-  float: right;
-}
-
 label {
   padding: 12px 12px 12px 12px;
   display: inline-block;
@@ -227,7 +214,33 @@ label {
   border-spacing: 20px 0;
 }
 
-.width-25 {
+.register {
+  margin: 10% 30%;
+}
+
+.registerLabel {
+  font-size: 85%;
+}
+
+.registerInput {
+  float: right;
+}
+
+.registerSubmit {
+  background-color: rgb(255, 255, 255);
+  border: none;
+  color: red;
+  width: 60px;
+  height: 18px;
+  margin: 10px;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 12px;
+  float: right;
+  padding: 0px 60px 0px 0px;
+}
+
+/*.width-25 {
   float: left;
   width: 25%;
   margin-top: 6px;
@@ -237,4 +250,4 @@ label {
   float: left;
   width: 75%;
   margin-top: 6px;
-}
+}*/
