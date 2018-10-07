@@ -1,24 +1,175 @@
 {
   "peliculas": [
     {
-      "titulo": "La guerra de las galaxias: Episodio 1-La amenaza fantasma",
-      "poster": "imagenes/guerraepisodio1.jpg",
+      "titulo": "Avatar",
+      "poster": "/pics/avatar.jpg",
+      "director": "James Cameron",
+      "precio": 18.99,
+      "categoria": "Aventura",
+      "anno": 1999,
+      "actores": []
+    },
+    {
+      "titulo": "Celda 211",
+      "poster": "/pics/celda211.jpg",
+      "director": "George Lucas",
+      "precio": 12.99,
+      "categoria": "Accion",
+      "anno": 2001,
+      "actores": []
+    },
+    {
+      "titulo": "Dunkerque",
+      "poster": "/pics/dunkerque.jpg",
       "director": "George Lucas",
       "precio": 18.99,
       "categoria": "Aventura",
       "anno": 1999,
-      "actores": [
-        {
-          "nombre": "Jake Lloyd",
-          "personaje": "Anakin Skywalker",
-          "foto": "imagenes/anakin.jpg"
-        },
-        {
-          "nombre": "Ewan McGregor",
-          "personaje": "Obi-Wan Kenobi",
-          "foto": "imagenes/kenobi.jpg"
-        }
-      ]
+      "actores": []
+    },
+    {
+      "titulo": "El caballero oscuro",
+      "poster": "/pics/elcaballerooscuro.jpg",
+      "director": "George Lucas",
+      "precio": 18.99,
+      "categoria": "Aventura",
+      "anno": 1999,
+      "actores": []
+    },
+    {
+      "titulo": "El lobo de Wall Street",
+      "poster": "/pics/ellobo.jpg",
+      "director": "George Lucas",
+      "precio": 18.99,
+      "categoria": "Aventura",
+      "anno": 1999,
+      "actores": []
+    },
+    {
+      "titulo": "Animales Fantasticos y donde encontrarlos",
+      "poster": "/pics/fantasticbeasts.jpg",
+      "director": "George Lucas",
+      "precio": 18.99,
+      "categoria": "Aventura",
+      "anno": 1999,
+      "actores": []
+    },
+    {
+      "titulo": "Goldfinger",
+      "poster": "/pics/goldfinger.jpg",
+      "director": "George Lucas",
+      "precio": 18.99,
+      "categoria": "Aventura",
+      "anno": 1999,
+      "actores": []
+    },
+    {
+      "titulo": "El gran torino",
+      "poster": "/pics/grantorino.jpg",
+      "director": "George Lucas",
+      "precio": 18.99,
+      "categoria": "Aventura",
+      "anno": 1999,
+      "actores": []
+    },
+    {
+      "titulo": "Infiltrados",
+      "poster": "/pics/infiltrados.jpg",
+      "director": "George Lucas",
+      "precio": 18.99,
+      "categoria": "Aventura",
+      "anno": 1999,
+      "actores": []
+    },
+    {
+      "titulo": "Interestelar",
+      "poster": "/pics/interestelar.jpg",
+      "director": "George Lucas",
+      "precio": 18.99,
+      "categoria": "Aventura",
+      "anno": 1999,
+      "actores": []
+    },
+    {
+      "titulo": "IT",
+      "poster": "/pics/IT.jpg",
+      "director": "George Lucas",
+      "precio": 18.99,
+      "categoria": "Aventura",
+      "anno": 1999,
+      "actores": []
+    },
+    {
+      "titulo": "La sirenita",
+      "poster": "/pics/lasirenita.jpg",
+      "director": "George Lucas",
+      "precio": 18.99,
+      "categoria": "Aventura",
+      "anno": 1999,
+      "actores": []
+    },
+    {
+      "titulo": "El señor de los anillos: La comunidad del anillo",
+      "poster": "/pics/lorfor.jpg",
+      "director": "George Lucas",
+      "precio": 18.99,
+      "categoria": "Aventura",
+      "anno": 1999,
+      "actores": []
+    },
+    {
+      "titulo": "Malditos bastardos",
+      "poster": "/pics/malditosbastardos.jpg",
+      "director": "George Lucas",
+      "precio": 18.99,
+      "categoria": "Aventura",
+      "anno": 1999,
+      "actores": []
+    },
+    {
+      "titulo": "Origen",
+      "poster": "/pics/origen.jpg",
+      "director": "George Lucas",
+      "precio": 18.99,
+      "categoria": "Aventura",
+      "anno": 1999,
+      "actores": []
+    },
+    {
+      "titulo": "Shutter island",
+      "poster": "/pics/shutterisland.jpg",
+      "director": "George Lucas",
+      "precio": 18.99,
+      "categoria": "Aventura",
+      "anno": 1999,
+      "actores": []
+    },
+    {
+      "titulo": "Star Wars: El despertar de la fuerza",
+      "poster": "/pics/starwars.jpg",
+      "director": "George Lucas",
+      "precio": 18.99,
+      "categoria": "Aventura",
+      "anno": 1999,
+      "actores": []
+    },
+    {
+      "titulo": "Los increibles 2",
+      "poster": "/pics/theincredibles2.jpg",
+      "director": "George Lucas",
+      "precio": 18.99,
+      "categoria": "Aventura",
+      "anno": 1999,
+      "actores": []
+    },
+    {
+      "titulo": "Toy Story 3",
+      "poster": "/pics/toystory3.jpg",
+      "director": "George Lucas",
+      "precio": 18.99,
+      "categoria": "Aventura",
+      "anno": 1999,
+      "actores": []
     }
   ]
 }
