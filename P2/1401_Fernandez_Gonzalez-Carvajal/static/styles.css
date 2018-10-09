@@ -19,12 +19,12 @@ div {
 }
 
 div form input[type=search] {
-  color: rgb(169,169,169);
+  color: black;
   width: 35%;
 }
 
 div form input[type=text] {
-  color: rgb(169,169,169);
+  color: black;
   width: 35%;
 }
 

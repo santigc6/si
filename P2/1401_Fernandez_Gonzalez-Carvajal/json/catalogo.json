@@ -5,7 +5,7 @@
       "poster": "avatar.jpg",
       "director": "James Cameron",
       "precio": 18.99,
-      "categoria": "Aventura",
+      "categoria": "Adventure",
       "anno": 1999,
       "actores": []
     },
@@ -14,7 +14,7 @@
       "poster": "celda211.jpg",
       "director": "George Lucas",
       "precio": 12.99,
-      "categoria": "Accion",
+      "categoria": "Action",
       "anno": 2001,
       "actores": []
     },
@@ -22,9 +22,9 @@
       "titulo": "Dunkerque",
       "poster": "dunkerque.jpg",
       "director": "George Lucas",
-      "precio": 18.99,
+      "precio": 20.99,
       "categoria": "Aventura",
-      "anno": 1999,
+      "anno": 2018,
       "actores": []
     },
     {
