@@ -9,12 +9,12 @@
   <body>
     <!-- Barra de menu -->
     <div class="upperBar">
-      <a class="logoButton" href="index.html">
+      <a class="logoButton" href="{{ url_for('index') }}">
         <img class="logoButton" src="{{ url_for('static', filename='logo.png') }}" alt="logo">
       </a>
-      <a class="buttonTop" href="index.html">My cart</a>
+      <a class="buttonTop" href="{{ url_for('index') }}">My cart</a>
       <a class="buttonTop" href="../html/register.html">Register</a>
-      <a class="buttonTop" href="index.html">Sign in</a>
+      <a class="buttonTop" href="{{ url_for('index') }}">Sign in</a>
       <a class="buttonTopExt" href="../html/shoppingHistory.html">Shopping history</a>
     </div>
 

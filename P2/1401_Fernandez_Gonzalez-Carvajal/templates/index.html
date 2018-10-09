@@ -2,7 +2,7 @@
 
 {% block content %}
       <div class ="row">
-        <form action="filters" method="POST">
+        <form action="{{ url_for('filter') }}" method="POST">
           <input type="search" name="SearchFilm" value="Search Film" onfocus="this.value='';">
           <input type="submit" value="Go">
           <select name="CategorySearch">
@@ -29,7 +29,7 @@
         </form>
       </div>
       {% for pelicula in peliculas %}
-      <a href="details/{{ pelicula.titulo }}">
+      <a href="{{ url_for('details', pelicula='') }}{{ pelicula.titulo }}">
         <img class="filmPic" src="{{ url_for('static', filename='') }}{{ pelicula.poster }}" alt="{{ pelicula.titulo }}">
       </a>
       {% endfor %}

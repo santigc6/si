@@ -4,9 +4,6 @@ import sys
 
 app = Flask(__name__)
 
-print app.config['APPLICATION_ROOT']
-#app.config['APPLICATION_ROOT'] = os.path.realpath(os.path.dirname(__file__))
-
 @app.route('/')
 @app.route('/index.html')
 def index():
