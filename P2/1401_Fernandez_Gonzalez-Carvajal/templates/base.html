@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>WebFlix</title>
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  </head>
+
+  <body>
+    <!-- Barra de menu -->
+    <div class="upperBar">
+      <a class="logoButton" href="/index.html">
+        <img class="logoButton" src="{{ url_for('static', filename='logo.png') }}" alt="logo">
+      </a>
+      <a class="buttonTop" href="/index.html">My cart</a>
+      <a class="buttonTop" href="../html/register.html">Register</a>
+      <a class="buttonTop" href="/index.html">Sign in</a>
+      <a class="buttonTopExt" href="../html/shoppingHistory.html">Shopping history</a>
+    </div>
+
+    <!-- Barra lateral -->
+    <div class="sideList">
+      <ul>
+        <li><p>2019</p></li>
+        <li><p>2018</p></li>
+        <li><p>2017</p></li>
+        <li><p>2016</p></li>
+        <li><p>2015</p></li>
+        <li><p>2014</p></li>
+        <li><p>2013</p></li>
+        <li><p>2012 and before</p></li>
+      </ul>
+    </div>
+
+    <!-- Pagina actual -->
+    <div class="content">
+      {% block content %}{% endblock %}
+    </div>
+    
+    <!-- Pie de pagina-->
+    <div class="foot">
+      <p>Your trusted online film shop &copy;2018/2019</p>
+    </div>
+  </body>
+</html>

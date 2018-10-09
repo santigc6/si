@@ -2,7 +2,7 @@
   "peliculas": [
     {
       "titulo": "Avatar",
-      "poster": "/pics/avatar.jpg",
+      "poster": "avatar.jpg",
       "director": "James Cameron",
       "precio": 18.99,
       "categoria": "Aventura",
@@ -11,7 +11,7 @@
     },
     {
       "titulo": "Celda 211",
-      "poster": "/pics/celda211.jpg",
+      "poster": "celda211.jpg",
       "director": "George Lucas",
       "precio": 12.99,
       "categoria": "Accion",
@@ -20,7 +20,7 @@
     },
     {
       "titulo": "Dunkerque",
-      "poster": "/pics/dunkerque.jpg",
+      "poster": "dunkerque.jpg",
       "director": "George Lucas",
       "precio": 18.99,
       "categoria": "Aventura",
@@ -29,7 +29,7 @@
     },
     {
       "titulo": "El caballero oscuro",
-      "poster": "/pics/elcaballerooscuro.jpg",
+      "poster": "elcaballerooscuro.jpg",
       "director": "George Lucas",
       "precio": 18.99,
       "categoria": "Aventura",
@@ -38,7 +38,7 @@
     },
     {
       "titulo": "El lobo de Wall Street",
-      "poster": "/pics/ellobo.jpg",
+      "poster": "ellobo.jpg",
       "director": "George Lucas",
       "precio": 18.99,
       "categoria": "Aventura",
@@ -47,7 +47,7 @@
     },
     {
       "titulo": "Animales Fantasticos y donde encontrarlos",
-      "poster": "/pics/fantasticbeasts.jpg",
+      "poster": "fantasticbeasts.jpg",
       "director": "George Lucas",
       "precio": 18.99,
       "categoria": "Aventura",
@@ -56,7 +56,7 @@
     },
     {
       "titulo": "Goldfinger",
-      "poster": "/pics/goldfinger.jpg",
+      "poster": "goldfinger.jpg",
       "director": "George Lucas",
       "precio": 18.99,
       "categoria": "Aventura",
@@ -65,7 +65,7 @@
     },
     {
       "titulo": "El gran torino",
-      "poster": "/pics/grantorino.jpg",
+      "poster": "grantorino.jpg",
       "director": "George Lucas",
       "precio": 18.99,
       "categoria": "Aventura",
@@ -74,7 +74,7 @@
     },
     {
       "titulo": "Infiltrados",
-      "poster": "/pics/infiltrados.jpg",
+      "poster": "infiltrados.jpg",
       "director": "George Lucas",
       "precio": 18.99,
       "categoria": "Aventura",
@@ -83,7 +83,7 @@
     },
     {
       "titulo": "Interestelar",
-      "poster": "/pics/interestelar.jpg",
+      "poster": "interestelar.jpg",
       "director": "George Lucas",
       "precio": 18.99,
       "categoria": "Aventura",
@@ -92,7 +92,7 @@
     },
     {
       "titulo": "IT",
-      "poster": "/pics/IT.jpg",
+      "poster": "IT.jpg",
       "director": "George Lucas",
       "precio": 18.99,
       "categoria": "Aventura",
@@ -101,7 +101,7 @@
     },
     {
       "titulo": "La sirenita",
-      "poster": "/pics/lasirenita.jpg",
+      "poster": "lasirenita.jpg",
       "director": "George Lucas",
       "precio": 18.99,
       "categoria": "Aventura",
@@ -110,7 +110,7 @@
     },
     {
       "titulo": "El señor de los anillos: La comunidad del anillo",
-      "poster": "/pics/lorfor.jpg",
+      "poster": "lorfor.jpg",
       "director": "George Lucas",
       "precio": 18.99,
       "categoria": "Aventura",
@@ -119,7 +119,7 @@
     },
     {
       "titulo": "Malditos bastardos",
-      "poster": "/pics/malditosbastardos.jpg",
+      "poster": "malditosbastardos.jpg",
       "director": "George Lucas",
       "precio": 18.99,
       "categoria": "Aventura",
@@ -128,7 +128,7 @@
     },
     {
       "titulo": "Origen",
-      "poster": "/pics/origen.jpg",
+      "poster": "origen.jpg",
       "director": "George Lucas",
       "precio": 18.99,
       "categoria": "Aventura",
@@ -137,7 +137,7 @@
     },
     {
       "titulo": "Shutter island",
-      "poster": "/pics/shutterisland.jpg",
+      "poster": "shutterisland.jpg",
       "director": "George Lucas",
       "precio": 18.99,
       "categoria": "Aventura",
@@ -146,7 +146,7 @@
     },
     {
       "titulo": "Star Wars: El despertar de la fuerza",
-      "poster": "/pics/starwars.jpg",
+      "poster": "starwars.jpg",
       "director": "George Lucas",
       "precio": 18.99,
       "categoria": "Aventura",
@@ -155,7 +155,7 @@
     },
     {
       "titulo": "Los increibles 2",
-      "poster": "/pics/theincredibles2.jpg",
+      "poster": "theincredibles2.jpg",
       "director": "George Lucas",
       "precio": 18.99,
       "categoria": "Aventura",
@@ -164,7 +164,7 @@
     },
     {
       "titulo": "Toy Story 3",
-      "poster": "/pics/toystory3.jpg",
+      "poster": "toystory3.jpg",
       "director": "George Lucas",
       "precio": 18.99,
       "categoria": "Aventura",

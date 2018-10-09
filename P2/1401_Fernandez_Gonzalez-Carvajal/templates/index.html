@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+      <div class ="row">
+        <form>
+          <input type="search" name="SearchFilm" value="Search Film">
+          <input type="submit" value="Go">
+          <select name="CategorySearch">
+            <option selected value="0">Select a category</option>
+            <option value="1">Action</option>
+            <option value="2">Adventure</option>
+            <option value="3">Animation</option>
+            <option value="4">Comedy</option>
+            <option value="5">Crime</option>
+            <option value="6">Drama</option>
+            <option value="7">Family</option>
+            <option value="8">Fantasy</option>
+            <option value="9">History</option>
+            <option value="10">Horror</option>
+            <option value="11">Music</option>
+            <option value="12">Mistery</option>
+            <option value="13">Romance</option>
+            <option value="14">Sci-Fi</option>
+            <option value="15">Sport</option>
+            <option value="16">Superhero</option>
+            <option value="17">Thriller</option>
+            <option value="18">War</option>
+          </select>
+        </form>
+      </div>
+      {% for pelicula in peliculas %}
+      <a href="/details/{{ pelicula.titulo }}">
+        <img class="filmPic" src="{{ url_for('static', filename='') }}{{ pelicula.poster }}" alt="{{ pelicula.titulo }}">
+      </a>
+      {% endfor %}
+{% endblock %}
