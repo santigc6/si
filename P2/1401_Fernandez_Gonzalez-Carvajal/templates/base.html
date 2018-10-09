@@ -13,9 +13,9 @@
         <img class="logoButton" src="{{ url_for('static', filename='logo.png') }}" alt="logo">
       </a>
       <a class="buttonTop" href="{{ url_for('index') }}">My cart</a>
-      <a class="buttonTop" href="../html/register.html">Register</a>
+      <a class="buttonTop" href="{{ url_for('index') }}">Register</a>
       <a class="buttonTop" href="{{ url_for('index') }}">Sign in</a>
-      <a class="buttonTopExt" href="../html/shoppingHistory.html">Shopping history</a>
+      <a class="buttonTopExt" href="{{ url_for('index') }}">Shopping history</a>
     </div>
 
     <!-- Barra lateral -->

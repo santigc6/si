@@ -3,18 +3,18 @@
   <head>
     <title>WebFlix</title>
     <meta charset="utf-8"/>
-    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
   </head>
 
   <body>
     <!-- Barra de menu -->
     <div class="upperBar">
-      <a class="logoButton" href=../index.html>
-        <img class="logoButton" src="../pics/logo.png" alt="logo">
+      <a class="logoButton" href="{{ url_for('index') }}">
+        <img class="logoButton" src="{{ url_for('static', filename='logo.png') }}" alt="logo">
       </a>
       <p class="loggedText">Logged as user13</p>
-      <a class="buttonTop" href="../index.html">My cart</a>
-      <a class="buttonTop" href="../index.html">Log out</a>
+      <a class="buttonTop" href="{{ url_for('index') }}">My cart</a>
+      <a class="buttonTop" href="{{ url_for('index') }}s">Log out</a>
     </div>
 
     <!-- Barra lateral -->
