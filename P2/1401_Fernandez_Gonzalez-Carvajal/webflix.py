@@ -1,14 +1,21 @@
 from flask import Flask, render_template, json, url_for, request
 import os
 import sys
+import md5
+import random
 
 app = Flask(__name__)
 
 @app.route('/')
 @app.route('/index.html')
 def index():
+  SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
+
+  users_path = os.path.join(SITE_ROOT, 'usuarios')
+  if os.path.exists(users_path) == False: # If users' directory doesnt exist we create it
+    os.mkdir(users_path, 0777)
+  
   try:
-    SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
     json_url = os.path.join(SITE_ROOT, "json", "catalogo.json")
     file_json = open(json_url)
     json_data = json.load(file_json)
@@ -72,6 +79,31 @@ def filter():
           context['peliculas'].append(peli)
       
     return render_template('index.html', **context)
-  
+
+@app.route('/regform', methods=['POST', 'GET'])
+def registerForm():
+  return render_template('register.html', error=False)
+
+@app.route('/register', methods=['POST', 'GET'])
+def register():
+  if request.method == 'POST': # We only allow POST requests
+    user = request.form['Username'].lower()
+    password = request.form['Password'].lower()
+    email = request.form['E-mail'].lower()
+    cCard = request.form['CreditCard'].lower()
+    
+    SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
+    userFolder = os.path.join(SITE_ROOT, "usuarios", user)
+    
+    if os.path.exists(userFolder) == True: # The user already exists
+      return render_template('register.html', error=True)
+    
+    os.mkdir(userFolder, 0777)
+    f = open(os.path.join(userFolder, 'datos.dat'), 'w+')
+    f.write('username: '+user+'\n'+'password: '+md5.new(password).hexdigest()+'\n'+'email: '+email+'\n'+'creditcard: '+cCard+'\n'+'balance: '+str(random.randint(0, 101))+'\n')
+    f.close()
+    
+    return render_template('register.html', error=False)
+    
 if __name__ == '__main__':
   app.run(host='0.0.0.0', debug=True)

@@ -28,6 +28,11 @@ div form input[type=text] {
   width: 35%;
 }
 
+div form input[type=password] {
+  color: black;
+  width: 35%;
+}
+
 div form input[type=submit] {
   width: 6%;
   text-align: center;
@@ -230,6 +235,7 @@ label {
 }
 
 .registerInput {
+  width:35%;
   float: right;
 }
 
@@ -246,4 +252,10 @@ label {
   border-radius: 12px;
   float: right;
   padding: 0px 85px 0px 30px;
+}
+
+.errorMsg {
+  color: red;
+  text-align: center;
+  float: center;
 }
