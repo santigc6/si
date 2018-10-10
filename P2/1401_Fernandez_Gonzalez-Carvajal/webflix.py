@@ -13,7 +13,9 @@ def index():
 
   users_path = os.path.join(SITE_ROOT, 'usuarios')
   if os.path.exists(users_path) == False: # If users' directory doesnt exist we create it
+    oldmask = os.umask(000)
     os.mkdir(users_path, 0777)
+    os.umask(oldmask)
   
   try:
     json_url = os.path.join(SITE_ROOT, "json", "catalogo.json")
