@@ -4,4 +4,4 @@
   -sudo chgrp www-data public_html/
   -sudo chmod g+w public_html/
 
-Autores: Adrián Fernández Amador y Santiago González- Carvajal Centera.
+Autores: Adrián Fernández Amador y Santiago González- Carvajal Centenera.
