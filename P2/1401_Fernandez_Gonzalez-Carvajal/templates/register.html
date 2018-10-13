@@ -3,22 +3,21 @@
 {% block content %}
       <script type="text/javascript" src="{{ url_for('static', filename='js/validateRegistration.js') }}"></script>
       <form class="register" name="regForm" action="{{ url_for('register') }}" method="POST" onsubmit="return validateRegistration()">
-        <label class="registerLabel" for="Username">Username:</label>
-        <input class="registerInput" type="text" id="Username" name="Username" value="Username" onfocus="this.value='';">
-        <br>
-        <label class="registerLabel" for="Password">Password:</label>
-        <input class="registerInput" type="password" id="Password" name="Password" value="Password" onfocus="this.value='';">
-        <br>
-        <label class="registerLabel" for="RepeatPassword">Repeat password:</label>
-        <input class="registerInput" type="password" id="RepeatPassword" name="RepeatPassword" value="Password" onfocus="this.value='';">
-        <br>
-        <label class="registerLabel" for="E-mail">E-mail:</label>
-        <input class="registerInput" type="text" id="E-mail" name="E-mail" value="E-mail" onfocus="this.value='';">
-        <br>
-        <label class="registerLabel" for="CreditCard">Credit card:</label>
-        <input class="registerInput" type="text" id="CreditCard" name="CreditCard" value="Credit card" onfocus="this.value='';">
-        <br>
-        <input class="registerSubmit" type="submit" value="Confirm">
+        <div class="left">
+          <label for="Username">Username:</label><br>
+          <label for="Password">Password:</label><br>
+          <label for="RepeatPassword">Repeat password:</label><br>
+          <label for="E-mail">E-mail:</label><br>
+          <label for="CreditCard">Credit card:</label><br>
+          <input type="submit" value="Confirm">
+        </div>
+        <div class="right">
+          <input type="text" id="Username" name="Username" placeholder="Username" onfocus="this.value='';">
+          <input type="password" id="Password" name="Password" onfocus="this.value='';">
+          <input type="password" id="RepeatPassword" name="RepeatPassword" onfocus="this.value='';">
+          <input type="text" id="E-mail" name="E-mail" placeholder="E-mail" onfocus="this.value='';">
+          <input type="text" id="CreditCard" name="CreditCard" placeholder="Credit card" onfocus="this.value='';">
+        </div>
       </form>
       {% if error %}
       <div>

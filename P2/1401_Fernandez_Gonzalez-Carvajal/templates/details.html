@@ -1,13 +1,15 @@
 {% extends 'base.html' %}
 
 {% block content %}
-      <img class="detailPic" src="{{ url_for('static', filename='') }}{{ poster }}" alt="detailPicture">
-      <div class="detailInfo">
-        <p class="info"><b>Title: </b>{{ titulo }}</p>
-        <p class="info"><b>Director: </b>{{ director }}</p>
-        <p class="info"><b>Price: </b>{{ precio }}&euro;.</p>
-        <p class="info"><b>First release: </b>{{ anno }}</p>
-        <p class="info"><b>Category: </b>{{ categoria }}</p>
-      </div>
-      <a class="buttonDown" href="{{ url_for('index') }}">Add to cart</a>
+  <div class="detail">
+    <img class="detailPic" src="{{ url_for('static', filename='') }}{{ poster }}" alt="detailPicture">
+    <div class="detailInfo">
+      <p class="info"><b>Title: </b>{{ titulo }}</p>
+      <p class="info"><b>Director: </b>{{ director }}</p>
+      <p class="info"><b>Price: </b>{{ precio }}&euro;.</p>
+      <p class="info"><b>First release: </b>{{ anno }}</p>
+      <p class="info"><b>Category: </b>{{ categoria }}</p>
+      <a class="lbutton" href="{{ url_for('index') }}">Add to cart</a>
+    </div>
+  </div>
 {% endblock %}

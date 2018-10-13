@@ -1,9 +1,10 @@
-/*html items*/
+/* HTML ITEMS */
 html{
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
+  font-size: 100%;
 }
 
 body {
@@ -18,28 +19,194 @@ div {
   padding: 0;
 }
 
-div form input[type=search] {
-  color: black;
-  width: 35%;
+
+
+/* CLASSES */
+.loggedText {
+  color: white;
+  text-align: right;
+  margin-right: 50px;
 }
 
-div form input[type=text] {
-  color: black;
-  width: 35%;
-}
-
-div form input[type=password] {
-  color: black;
-  width: 35%;
-}
-
-div form input[type=submit] {
-  width: 6%;
+.title {
+  font-size: 42px;
+  color: white;
   text-align: center;
 }
 
-div form select {
-  width: 56.2%;
+.shoppingHist {
+  font-size: 36px;
+  background-color: black;
+  color: red;
+  margin-left: auto;
+  margin-right: auto;
+  border-collapse: separate;
+  border-spacing: 20px 0;
+}
+
+.errorMsg {
+  color: red;
+  text-align: center;
+  float: center;
+}
+
+
+
+/* Menu */
+ul.menu {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 15%;
+  min-height: 90px;
+  float: top;
+  overflow: hidden;
+  background-color: black;
+  border-bottom: 2px solid rgb(32, 32, 32);
+  list-style-type: none;
+}
+
+a.logo {
+  float: left;
+  outline: none;
+}
+
+a.lbutton {
+  margin: 26px 10px;
+  padding: 12px 25px;
+  border: 1px solid rgb(204, 204, 204);
+  border-radius: 8px;
+  display: inline-block;
+  color: rgb(204, 204, 204);
+  background-color: rgb(8, 8, 8);
+  text-align: center;
+  text-decoration: none;
+  font-family: "Arial", Helvetica, sans-serif;
+  outline: none;
+  float: left;
+}
+
+a.rbutton {
+  margin: 26px 10px;
+  padding: 12px 25px;
+  border: 1px solid rgb(204, 204, 204);
+  border-radius: 8px;
+  display: inline-block;
+  color: rgb(204, 204, 204);
+  background-color: rgb(8, 8, 8);
+  text-align: center;
+  text-decoration: none;
+  font-family: "Arial", Helvetica, sans-serif;
+  outline: none;
+  float: right;
+}
+
+a.lbutton:hover, a.rbutton:hover {
+  background-color: rgb(32, 32, 32);
+}
+
+
+/*VIEJO
+.upperBar {
+  background-color: black;
+  float: top;
+  width: 100%;
+  height: 18%;
+  min-height: 130px;
+  list-style-type: none;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+.buttonTop {
+  background-color: white;
+  border: none;
+  color: red;
+  width: 90px;
+  height: 18px;
+  margin: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 12px;
+  float: right;
+}
+
+.buttonTopExt {
+  background-color: white;
+  border: none;
+  color: red;
+  width: 90px;
+  height: 36px;
+  margin: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 12px;
+  float: right;
+}
+
+.logoButton {
+  float: left;
+  width: 400px;
+  height: 100%;
+}*/
+
+
+
+/* Side list */
+ul.sideList {
+  margin: 0;
+  padding: 0;
+  width: 25%;
+  height: 80%;
+  position: fixed;
+  left: 0;
+  overflow: auto;
+  list-style-type: none;
+  background-color: black;
+}
+
+ul.sideList > li {
+  margin: 0;
+  width: 100%;
+  float: left;
+  background-color: rgb(8, 8, 8);
+  text-align: center;
+}
+
+ul.sideList > li:nth-child(even) {
+  background-color: rgb(16, 16, 16);
+}
+
+ul.sideList > li > a {
+  padding: 12px;
+  vertical-align: middle;
+  display: block;
+  color: rgb(204, 204, 204);
+  text-decoration: none;
+  font-size: 24px;
+}
+
+ul.sideList > li > a:hover {
+  color: rgb(8, 8, 8);
+  background-color: red;
+}
+
+
+/*VIEJO
+.sideList {
+  background-color: red;
+  width: 25%;
+  height: 77%;
+  float: left;
+  position: relative;
+  min-height: 400px;
+  margin: 0;
+  padding: 0;
 }
 
 div ul {
@@ -65,78 +232,26 @@ div ul li {
 div ul li p {
   vertical-align: middle;
   font-size: 24px;
-}
+}*/
 
-table th {
-  font-weight: bold;
-}
 
-label {
-  padding: 12px 12px 12px 12px;
-  display: inline-block;
-  color: white;
-}
 
-/*classes*/
-.upperBar {
-  background-color: rgb(0, 0, 0);
-  float: top;
-  width: 100%;
-  height: 18%;
-  min-height: 130px;
-  list-style-type: none;
-  overflow: hidden;
+/* Content */
+div.content {
   margin: 0;
   padding: 0;
+  width: 75%;
+  height: 80%;
+  position: fixed;
+  right: 0;
+  overflow: auto;
+  background-image: linear-gradient(135deg, rgb(8, 8, 8), rgb(32, 32, 32));
 }
 
-.buttonTop {
-  background-color: rgb(255, 255, 255);
-  border: none;
-  color: red;
-  width: 90px;
-  height: 18px;
-  margin: 10px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  border-radius: 12px;
-  float: right;
-}
 
-.buttonTopExt {
-  background-color: rgb(255, 255, 255);
-  border: none;
-  color: red;
-  width: 90px;
-  height: 36px;
-  margin: 10px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  border-radius: 12px;
-  float: right;
-}
 
-.logoButton {
-  float: left;
-  width: 400px;
-  height: 100%;
-}
 
-.sideList {
-  background-color: red;
-  width: 25%;
-  height: 77%;
-  float: left;
-  position: relative;
-  min-height: 400px;
-  margin: 0;
-  padding: 0;
-}
-
+/*VIEJO
 .content {
   background-color: rgb(32,32,32);
   float: right;
@@ -147,19 +262,32 @@ label {
   padding: 0;
   overflow-y: auto;
   overflow-x: auto;
+}*/
+
+
+
+/*Footer*/
+div.foot {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 5%;
+  min-height: 30px;
+  position: fixed;
+  bottom: 0;
+  background-color: black;
+  text-align: center;
 }
 
-.filmPic {
-  height: 32%;
-  width: 24.2%;
+div.foot > p {
+  margin: auto;
+  padding: 10px;
+  color: red;
+  font-family: "Arial", Helvetica, sans-serif;
 }
 
-.loggedText {
-  color: white;
-  text-align: right;
-  margin-right: 50px;
-}
 
+/*VIEJO
 .foot {
   position: fixed;
   bottom: 0;
@@ -169,8 +297,152 @@ label {
   background-color: black;
   text-align: center;
   color: red;
+}*/
+
+
+
+/*Index*/
+form.search {
+
 }
 
+form.search > input[type=search] {
+  width: 60%;
+  height: 47px;
+  float: left;
+  box-sizing: border-box;
+  border: 2px solid rgb(204, 204, 204);
+  font-size: 16px;
+  background-color: white;
+  background-image: url("search_icon.png");
+  background-position: 10px 10px; 
+  background-repeat: no-repeat;
+  background-size: 21px;
+  padding: 12px 20px 12px 40px;
+}
+
+form.search > input[type=submit] {
+  width: 20%;
+  height: 47px;
+  padding: 10px;
+  float: left;
+  color: white;
+  background: red;
+  border: 1px solid darkred;
+  font-size: 17px;
+  cursor: pointer;
+}
+
+form.search > input[type=submit]:hover {
+  background: darkred;
+}
+
+form.search > select {
+  width: 20%;
+  height: 47px;
+  float: left;
+  box-sizing: border-box;
+  border: 2px solid rgb(204, 204, 204);
+  font-size: 16px;
+  background-color: white;
+  padding: 10px;
+}
+
+img.filmPic {
+  width: 235px;
+  height: 300px;
+}
+
+.container {
+  position: relative;
+  width: 235px;
+  height: 300px;
+  float: left;
+  border: 2px solid rgb(204, 204, 204);
+  border-radius: 2px
+}
+
+.container:hover {
+  opacity: 0.3;
+  border-color: rgb(32, 32, 32);
+}
+
+p.hidDesc {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  color: white;
+  text-align: center;
+  font-size: 18px;
+  font-family: "Arial", Helvetica, sans-serif;
+  visibility: hidden;
+}
+
+.container:hover p.hidDesc {
+  visibility: visible;
+}
+
+
+/*VIEJO
+div form input[type=search] {
+  color: black;
+  width: 35%;
+}
+
+div form input[type=text] {
+  color: black;
+  width: 35%;
+}
+
+div form input[type=password] {
+  color: black;
+  width: 35%;
+}
+
+div form input[type=submit] {
+  width: 6%;
+  text-align: center;
+}
+
+div form select {
+  width: 56.2%;
+}
+
+.filmPic {
+  height: 32%;
+  width: 24.2%;
+}*/
+
+
+
+/* Details */
+div.detail {
+  width: 800px;
+  height: 360px;
+  margin: 50px 80px;
+}
+
+img.detailPic {
+  width: 280px;
+  height: 360px;
+  float: left;
+  border: 2px solid rgb(204, 204, 204);
+  border-radius: 2px
+}
+
+div.detailInfo {
+  width: 510px;
+  float: right;
+  color: rgb(204, 204, 204);
+}
+
+p.info {
+  margin: 26px 10px;
+}
+
+
+/*VIEJO
 .detailPic {
   margin-left: 10%;
   margin-top: 5%;
@@ -194,7 +466,7 @@ label {
 }
 
 .buttonDown {
-  background-color: rgb(255, 255, 255);
+  background-color: white;
   border: none;
   color: red;
   width: 90px;
@@ -207,24 +479,58 @@ label {
   font-size: 16px;
   border-radius: 12px;
   float: right;
+}*/
+
+
+
+/* Register */
+form.register {
+  width: 600px;
+  height: 300px;
+  margin: 100px 160px;
 }
 
-.title {
-  font-size: 42px;
+div.left {
+  width: 50%;
+  height: 100%;
+  float: left;
+}
+
+div.right {
+  width: 50%;
+  height: 100%;
+  float: right;
+}
+
+form.register label {
+  width: 100%;
+  margin-top: 11px;
+  margin-bottom: 10px;
+  display: inline-block;
+  color: rgb(204, 204, 204);
+  font-family: "Arial", Helvetica, sans-serif;
+  font-size: 1.25em;
+}
+
+form.register input[type=text], form.register input[type=password] {
+  width: 100%;
+  height: 30px;
+}
+
+form.register input[type=submit] {
+  width: 70%;
+  height: 47px;
+  padding: 10px;
+  float: left;
   color: white;
-  text-align: center;
+  background: red;
+  border: 1px solid darkred;
+  font-size: 17px;
+  cursor: pointer;
 }
 
-.shoppingHist {
-  font-size: 36px;
-  background-color: black;
-  color: red;
-  margin-left: auto;
-  margin-right: auto;
-  border-collapse: separate;
-  border-spacing: 20px 0;
-}
 
+/*VIEJO
 .register {
   display: block;
   margin: 10% 30%;
@@ -240,7 +546,7 @@ label {
 }
 
 .registerSubmit {
-  background-color: rgb(255, 255, 255);
+  background-color: white;
   text-align: center;
   border: none;
   color: red;
@@ -252,10 +558,4 @@ label {
   border-radius: 12px;
   float: right;
   padding: 0px 85px 0px 30px;
-}
-
-.errorMsg {
-  color: red;
-  text-align: center;
-  float: center;
-}
+}*/
