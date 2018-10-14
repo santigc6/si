@@ -1,4 +1,4 @@
-from flask import Flask, render_template, json, url_for, request
+from flask import Flask, render_template, json, url_for, request, redirect
 import os
 import sys
 import md5
@@ -25,6 +25,12 @@ def index():
     return "<h1>There was a problem loading the catalogue</h1>"
   
   file_json.close()
+  
+  cats = set()
+  for peli in json_data["peliculas"]:
+    cats.add(peli["categoria"])
+  
+  json_data["categorias"]=list(cats)
   
   return render_template('index.html', **json_data)
 
@@ -61,6 +67,7 @@ def filter():
     except IOError:
       return "<h1>There was a problem loading the catalogue</h1>"
     
+    file_json.close()
     context = {'peliculas': []}
     if filmName != '' and filmName != 'search film': # Filtro por nombre y categoria
       if category != 'default':  
@@ -80,6 +87,12 @@ def filter():
         for peli in json_data['peliculas']:
           context['peliculas'].append(peli)
       
+    cats = set()
+    for peli in json_data["peliculas"]:
+      cats.add(peli["categoria"])
+    
+    context["categorias"]=list(cats)
+    
     return render_template('index.html', **context)
 
 @app.route('/regform', methods=['POST', 'GET'])
@@ -105,7 +118,32 @@ def register():
     f.write('username: '+user+'\n'+'password: '+md5.new(password).hexdigest()+'\n'+'email: '+email+'\n'+'creditcard: '+cCard+'\n'+'balance: '+str(random.randint(0, 101))+'\n')
     f.close()
     
-    return render_template('register.html', error=False)
+    return render_template('login.html', error=False)
+    
+@app.route('/logform', methods=['POST', 'GET'])
+def loginForm():
+  return render_template('login.html', error=False)
+
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+  if request.method == 'POST': # We only allow POST requests
+    user = request.form['Username'].lower()
+    password = request.form['Password'].lower()
+    
+    SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
+    userFolder = os.path.join(SITE_ROOT, "usuarios", user)
+    
+    if os.path.exists(userFolder) == False: # The user doesnt exist
+      return render_template('login.html', error=True)
+    
+    f = open(os.path.join(userFolder, 'datos.dat'), 'r')
+    lines = f.readlines()
+    f.close()
+    
+    if lines[1].find(md5.new(password).hexdigest()) == -1: # Wrong password
+      return render_template('login.html', error=True)
+    
+    return redirect(url_for('index'))
     
 if __name__ == '__main__':
   app.run(host='0.0.0.0', debug=True)
