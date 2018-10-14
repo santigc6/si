@@ -1,10 +1,11 @@
-from flask import Flask, render_template, json, url_for, request, redirect
+from flask import Flask, render_template, json, url_for, request, redirect, session, make_response
 import os
 import sys
 import md5
 import random
 
 app = Flask(__name__)
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 @app.route('/')
 @app.route('/index.html')
@@ -32,6 +33,9 @@ def index():
   
   json_data["categorias"]=list(cats)
   
+  if 'user' in session:
+    json_data['user'] = session['user']
+  
   return render_template('index.html', **json_data)
 
 @app.route('/details/<string:pelicula>')
@@ -50,6 +54,9 @@ def details(pelicula):
     if peli['titulo'] == pelicula:
       context = dict(peli)
       break
+      
+  if 'user' in session:
+    context['user'] = session['user']
       
   return render_template('details.html', **context)  
     
@@ -92,6 +99,8 @@ def filter():
       cats.add(peli["categoria"])
     
     context["categorias"]=list(cats)
+    if 'user' in session:
+      context['user'] = session['user']
     
     return render_template('index.html', **context)
 
@@ -122,6 +131,10 @@ def register():
     
 @app.route('/logform', methods=['POST', 'GET'])
 def loginForm():
+  user=request.cookies.get('lastUser')
+  if user:
+    return render_template('login.html', error=False, cookie=user)
+  
   return render_template('login.html', error=False)
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -136,14 +149,53 @@ def login():
     if os.path.exists(userFolder) == False: # The user doesnt exist
       return render_template('login.html', error=True)
     
-    f = open(os.path.join(userFolder, 'datos.dat'), 'r')
-    lines = f.readlines()
+    try:
+      f = open(os.path.join(userFolder, 'datos.dat'), 'r')
+      lines = f.readlines()
+    except IOError:
+      return "<h1>Something went wrong</h1>"
     f.close()
     
     if lines[1].find(md5.new(password).hexdigest()) == -1: # Wrong password
       return render_template('login.html', error=True)
     
-    return redirect(url_for('index'))
+    # Update the session
+    session['user']=lines[0].split()[1]
+    session['email']=lines[2].split()[1]
+    session['creditcard']=lines[3].split()[1]
+    session['balance']=lines[4].split()[1]
+ 
+    try:
+      json_url = os.path.join(SITE_ROOT, "json", "catalogo.json")
+      file_json = open(json_url)
+      json_data = json.load(file_json)
+    except IOError:
+      return "<h1>There was a problem loading the catalogue</h1>"
     
+    file_json.close()
+    
+    cats = set()
+    for peli in json_data["peliculas"]:
+      cats.add(peli["categoria"])
+    
+    json_data["categorias"]=list(cats)
+    
+    if 'user' in session:
+      json_data['user'] = session['user']
+
+    response = make_response(render_template('index.html', **json_data))
+    response.set_cookie('lastUser', user)    
+        
+    return response
+    
+@app.route('/logout', methods=['POST', 'GET'])
+def logOut():
+  # Update the session
+  for key in session.keys():
+     session.pop(key)
+     
+  return redirect(url_for('index'))
+
+
 if __name__ == '__main__':
   app.run(host='0.0.0.0', debug=True)
