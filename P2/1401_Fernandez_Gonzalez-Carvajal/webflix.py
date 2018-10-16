@@ -122,7 +122,9 @@ def register():
     if os.path.exists(userFolder) == True: # The user already exists
       return render_template('register.html', error=True)
     
+    oldmask = os.umask(000)
     os.mkdir(userFolder, 0777)
+    os.umask(oldmask)
     f = open(os.path.join(userFolder, 'datos.dat'), 'w+')
     f.write('username: '+user+'\n'+'password: '+md5.new(password).hexdigest()+'\n'+'email: '+email+'\n'+'creditcard: '+cCard+'\n'+'balance: '+str(random.randint(0, 101))+'\n')
     f.close()
