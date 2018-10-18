@@ -8,40 +8,42 @@
 
   <body>
     <!-- Menu -->
-    <ul class="menu">
-      <li>
-        <a class="logo" href="{{ url_for('index') }}">
-          <img src="{{ url_for('static', filename='logo.png') }}" alt="logo">
-        </a>
-      </li>
-      {% if user %}
-      <li>
-       <p class="loggedText">Logged as {{ user }}</p>
-      </li> 
-      <li>
-        <a class="rbutton" href="{{ url_for('index') }}">My cart</a>
-      </li>
-      <li>
-        <a class="rbutton" href="{{ url_for('index') }}">Shopping history</a>
-      </li>
-      <li>
-        <a class="rbutton" href="{{ url_for('logOut') }}">Log out</a>
-      </li>
-      {% else %}
-      <li>
-        <a class="rbutton" href="{{ url_for('index') }}">My cart</a>
-      </li>
-      <li>
-        <a class="rbutton" href="{{ url_for('registerForm') }}">Register</a>
-      </li>
-      <li>
-        <a class="rbutton" href="{{ url_for('loginForm') }}">Sign in</a>
-      </li>
-      <li>
-        <a class="rbutton" href="{{ url_for('index') }}">Shopping history</a>
-      </li>
-      {% endif %}
-    </ul>
+    <div class="menu">
+      <a class="logo" href="{{ url_for('index') }}">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="logo">
+      </a>
+      <ul>
+        {% if user %}
+        <li>
+          <a class="rbutton" href="{{ url_for('logOut') }}">Sing out</a>
+        </li>
+        <li>
+          <a class="rbutton" href="{{ url_for('myCart') }}">My cart</a>
+        </li>
+        <li>
+          <a class="rbutton" href="{{ url_for('index') }}">Shopping history</a>
+        </li>
+        <li>
+          <div>
+            <p class="logText">Logged as {{ user }}</p>
+          </div>
+        </li> 
+        {% else %}
+        <li>
+          <a class="rbutton" href="{{ url_for('registerForm') }}">Register</a>
+        </li>
+        <li>
+          <a class="rbutton" href="{{ url_for('loginForm') }}">Sign in</a>
+        </li>
+        <li>
+          <a class="rbutton" href="{{ url_for('myCart') }}">My cart</a>
+        </li>
+        <li>
+          <a class="rbutton" href="{{ url_for('index') }}">Shopping history</a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
 
     <!-- Side list -->
     <ul class="sideList">

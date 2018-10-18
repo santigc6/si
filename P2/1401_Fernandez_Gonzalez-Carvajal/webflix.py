@@ -8,7 +8,7 @@ app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 @app.route('/')
-@app.route('/index.html')
+@app.route('/index')
 def index():
   SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
 
@@ -197,6 +197,11 @@ def logOut():
      session.pop(key)
      
   return redirect(url_for('index'))
+
+@app.route('/mycart', methods=['POST', 'GET'])
+def myCart():
+  
+  return render_template('shoppingCart.html', error=False)
 
 
 if __name__ == '__main__':

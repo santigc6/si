@@ -22,12 +22,6 @@ div {
 
 
 /* CLASSES */
-.loggedText {
-  color: white;
-  text-align: right;
-  margin-right: 50px;
-}
-
 .title {
   font-size: 42px;
   color: white;
@@ -53,7 +47,7 @@ div {
 
 
 /* Menu */
-ul.menu {
+div.menu {
   margin: 0;
   padding: 0;
   width: 100%;
@@ -63,12 +57,45 @@ ul.menu {
   overflow: hidden;
   background-color: black;
   border-bottom: 2px solid rgb(32, 32, 32);
+}
+
+div.menu ul {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background-color: inherit;
   list-style-type: none;
 }
 
 a.logo {
+  height: 100%;
+  width: auto;
   float: left;
   outline: none;
+}
+
+a.logo img {
+  height: 100%;
+  width: auto;
+}
+
+div.menu div {
+  height: 100%;
+  margin: 16px 10px;
+  padding: auto;
+  float: right;
+  display: inline-block;
+  text-align: center;
+  border-right: 1px solid rgb(204, 204, 204);
+}
+
+div.menu div > p {
+  margin-right: 10px;
+  color: rgb(204, 204, 204);
+  font-family: "Arial", Helvetica, sans-serif;
+  font-size: 1.25em;
+  cursor: default;
 }
 
 a.lbutton {
@@ -153,6 +180,12 @@ a.lbutton:hover, a.rbutton:hover {
   float: left;
   width: 400px;
   height: 100%;
+}
+
+.loggedText {
+  color: white;
+  text-align: right;
+  margin-right: 50px;
 }*/
 
 
@@ -245,7 +278,7 @@ div.content {
   position: fixed;
   right: 0;
   overflow: auto;
-  background-image: linear-gradient(135deg, rgb(8, 8, 8), rgb(32, 32, 32));
+  background-image: linear-gradient(135deg, rgb(10, 10, 10), rgb(34, 34, 34));
 }
 
 
@@ -302,8 +335,11 @@ div.foot > p {
 
 
 /*Index*/
-form.search {
-
+div.index {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
 }
 
 form.search > input[type=search] {
@@ -484,7 +520,7 @@ p.info {
 
 
 /* Register */
-form.register {
+div.register {
   width: 600px;
   height: 300px;
   margin: 100px 160px;
@@ -502,7 +538,7 @@ div.right {
   float: right;
 }
 
-form.register label {
+form.registerForm label {
   width: 100%;
   margin-top: 11px;
   margin-bottom: 10px;
@@ -512,12 +548,12 @@ form.register label {
   font-size: 1.25em;
 }
 
-form.register input[type=text], form.register input[type=password] {
+form.registerForm input[type=text], form.registerForm input[type=password] {
   width: 100%;
   height: 30px;
 }
 
-form.register input[type=submit] {
+form.registerForm input[type=submit] {
   width: 70%;
   height: 47px;
   padding: 10px;
@@ -559,3 +595,12 @@ form.register input[type=submit] {
   float: right;
   padding: 0px 85px 0px 30px;
 }*/
+
+
+
+/* Shopping cart */
+div.cart {
+  width: 800px;
+  height: 360px;
+  margin: 50px 80px;
+}
