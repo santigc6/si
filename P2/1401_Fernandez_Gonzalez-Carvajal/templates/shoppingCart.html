@@ -1,5 +1,29 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  
+  <div class="cart">
+    <div class="shoppingList">
+      <table>
+        <tr>
+          <th>Film</th>
+          <th colspan="2">Price</th>
+        </tr>
+
+        <tr>
+          <td>prueba</td>
+          <td>12</td>
+          <td>
+            <a href="{{ url_for('index') }}">
+              <img class="icon" src="{{ url_for('static', filename='trash_icon.png') }}" alt="trash icon">
+            </a>
+          </td>
+        </tr>
+
+      </table>
+    </div>
+    <div class="underList">
+      <a class="rbutton" href="{{ url_for('index') }}">Purchase</a>
+      <p class="desc">Total price: 100 €</p>
+    </div>
+  </div>
 {% endblock %}
