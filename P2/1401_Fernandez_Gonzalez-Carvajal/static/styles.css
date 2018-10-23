@@ -633,6 +633,7 @@ img.icon {
   width: 21px;
   height: 21px;
   float: right;
+  color: white;
 }
 
 div.cart > div.underList {

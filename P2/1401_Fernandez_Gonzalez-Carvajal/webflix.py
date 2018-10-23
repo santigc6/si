@@ -208,8 +208,29 @@ def logOut():
 
 @app.route('/mycart')
 def myCart():
-  
-  return render_template('shoppingCart.html', error=False)
+  context = {}
+  context['peliculas'] = []
+  context['total'] = 0.0
+  if 'cart' in session:
+    try:
+      SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
+      json_url = os.path.join(SITE_ROOT, "json", "catalogo.json")
+      file_json = open(json_url)
+      json_data = json.load(file_json)
+    except IOError:
+      return "<h1>There was a problem loading the catalogue</h1>"
+    file_json.close()
+
+    for pelicula in json_data['peliculas']:
+      for idPelicula in session['cart']:
+        if str(pelicula['id']) == idPelicula:
+          context['peliculas'].append(pelicula)
+          context['total'] += pelicula['precio']
+
+  if 'user' in session:
+    context['user'] = session['user']
+
+  return render_template('shoppingCart.html', **context)
 
 @app.route('/removeFilm/<string:film>')
 def removeFromCart(film):
