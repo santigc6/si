@@ -13,7 +13,7 @@
     <input type="submit" value="Search">
   </form>
   {% for pelicula in peliculas %}
-    <a class="container" href="{{ url_for('details', pelicula='') }}{{ pelicula.titulo }}">
+    <a class="container" href="{{ url_for('details', pelicula='') }}{{ pelicula.id }}">
       <img class="filmPic" src="{{ url_for('static', filename='') }}{{ pelicula.poster }}" alt="{{ pelicula.titulo }}">
       <p class="hidDesc">
         {{ pelicula.titulo }}

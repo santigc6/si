@@ -51,7 +51,7 @@ def details(pelicula):
   file_json.close()
   
   for peli in json_data['peliculas']:
-    if peli['titulo'] == pelicula:
+    if str(peli['id']) == pelicula:
       context = dict(peli)
       break
       
@@ -166,6 +166,7 @@ def login():
     session['email']=lines[2].split()[1]
     session['creditcard']=lines[3].split()[1]
     session['balance']=lines[4].split()[1]
+    session.modified=True
  
     try:
       json_url = os.path.join(SITE_ROOT, "json", "catalogo.json")
