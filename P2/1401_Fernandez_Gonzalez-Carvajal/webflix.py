@@ -57,7 +57,12 @@ def details(pelicula):
       
   if 'user' in session:
     context['user'] = session['user']
-      
+    
+  context['inCart'] = False
+  if 'cart' in session:
+    if pelicula in session['cart']:
+      context['inCart'] = True # The film has already been added
+  
   return render_template('details.html', **context)  
     
 @app.route('/filters', methods=['POST', 'GET'])
@@ -104,7 +109,7 @@ def filter():
     
     return render_template('index.html', **context)
 
-@app.route('/regform', methods=['POST', 'GET'])
+@app.route('/regform')
 def registerForm():
   return render_template('register.html', error=False)
 
@@ -131,7 +136,7 @@ def register():
     
     return render_template('login.html', error=False)
     
-@app.route('/logform', methods=['POST', 'GET'])
+@app.route('/logform')
 def loginForm():
   user=request.cookies.get('lastUser')
   if user:
@@ -191,7 +196,7 @@ def login():
         
     return response
     
-@app.route('/logout', methods=['POST', 'GET'])
+@app.route('/logout')
 def logOut():
   # Update the session
   for key in session.keys():
@@ -199,11 +204,32 @@ def logOut():
      
   return redirect(url_for('index'))
 
-@app.route('/mycart', methods=['POST', 'GET'])
+@app.route('/mycart')
 def myCart():
   
   return render_template('shoppingCart.html', error=False)
 
+@app.route('/removeFilm/<string:film>')
+def removeFromCart(film):
+  session['cart'].remove(film)
+  session.modified=True
+      
+  return redirect(url_for('details', pelicula=film))
+
+@app.route('/addFilm/<string:film>')
+def addToCart(film):
+  if 'cart' not in session:
+    session['cart']=[]
+  
+  session['cart'].append(film)
+  session.modified=True
+  
+  return redirect(url_for('details', pelicula=film))
+
+@app.route('/confirmFilm/<string:film>')
+def confirmFilm(film):
+  return
+
 
 if __name__ == '__main__':
-  app.run(host='0.0.0.0', debug=True)
+  app.run(host='0.0.0.0')

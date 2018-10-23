@@ -9,7 +9,11 @@
       <p class="info"><b>Price: </b>{{ precio }}&euro;.</p>
       <p class="info"><b>First release: </b>{{ anno }}</p>
       <p class="info"><b>Category: </b>{{ categoria }}</p>
-      <a class="lbutton" href="{{ url_for('index') }}">Add to cart</a>
+      {% if inCart %}  
+        <a class="lbutton" href="{{ url_for('removeFromCart', film='') }}{{ id }}">Remove from cart</a>
+      {% else %}
+        <a class="lbutton" href="{{ url_for('addToCart', film='') }}{{ id }}">Add to cart</a>
+      {% endif %}
     </div>
   </div>
 {% endblock %}
