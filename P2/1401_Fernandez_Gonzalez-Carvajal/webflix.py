@@ -3,6 +3,7 @@ import os
 import sys
 import md5
 import random
+import json
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
@@ -84,7 +85,7 @@ def filter():
     if filmName != '' and filmName != 'search film': # Filtro por nombre y categoria
       if category != 'default':  
         for peli in json_data['peliculas']:
-          if peli['titulo'].lower().find(filmName) >= 0 and  peli['categoria'].lower() == category:
+          if peli['titulo'].lower().find(filmName) >= 0 and peli['categoria'].lower() == category:
             context['peliculas'].append(peli)
       else: # Filtro por nombre
         for peli in json_data['peliculas']:
@@ -200,7 +201,8 @@ def login():
 def logOut():
   # Update the session
   for key in session.keys():
-     session.pop(key)
+    if key != 'cart':
+      session.pop(key)
      
   return redirect(url_for('index'))
 
@@ -228,8 +230,68 @@ def addToCart(film):
 
 @app.route('/confirmFilm/<string:film>')
 def confirmFilm(film):
-  return
+  if 'user' not in session:
+    return redirect(url_for('loginForm'))
+    
+  SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
 
+  try:
+    json_url = os.path.join(SITE_ROOT, "json", "catalogo.json")
+    file_json = open(json_url)
+    json_data = json.load(file_json)
+  except IOError:
+    return "<h1>There was a problem with your operation</h1>"
+  
+  file_json.close()
+  
+  price = 0
+  for peli in json_data['peliculas']:
+    if str(peli['id']) == film:
+      price = peli['precio']
+      
+  if user['balance'] < price:
+    return render_template('shoppingCart.html', error=False) # You are oom
+    
+  session['balance'] -= price
+  
+  
+  
+@app.route('/confirmAll')
+def confirmAll():
+  if 'user' not in session:
+    return redirect(url_for('logForm'))
 
+  SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
+
+  try:
+    json_url = os.path.join(SITE_ROOT, "json", "catalogo.json")
+    file_json = open(json_url)
+    json_data = json.load(file_json)
+  except IOError:
+    return "<h1>There was a problem with your operation</h1>"
+  
+  file_json.close()
+  
+  if 'cart' in session:
+    price = 0
+    for film in user['cart']:
+      for peli in json_data['peliculas']:
+        if str(peli['id']) == film:
+          price += peli['precio']
+          
+  if user['balance'] < price:
+    return render_template('shoppingCart.html', error=False) # You are oom
+  
+  session['balance'] -= price
+  
+  try:
+    json_url = os.path.join(SITE_ROOT, 'usuarios', session['user'], 'historial.json')
+    file_json = open(json_url)
+    json_data = json.load(file_json)
+  except IOError:
+    return "<h1>There was a problem with your operation</h1>"
+  
+  file_json.close()
+  
 if __name__ == '__main__':
   app.run(host='0.0.0.0')
