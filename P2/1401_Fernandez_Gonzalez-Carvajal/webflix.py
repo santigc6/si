@@ -3,7 +3,7 @@ import os
 import sys
 import md5
 import random
-import json
+import datetime
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
@@ -236,8 +236,13 @@ def myCart():
 def removeFromCart(film):
   session['cart'].remove(film)
   session.modified=True
-      
-  return redirect(url_for('details', pelicula=film))
+  
+  if request.referrer:
+    url = request.referrer
+        
+    return redirect(url)
+  else:
+    return redirect(url_for('details', pelicula=film))
 
 @app.route('/addFilm/<string:film>')
 def addToCart(film):
@@ -265,22 +270,69 @@ def confirmFilm(film):
   
   file_json.close()
   
-  price = 0
+  price = 0.0
   for peli in json_data['peliculas']:
     if str(peli['id']) == film:
       price = peli['precio']
       
-  if user['balance'] < price:
-    return render_template('shoppingCart.html', error=False) # You are oom
+  if float(session['balance']) < price:
+    return redirect(url_for('myCart'))
     
-  session['balance'] -= price
+  session['balance'] = str(float(session['balance']) - price)
   
+  try:
+    data_url = os.path.join(SITE_ROOT, 'usuarios', session['user'], 'datos.dat')
+    file_data = open(data_url, 'r')  
+  except IOError:
+    return "<h1>There was a problem with your operation</h1>"
   
+  lines = file_data.readlines()
+  lines[-1] = 'balance: '+session['balance'] # New balance
+
+  file_data.close()
+  
+  try:
+    file_data = open(data_url, 'w')
+    file_data.writelines(lines)
+  except IOError:
+    return "<h1>There was a problem with your operation</h1>" 
+  
+  file_data.close()
+  
+  json_data = None
+  try:
+    json_url = os.path.join(SITE_ROOT, 'usuarios', session['user'], 'historial.json')
+    file_json = open(json_url)  
+    json_data = json.load(file_json)
+  except IOError:
+    pass
+  
+  if json_data != None:
+    file_json.close()
+    
+    json_data['peliculas'].append(film)
+  else:
+    json_data = {}
+    json_data['peliculas']=[]
+    json_data['peliculas'].append(film)
+
+  try:
+    file_json = open(json_url, 'w+')  
+    json.dump(json_data, file_json)
+  except IOError:
+    return "<h1>There was a problem with your operation</h1>" 
+   
+  file_json.close()
+  
+  session['cart'].remove(film)
+  session.modified = True
+  
+  return redirect(url_for('myCart'))
   
 @app.route('/confirmAll')
 def confirmAll():
   if 'user' not in session:
-    return redirect(url_for('logForm'))
+    return redirect(url_for('loginForm'))
 
   SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
 
@@ -294,25 +346,69 @@ def confirmAll():
   file_json.close()
   
   if 'cart' in session:
-    price = 0
-    for film in user['cart']:
+    price = 0.0
+    for film in session['cart']:
       for peli in json_data['peliculas']:
         if str(peli['id']) == film:
           price += peli['precio']
+  else:
+    return redirect(url_for('myCart'))
           
-  if user['balance'] < price:
-    return render_template('shoppingCart.html', error=False) # You are oom
+  if float(session['balance']) < price:
+    return redirect(url_for('myCart'))
   
-  session['balance'] -= price
+  session['balance'] = str(float(session['balance']) - price)
   
   try:
-    json_url = os.path.join(SITE_ROOT, 'usuarios', session['user'], 'historial.json')
-    file_json = open(json_url)
-    json_data = json.load(file_json)
+    data_url = os.path.join(SITE_ROOT, 'usuarios', session['user'], 'datos.dat')
+    file_data = open(data_url, 'r')  
   except IOError:
     return "<h1>There was a problem with your operation</h1>"
   
+  lines = file_data.readlines()
+  lines[-1] = 'balance: '+session['balance'] # New balance
+
+  file_data.close()
+  
+  try:
+    file_data = open(data_url, 'w')
+    file_data.writelines(lines)
+  except IOError:
+    return "<h1>There was a problem with your operation</h1>" 
+  
+  file_data.close()
+  
+  json_data = None
+  try:
+    json_url = os.path.join(SITE_ROOT, 'usuarios', session['user'], 'historial.json')
+    file_json = open(json_url)  
+    json_data = json.load(file_json)
+  except IOError:
+    pass
+  
+  if json_data != None:
+    file_json.close()
+    
+    for peli in session['cart']:
+      json_data['peliculas'].append(peli)
+  else:
+    json_data = {}
+    json_data['peliculas']=[]
+    for peli in session['cart']:
+      json_data['peliculas'].append(peli)
+
+  try:
+    file_json = open(json_url, 'w+')  
+    json.dump(json_data, file_json)
+  except IOError:
+    return "<h1>There was a problem with your operation</h1>" 
+   
   file_json.close()
+  
+  session['cart']=[]
+  session.modified = True
+  
+  return redirect(url_for('myCart'))
   
 if __name__ == '__main__':
   app.run(host='0.0.0.0')

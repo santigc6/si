@@ -1,1 +1,3 @@
 http://blog.luisrei.com/articles/flaskrest.html
+https://flask-login.readthedocs.io/en/latest/#how-it-works
+https://www.programcreek.com/python/example/76929/flask.request.referrer
