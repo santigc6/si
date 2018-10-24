@@ -6,6 +6,6 @@
   -sudo chgrp www-data public_html/
   -sudo chmod g+w public_html/
 
--Cuidado con los permisos de la carpeta usuarios, porque al descargar de Moodle se cambian a que el grupo y otros solo tienen lectura (y por lo tanto Apache también). Hay que volver a darles escritura a ambos.
+-Cuidado con los permisos de la carpeta usuarios, porque al descargar de Moodle se cambian a que el grupo y otros solo tienen lectura (y por lo tanto Apache también). Hay que volver a darles escritura a ambos (y en todas las subcarpetas y subarchivos).
 
 Autores: Adrián Fernández Amador y Santiago González- Carvajal Centenera.
