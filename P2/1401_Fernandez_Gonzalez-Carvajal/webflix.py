@@ -270,10 +270,16 @@ def confirmFilm(film):
   
   file_json.close()
   
+  today = datetime.datetime.now()
+  aux={}
   price = 0.0
   for peli in json_data['peliculas']:
     if str(peli['id']) == film:
       price = peli['precio']
+      aux['id']=peli['id']
+      aux['pelicula']=peli['titulo']
+      aux['precio']=peli['precio']
+      aux['fecha']=str(today.day)+'/'+str(today.month)+'/'+str(today.year)
       
   if float(session['balance']) < price:
     return redirect(url_for('myCart'))
@@ -310,11 +316,11 @@ def confirmFilm(film):
   if json_data != None:
     file_json.close()
     
-    json_data['peliculas'].append(film)
+    json_data['peliculas'].append(aux)
   else:
     json_data = {}
     json_data['peliculas']=[]
-    json_data['peliculas'].append(film)
+    json_data['peliculas'].append(aux)
 
   try:
     file_json = open(json_url, 'w+')  
@@ -345,12 +351,20 @@ def confirmAll():
   
   file_json.close()
   
+  today = datetime.datetime.now()
+  l_diccs=[]
   if 'cart' in session:
     price = 0.0
     for film in session['cart']:
+      aux={}
       for peli in json_data['peliculas']:
         if str(peli['id']) == film:
           price += peli['precio']
+          aux['id']=peli['id']
+          aux['pelicula']=peli['titulo']
+          aux['precio']=peli['precio']
+          aux['fecha']=str(today.day)+'/'+str(today.month)+'/'+str(today.year)
+          l_diccs.append(aux)
   else:
     return redirect(url_for('myCart'))
           
@@ -388,15 +402,12 @@ def confirmAll():
   
   if json_data != None:
     file_json.close()
-    
-    for peli in session['cart']:
-      json_data['peliculas'].append(peli)
+    for item in l_diccs:
+      json_data['peliculas'].append(item)
   else:
     json_data = {}
-    json_data['peliculas']=[]
-    for peli in session['cart']:
-      json_data['peliculas'].append(peli)
-
+    json_data['peliculas']=l_diccs
+  
   try:
     file_json = open(json_url, 'w+')  
     json.dump(json_data, file_json)
