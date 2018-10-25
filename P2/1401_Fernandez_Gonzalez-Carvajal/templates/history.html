@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="cart">
+    <div class="shoppingList">
+      <table>
+        <tr>
+          <th>Film</th>
+          <th>Price</th>
+          <th colspan="2">Date</th>
+        </tr>
+        {% for pelicula in peliculas %}
+          <tr>
+            <td>{{ pelicula.pelicula }}</td>
+            <td>{{ pelicula.precio }}</td>
+            <td>{{ pelicula.fecha }}</td>
+          </tr>
+        {% endfor %}
+      </table>
+    </div>
+    <div class="underList">
+      <a class="rbutton" href="{{ url_for('index') }}">Purchase</a>
+      <p class="desc">Total price: {{ total }}€</p>
+    </div>
+  </div>
+{% endblock %}
