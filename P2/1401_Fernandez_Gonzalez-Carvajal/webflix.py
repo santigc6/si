@@ -421,5 +421,25 @@ def confirmAll():
   
   return redirect(url_for('myCart'))
   
+@app.route('/shoppingHistory')
+def history():
+  SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
+  
+  json_data=None
+  try:
+    json_url = os.path.join(SITE_ROOT, 'usuarios', session['user'], 'historial.json')
+    file_json = open(json_url)  
+    json_data = json.load(file_json)
+  except IOError:
+    pass
+    
+  if json_data == None:
+    json_data={}
+    json_data['user']=session['user']
+    
+  json_data['user']=session['user']
+  
+  return render_template('history.html', **json_data)
+  
 if __name__ == '__main__':
   app.run(host='0.0.0.0')
