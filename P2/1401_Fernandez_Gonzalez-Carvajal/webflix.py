@@ -500,5 +500,9 @@ def cash():
     
     return redirect(url_for('history'))
   
+@app.route('/numberOfUsers')
+def numberOfUsers():
+  return '<p class="whiteParagraph">Actual number of users is '+str(random.randint(1, 1001))+'</p>'
+  
 if __name__ == '__main__':
   app.run(host='0.0.0.0')

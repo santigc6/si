@@ -2,8 +2,6 @@
 
 {% block content %}
       <script type="text/javascript" src="{{ url_for('static', filename='js/validateRegistration.js') }}"></script>
-      <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro|Open+Sans+Condensed:300|Raleway' rel='stylesheet' type='text/css'>
-      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script><!-- jQuery Library-->
       <script src="{{ url_for('static', filename='js/passwordCheck.js') }}"></script>
       <div class="register">
         <form class="registerForm" name="regForm" action="{{ url_for('register') }}" method="POST" onsubmit="return validateRegistration()">

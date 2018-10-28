@@ -4,6 +4,11 @@
     <title>WebFlix</title>
     <meta charset="utf-8"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script><!-- jQuery Library-->
+    <script type=text/javascript>
+      $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+    </script>
+    <script src="{{ url_for('static', filename='js/reloadNumberOfUsers.js') }}"></script>
   </head>
 
   <body>
@@ -39,6 +44,8 @@
           <a class="rbutton" href="{{ url_for('myCart') }}">My cart</a>
         </li>
         {% endif %}
+        <li id="resultUser">
+        </li>
       </ul>
     </div>
 
