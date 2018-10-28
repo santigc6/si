@@ -172,6 +172,7 @@ def login():
     session['email']=lines[2].split()[1]
     session['creditcard']=lines[3].split()[1]
     session['balance']=lines[4].split()[1]
+    session['cash']=False
     session.modified=True
  
     try:
@@ -203,6 +204,9 @@ def logOut():
   for key in session.keys():
     if key != 'cart':
       session.pop(key)
+  
+  if 'cart' in session:
+    session['cart']=[]
      
   return redirect(url_for('index'))
 
@@ -229,6 +233,13 @@ def myCart():
 
   if 'user' in session:
     context['user'] = session['user']
+
+  if 'cash' not in session:
+    session['cash']=False
+
+  context['error']=session['cash']
+  session['cash']=False
+  session.modified=True
 
   return render_template('shoppingCart.html', **context)
 
@@ -282,6 +293,9 @@ def confirmFilm(film):
       aux['fecha']=str(today.day)+'/'+str(today.month)+'/'+str(today.year)
       
   if float(session['balance']) < price:
+    session['cash']=True
+    session.modified=True
+    
     return redirect(url_for('myCart'))
     
   session['balance'] = str(float(session['balance']) - price)
@@ -369,6 +383,9 @@ def confirmAll():
     return redirect(url_for('myCart'))
           
   if float(session['balance']) < price:
+    session['cash']=True
+    session.modified=True
+    
     return redirect(url_for('myCart'))
   
   session['balance'] = str(float(session['balance']) - price)
@@ -439,7 +456,49 @@ def history():
     
   json_data['user']=session['user']
   
+  try:
+    data_url = os.path.join(SITE_ROOT, 'usuarios', session['user'], 'datos.dat')
+    file_data = open(data_url, 'r')  
+  except IOError:
+    return "<h1>There was a problem with your operation</h1>"
+  
+  lines = file_data.readlines()
+  money = lines[-1].split()[1]
+
+  file_data.close()
+  
+  json_data['money']=money
+  
   return render_template('history.html', **json_data)
+  
+@app.route('/raiseCash', methods=['POST', 'GET'])
+def cash():
+  if request.method == 'POST': # We only allow POST requests
+    cash = request.form['cash']
+
+    SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
+
+    try:
+      data_url = os.path.join(SITE_ROOT, 'usuarios', session['user'], 'datos.dat')
+      file_data = open(data_url, 'r')  
+    except IOError:
+      return "<h1>There was a problem with your operation</h1>"
+    
+    session['balance'] = str(float(session['balance']) + float(cash))
+    lines = file_data.readlines()
+    lines[-1] = 'balance: '+session['balance'] # New balance
+
+    file_data.close()
+    
+    try:
+      file_data = open(data_url, 'w')
+      file_data.writelines(lines)
+    except IOError:
+      return "<h1>There was a problem with your operation</h1>" 
+    
+    file_data.close()
+    
+    return redirect(url_for('history'))
   
 if __name__ == '__main__':
   app.run(host='0.0.0.0')

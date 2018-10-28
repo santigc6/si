@@ -19,4 +19,12 @@
       </table>
     </div>
   </div>
+  <div>
+    <p class="infoMsg">Your balance: {{ money }}€</p>
+    <form class="cashForm" name="cashForm" action="{{ url_for('cash') }}" method="POST">
+        <label class="infoMsg">Add money: </label>
+        <input type="number" required min="1" name="cash" step="0.01" max="100">
+        <input type="submit" value="Add money">
+    </form>
+  </div>
 {% endblock %}

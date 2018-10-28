@@ -31,4 +31,9 @@
       <p class="desc">Total price: {{ total }}€</p>
     </div>
   </div>
+  {% if error %}
+    <div>
+      <p class="errorMsg">You have not enough money</p>
+    </div>
+  {% endif %}
 {% endblock %}
