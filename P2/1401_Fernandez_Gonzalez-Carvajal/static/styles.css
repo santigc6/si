@@ -533,13 +533,13 @@ div.register {
 }
 
 div.left {
-  width: 50%;
+  width: 40%;
   height: 100%;
   float: left;
 }
 
 div.right {
-  width: 50%;
+  width: 60%;
   height: 100%;
   float: right;
 }
@@ -555,8 +555,12 @@ form.registerForm label {
 }
 
 form.registerForm input[type=text], form.registerForm input[type=password] {
-  width: 100%;
+  width: 75%;
   height: 30px;
+}
+
+form.registerForm span {
+  width: 25%;
 }
 
 form.registerForm input[type=submit] {
@@ -688,4 +692,29 @@ p.desc {
   color: rgb(204, 204, 204);
   font-family: "Arial", Helvetica, sans-serif;
   font-size: 1.25em;
+}
+
+/* Password strength styles*/
+.short{
+  font-weight:bold;
+  color:#FF0000;
+  font-size:larger;
+}
+
+.weak{
+  font-weight:bold;
+  color:orange;
+  font-size:larger;
+}
+
+.good{
+  font-weight:bold;
+  color:#2D98F3;
+  font-size:larger;
+}
+
+.strong{
+  font-weight:bold;
+  color: limegreen;
+  font-size:larger;
 }
