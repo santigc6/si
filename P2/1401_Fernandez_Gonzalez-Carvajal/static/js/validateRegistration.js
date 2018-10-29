@@ -17,7 +17,8 @@ function validateRegistration(){
   } else if (email == "" || email == "E-mail"){
     alert("Invalid email");
     return false
-  } else if (email.length != 0) {
+  } 
+  if (email.length != 0) {
     var flag=0;
     for(var i = 0; i < email.length; i++){
       if (email[i]=="@"){
@@ -28,10 +29,17 @@ function validateRegistration(){
       alert("Invalid email");
       return false;
     }
-  } else if(cCard == "" || cCard == "Credit card"){
-    alert("Invalid credit card");
+  } 
+  if(cCard == "" || cCard == "Credit card"){
+    alert("Invalid visa credit card [it must start with 4 and it must has a length of 13 or 16 digits]");
     return false;
   } else {
-    return true;
+    var cardno = /^(?:4[0-9]{12}(?:[0-9]{3})?)$/;
+  
+    if(cCard.match(cardno)){
+      return true;
+    }
+    alert("Invalid visa credit card [it must start with 4 and it must has a length of 13 or 16 digits]");
+    return false;
   }
 }

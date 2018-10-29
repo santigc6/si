@@ -576,14 +576,12 @@ form.registerForm input[type=submit] {
 }
 
 form.cashForm {
-  float: center;
   text-align: center;
+  float: center;
 }
 
 form.cashForm label {
   width: 100%;
-  margin-top: 11px;
-  margin-bottom: 10px;
   display: inline-block;
   color: rgb(204, 204, 204);
   font-family: "Arial", Helvetica, sans-serif;
@@ -591,7 +589,7 @@ form.cashForm label {
 }
 
 form.cashForm input[type=submit] {
-  width: 10%;
+  width: 13%;
   height: 37px;
   float: center;
   color: white;
@@ -658,6 +656,7 @@ div.cart > div.shoppingList table {
   font-family: "Arial", Helvetica, sans-serif;
   border-collapse: collapse;
   width: 100%;
+  table-layout: fixed;
 }
 
 div.cart > div.shoppingList table td, div.cart > div.shoppingList table th {
