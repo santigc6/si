@@ -722,8 +722,17 @@ p.desc {
 /* AJAX styles */
 
 #resultUser {
+  margin: 26px 10px;
   vertical-align: center;
   text-align: center;
+  float: right;
+  max-width: 60%;
+  border-radius: 8px;
+  border: 1px solid rgb(204, 204, 204);
+  color: rgb(204, 204, 204);
+  background-color: rgb(8, 8, 8);
+  text-decoration: none;
+  font-family: "Arial", Helvetica, sans-serif;
 }
 
 .whiteParagraph {

@@ -453,7 +453,15 @@ def history():
   if json_data == None:
     json_data={}
     json_data['user']=session['user']
-    
+  
+  json_data['fechas']={} 
+  for pelicula in json_data['peliculas']:
+    if pelicula['fecha'] not in json_data['fechas']:
+      json_data['fechas'][pelicula['fecha']]=[]
+        
+    json_data['fechas'][pelicula['fecha']].append(pelicula)
+      
+  json_data.pop('peliculas', None)
   json_data['user']=session['user']
   
   try:

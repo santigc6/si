@@ -4,17 +4,18 @@
   <div class="cart">
     <div class="shoppingList">
       <table>
-        <tr>
-          <th>Film</th>
-          <th>Price</th>
-          <th>Date</th>
-        </tr>
-        {% for pelicula in peliculas %}
+        {% for fecha in fechas %}
+          <h3>{{ fecha }}</h3>
+          <tr>
+            <th>Film</th>
+            <th>Price</th>
+          </tr>
+          {% for pelicula in fechas[fecha] %}            
           <tr>
             <td>{{ pelicula.pelicula }}</td>
             <td>{{ pelicula.precio }}</td>
-            <td>{{ pelicula.fecha }}</td>
           </tr>
+          {% endfor %}
         {% endfor %}
       </table>
     </div>
