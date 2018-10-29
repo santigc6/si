@@ -1,31 +1,36 @@
 {% extends 'base.html' %}
 
 {% block content %}
+  <script type="text/javascript" src="{{ url_for('static', filename='js/dropDown.js') }}"></script>
   <div class="cart">
     <div class="shoppingList">
-      <table>
-        {% for fecha in fechas %}
-          <h3>{{ fecha }}</h3>
-          <tr>
-            <th>Film</th>
-            <th>Price</th>
-          </tr>
-          {% for pelicula in fechas[fecha] %}            
-          <tr>
-            <td>{{ pelicula.pelicula }}</td>
-            <td>{{ pelicula.precio }}</td>
-          </tr>
-          {% endfor %}
-        {% endfor %}
-      </table>
+      {% for fecha in fechas %}
+        <div class="dropDown">
+          <p>{{ fecha }}</p>
+          <div class="dropDownContent">
+            <table>
+              <tr>
+                <th>Film</th>
+                <th>Price</th>
+              </tr>
+              {% for pelicula in fechas[fecha] %}
+                <tr>
+                  <td>{{ pelicula.pelicula }}</td>
+                  <td>{{ pelicula.precio }}</td>
+                </tr>
+              {% endfor %}
+            </table>
+          </div>
+        </div>
+      {% endfor %}
     </div>
   </div>
-  <div>
+  <div class="underList">
     <p class="infoMsg">Your balance: {{ money }}€</p>
     <form class="cashForm" name="cashForm" action="{{ url_for('cash') }}" method="POST">
-        <label class="infoMsg">Add money: </label>
-        <input type="number" required min="1" name="cash" step="0.01" max="100">
-        <input type="submit" value="Add money">
+      <label class="infoMsg">Add money: </label>
+      <input type="number" required min="1" name="cash" step="0.01" max="100">
+      <input type="submit" value="Add money">
     </form>
   </div>
 {% endblock %}

@@ -449,18 +449,19 @@ def history():
     json_data = json.load(file_json)
   except IOError:
     pass
-    
+  
+  if json_data != None:
+    json_data['fechas']={} 
+    for pelicula in json_data['peliculas']:
+      if pelicula['fecha'] not in json_data['fechas']:
+        json_data['fechas'][pelicula['fecha']]=[]
+          
+      json_data['fechas'][pelicula['fecha']].append(pelicula)
+      
   if json_data == None:
     json_data={}
     json_data['user']=session['user']
-  
-  json_data['fechas']={} 
-  for pelicula in json_data['peliculas']:
-    if pelicula['fecha'] not in json_data['fechas']:
-      json_data['fechas'][pelicula['fecha']]=[]
-        
-    json_data['fechas'][pelicula['fecha']].append(pelicula)
-      
+
   json_data.pop('peliculas', None)
   json_data['user']=session['user']
   
@@ -510,7 +511,7 @@ def cash():
   
 @app.route('/numberOfUsers')
 def numberOfUsers():
-  return '<p class="whiteParagraph">Actual number of users is '+str(random.randint(1, 1001))+'</p>'
+  return '<div><p>Users: '+str(random.randint(1, 1001))+'</p></div>'
   
 if __name__ == '__main__':
   app.run(host='0.0.0.0')
