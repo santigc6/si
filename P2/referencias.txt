@@ -1,6 +1,0 @@
-http://blog.luisrei.com/articles/flaskrest.html
-https://flask-login.readthedocs.io/en/latest/#how-it-works
-https://www.programcreek.com/python/example/76929/flask.request.referrer
-https://www.formget.com/password-strength-checker-in-jquery/
-https://stackoverflow.com/questions/5052543/how-to-fire-ajax-request-periodically
-http://flask.pocoo.org/docs/1.0/patterns/jquery/#where-is-my-site
