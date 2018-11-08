@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>WebFlix</title>
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script><!-- jQuery Library-->
+    <script type=text/javascript>
+      $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+    </script>
+    <script src="{{ url_for('static', filename='js/reloadNumberOfUsers.js') }}"></script>
+  </head>
+
+  <body>
+    <!-- Menu -->
+    <div class="menu">
+      <a class="logo" href="{{ url_for('index') }}">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="logo">
+      </a>
+      <ul>
+        {% if user %}
+        <li>
+          <a class="rbutton" href="{{ url_for('logOut') }}">Sing out</a>
+        </li>
+        <li>
+          <a class="rbutton" href="{{ url_for('myCart') }}">My cart</a>
+        </li>
+        <li>
+          <a class="rbutton" href="{{ url_for('history') }}">Shopping history</a>
+        </li>
+        <li>
+          <div>
+            <p>Logged as {{ user }}</p>
+          </div>
+        </li> 
+        {% else %}
+        <li>
+          <a class="rbutton" href="{{ url_for('registerForm') }}">Register</a>
+        </li>
+        <li>
+          <a class="rbutton" href="{{ url_for('loginForm') }}">Sign in</a>
+        </li>
+        <li>
+          <a class="rbutton" href="{{ url_for('myCart') }}">My cart</a>
+        </li>
+        {% endif %}
+        <li id="resultUser">
+        </li>
+      </ul>
+    </div>
+
+    <!-- Side list -->
+    <ul class="sideList">
+      <li><a href="{{ url_for('index') }}">2019</a></li>
+      <li><a href="{{ url_for('index') }}">2018</a></li>
+      <li><a href="{{ url_for('index') }}">2017</a></li>
+      <li><a href="{{ url_for('index') }}">2016</a></li>
+      <li><a href="{{ url_for('index') }}">2015</a></li>
+      <li><a href="{{ url_for('index') }}">2014</a></li>
+      <li><a href="{{ url_for('index') }}">2013</a></li>
+      <li><a href="{{ url_for('index') }}">2012</a></li>
+      <li><a href="{{ url_for('index') }}">2011</a></li>
+      <li><a href="{{ url_for('index') }}">2010 and before</a></li>
+    </ul>
+
+    <!-- Content -->
+    <div class="content">
+      {% block content %}{% endblock %}
+    </div>
+    
+    <!-- Footer -->
+    <div class="foot">
+      <p>Your trusted online film shop &copy;2018/2019</p>
+    </div>
+  </body>
+</html>

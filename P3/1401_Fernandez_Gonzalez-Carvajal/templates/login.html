@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="register">
+      <form class="registerForm" name="logForm" action="{{ url_for('login') }}" method="POST">
+        <div class="left">
+          <label for="Username">Username:</label><br>
+          <label for="Password">Password:</label><br>
+          <input type="submit" value="Confirm">
+        </div>
+        <div class="right">
+          {% if cookie %}
+          <input type="text" id="Username" name="Username" placeholder="Username" value="{{ cookie }}">
+          {% else %}
+          <input type="text" id="Username" name="Username" placeholder="Username" onfocus="this.value='';">
+          {% endif %}
+          <input type="password" id="Password" name="Password" onfocus="this.value='';">
+        </div>
+      </form>
+    </div>
+    {% if error %}
+    <div>
+      <p class="errorMsg">Invalid username or password</p>
+    </div>
+    {% endif %}
+{% endblock %}

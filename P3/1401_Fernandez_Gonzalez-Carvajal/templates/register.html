@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+      <script type="text/javascript" src="{{ url_for('static', filename='js/validateRegistration.js') }}"></script>
+      <script src="{{ url_for('static', filename='js/passwordCheck.js') }}"></script>
+      <div class="register">
+        <form class="registerForm" name="regForm" action="{{ url_for('register') }}" method="POST" onsubmit="return validateRegistration()">
+          <div class="left">
+            <label for="Username">Username:</label><br>
+            <label for="password">Password:</label><br>
+            <label for="RepeatPassword">Repeat password:</label><br>
+            <label for="E-mail">E-mail:</label><br>
+            <label for="CreditCard">Credit card:</label><br>
+            <input type="submit" value="Confirm">
+          </div>
+          <div class="right">
+            <input type="text" required id="Username" name="Username" placeholder="Username" onfocus="this.value='';">
+            <input type="password" required id="password" name="Password" onfocus="this.value='';">
+            <span id="result"></span>
+            <input type="password" required id="RepeatPassword" name="RepeatPassword" onfocus="this.value='';">
+            <input type="text" required id="E-mail" name="E-mail" placeholder="E-mail" onfocus="this.value='';">
+            <input type="text" required id="CreditCard" name="CreditCard" placeholder="Credit card" onfocus="this.value='';">
+          </div>
+        </form>
+      </div>
+      {% if error %}
+      <div>
+        <p class="errorMsg">User already exists</p>
+      </div>
+      {% endif %}
+{% endblock %}

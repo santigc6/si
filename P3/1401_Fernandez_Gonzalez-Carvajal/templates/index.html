@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="index">
+  <form class="search" action="{{ url_for('filter') }}" method="POST">
+    <select class="custom-select" name="CategorySearch" onchange="if(this.value != 0) { this.form.submit();}">
+      <option selected value="Default">Select a category</option>
+      {% for categoria in categorias %}
+      <option value="{{ categoria }}">{{ categoria }}</option>
+      {% endfor %}
+    </select>
+    <input type="search" name="SearchFilm" placeholder="Search films by name" onfocus="this.value='';">
+    <input type="submit" value="Search">
+  </form>
+  {% for pelicula in peliculas %}
+    <a class="container" href="{{ url_for('details', pelicula='') }}{{ pelicula.id }}">
+      <img class="filmPic" src="{{ url_for('static', filename='') }}{{ pelicula.poster }}" alt="{{ pelicula.titulo }}">
+      <p class="hidDesc">
+        {{ pelicula.titulo }}
+      </p>
+    </a>
+  {% endfor %}
+</div>
+{% endblock %}

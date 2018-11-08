@@ -1,0 +1,748 @@
+/* HTML ITEMS */
+html{
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  font-size: 100%;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+div {
+  margin: 0;
+  padding: 0;
+}
+
+
+
+/* CLASSES */
+.title {
+  font-size: 42px;
+  color: white;
+  text-align: center;
+}
+
+.shoppingHist {
+  font-size: 36px;
+  background-color: black;
+  color: red;
+  margin-left: auto;
+  margin-right: auto;
+  border-collapse: separate;
+  border-spacing: 20px 0;
+}
+
+.errorMsg {
+  color: red;
+  text-align: center;
+  float: center;
+}
+
+.infoMsg {
+  color: white;
+  text-align: center;
+  float: center;
+}
+
+
+
+/* Menu */
+div.menu {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 15%;
+  min-height: 90px;
+  float: top;
+  overflow: hidden;
+  background-color: black;
+  border-bottom: 2px solid rgb(32, 32, 32);
+}
+
+div.menu ul {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background-color: inherit;
+  list-style-type: none;
+}
+
+a.logo {
+  height: 100%;
+  width: auto;
+  float: left;
+  outline: none;
+}
+
+a.logo img {
+  height: 100%;
+  width: auto;
+}
+
+div.menu div {
+  height: 100%;
+  margin: 16px 10px;
+  padding: auto;
+  float: right;
+  display: inline-block;
+  text-align: center;
+  border-right: 1px solid rgb(204, 204, 204);
+}
+
+div.menu div > p {
+  margin-right: 10px;
+  color: rgb(204, 204, 204);
+  font-family: "Arial", Helvetica, sans-serif;
+  font-size: 1.25em;
+  cursor: default;
+}
+
+a.lbutton {
+  margin: 26px 10px;
+  padding: 12px 25px;
+  border: 1px solid rgb(204, 204, 204);
+  border-radius: 8px;
+  display: inline-block;
+  color: rgb(204, 204, 204);
+  background-color: rgb(8, 8, 8);
+  text-align: center;
+  text-decoration: none;
+  font-family: "Arial", Helvetica, sans-serif;
+  outline: none;
+  float: left;
+}
+
+a.rbutton {
+  margin: 26px 10px;
+  padding: 12px 25px;
+  border: 1px solid rgb(204, 204, 204);
+  border-radius: 8px;
+  display: inline-block;
+  color: rgb(204, 204, 204);
+  background-color: rgb(8, 8, 8);
+  text-align: center;
+  text-decoration: none;
+  font-family: "Arial", Helvetica, sans-serif;
+  outline: none;
+  float: right;
+}
+
+a.lbutton:hover, a.rbutton:hover {
+  background-color: rgb(32, 32, 32);
+}
+
+
+/*VIEJO
+.upperBar {
+  background-color: black;
+  float: top;
+  width: 100%;
+  height: 18%;
+  min-height: 130px;
+  list-style-type: none;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+.buttonTop {
+  background-color: white;
+  border: none;
+  color: red;
+  width: 90px;
+  height: 18px;
+  margin: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 12px;
+  float: right;
+}
+
+.buttonTopExt {
+  background-color: white;
+  border: none;
+  color: red;
+  width: 90px;
+  height: 36px;
+  margin: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 12px;
+  float: right;
+}
+
+.logoButton {
+  float: left;
+  width: 400px;
+  height: 100%;
+}
+
+.loggedText {
+  color: white;
+  text-align: right;
+  margin-right: 50px;
+}*/
+
+
+
+/* Side list */
+ul.sideList {
+  margin: 0;
+  padding: 0;
+  width: 25%;
+  height: 80%;
+  position: fixed;
+  left: 0;
+  overflow: auto;
+  list-style-type: none;
+  background-color: black;
+}
+
+ul.sideList > li {
+  margin: 0;
+  width: 100%;
+  float: left;
+  background-color: rgb(8, 8, 8);
+  text-align: center;
+}
+
+ul.sideList > li:nth-child(even) {
+  background-color: rgb(16, 16, 16);
+}
+
+ul.sideList > li > a {
+  padding: 12px;
+  vertical-align: middle;
+  display: block;
+  color: rgb(204, 204, 204);
+  text-decoration: none;
+  font-size: 24px;
+}
+
+ul.sideList > li > a:hover {
+  color: rgb(8, 8, 8);
+  background-color: red;
+}
+
+
+/*VIEJO
+.sideList {
+  background-color: red;
+  width: 25%;
+  height: 77%;
+  float: left;
+  position: relative;
+  min-height: 400px;
+  margin: 0;
+  padding: 0;
+}
+
+div ul {
+  float: left;
+  margin: 0;
+  list-style-type: none;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+}
+
+div ul li {
+  text-align: center;
+  float: left;
+  margin: 0;
+  width: 100%;
+  height: 12.23%;
+  position: relative;
+  border-style: solid;
+  border-width: thin;
+}
+
+div ul li p {
+  vertical-align: middle;
+  font-size: 24px;
+}*/
+
+
+
+/* Content */
+div.content {
+  margin: 0;
+  padding: 0;
+  width: 75%;
+  height: 80%;
+  position: fixed;
+  right: 0;
+  overflow: auto;
+  background-image: linear-gradient(135deg, rgb(10, 10, 10), rgb(34, 34, 34));
+}
+
+
+
+
+/*VIEJO
+.content {
+  background-color: rgb(32,32,32);
+  float: right;
+  height: 77%;
+  min-height: 400px;
+  width: 75%;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  overflow-x: auto;
+}*/
+
+
+
+/*Footer*/
+div.foot {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 5%;
+  min-height: 30px;
+  position: fixed;
+  bottom: 0;
+  background-color: black;
+  text-align: center;
+}
+
+div.foot > p {
+  margin: auto;
+  padding: 10px;
+  color: red;
+  font-family: "Arial", Helvetica, sans-serif;
+}
+
+
+/*VIEJO
+.foot {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 5%;
+  background-color: black;
+  text-align: center;
+  color: red;
+}*/
+
+
+
+/*Index*/
+div.index {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+form.search > input[type=search] {
+  width: 60%;
+  height: 47px;
+  float: left;
+  box-sizing: border-box;
+  border: 2px solid rgb(204, 204, 204);
+  font-size: 16px;
+  background-color: white;
+  background-image: url("search_icon.png");
+  background-position: 10px 10px; 
+  background-repeat: no-repeat;
+  background-size: 21px;
+  padding: 12px 20px 12px 40px;
+}
+
+form.search > input[type=submit] {
+  width: 20%;
+  height: 47px;
+  padding: 10px;
+  float: left;
+  color: white;
+  background: red;
+  border: 1px solid darkred;
+  font-size: 17px;
+  cursor: pointer;
+}
+
+form.search > input[type=submit]:hover {
+  background: darkred;
+}
+
+form.search > select {
+  width: 20%;
+  height: 47px;
+  float: left;
+  box-sizing: border-box;
+  border: 2px solid rgb(204, 204, 204);
+  font-size: 16px;
+  background-color: white;
+  padding: 10px;
+}
+
+img.filmPic {
+  width: 235px;
+  height: 300px;
+}
+
+.container {
+  position: relative;
+  width: 235px;
+  height: 300px;
+  float: left;
+  border: 2px solid rgb(204, 204, 204);
+  border-radius: 2px
+}
+
+.container:hover {
+  opacity: 0.3;
+  border-color: rgb(32, 32, 32);
+}
+
+p.hidDesc {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  color: white;
+  text-align: center;
+  font-size: 18px;
+  font-family: "Arial", Helvetica, sans-serif;
+  visibility: hidden;
+}
+
+.container:hover p.hidDesc {
+  visibility: visible;
+}
+
+
+/*VIEJO
+div form input[type=search] {
+  color: black;
+  width: 35%;
+}
+
+div form input[type=text] {
+  color: black;
+  width: 35%;
+}
+
+div form input[type=password] {
+  color: black;
+  width: 35%;
+}
+
+div form input[type=submit] {
+  width: 6%;
+  text-align: center;
+}
+
+div form select {
+  width: 56.2%;
+}
+
+.filmPic {
+  height: 32%;
+  width: 24.2%;
+}*/
+
+
+
+/* Details */
+div.detail {
+  width: 800px;
+  height: 360px;
+  margin: 50px 80px;
+}
+
+img.detailPic {
+  width: 280px;
+  height: 360px;
+  float: left;
+  border: 2px solid rgb(204, 204, 204);
+  border-radius: 2px
+}
+
+div.detailInfo {
+  width: 510px;
+  float: right;
+  color: rgb(204, 204, 204);
+}
+
+p.info {
+  margin: 26px 10px;
+}
+
+
+/*VIEJO
+.detailPic {
+  margin-left: 10%;
+  margin-top: 5%;
+  height: 70%;
+  width: 40%;
+  float: left;
+}
+
+.detailInfo {
+  background-color: black;
+  color: red;
+  margin-right: 10%;
+  margin-top: 5%;
+  height: 70%;
+  width: 40%;
+  float: right;
+}
+
+.info {
+  margin-left: 20px;
+}
+
+.buttonDown {
+  background-color: white;
+  border: none;
+  color: red;
+  width: 90px;
+  height: 18px;
+  margin-right: 10%;
+  margin-top: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 12px;
+  float: right;
+}*/
+
+
+
+/* Register */
+div.register {
+  width: 600px;
+  height: 300px;
+  margin: 100px 160px;
+}
+
+div.left {
+  width: 40%;
+  height: 100%;
+  float: left;
+}
+
+div.right {
+  width: 60%;
+  height: 100%;
+  float: right;
+}
+
+form.registerForm label {
+  width: 100%;
+  margin-top: 11px;
+  margin-bottom: 10px;
+  display: inline-block;
+  color: rgb(204, 204, 204);
+  font-family: "Arial", Helvetica, sans-serif;
+  font-size: 1.25em;
+}
+
+form.registerForm input[type=text], form.registerForm input[type=password] {
+  width: 75%;
+  height: 30px;
+}
+
+form.registerForm span {
+  width: 25%;
+}
+
+form.registerForm input[type=submit] {
+  width: 70%;
+  height: 47px;
+  padding: 10px;
+  float: left;
+  color: white;
+  background: red;
+  border: 1px solid darkred;
+  font-size: 17px;
+  cursor: pointer;
+}
+
+form.cashForm {
+  text-align: center;
+  float: center;
+}
+
+form.cashForm label {
+  width: 100%;
+  display: inline-block;
+  color: rgb(204, 204, 204);
+  font-family: "Arial", Helvetica, sans-serif;
+  font-size: 1.25em;
+}
+
+form.cashForm input[type=submit] {
+  width: 13%;
+  height: 37px;
+  float: center;
+  color: white;
+  background: red;
+  border: 1px solid darkred;
+  font-size: 17px;
+  cursor: pointer;
+  text-align: center;
+}
+
+form.cashForm input[type=number] {
+  height: 27px;
+  width: 10%;
+  float: center;
+  text-align: center;
+}
+
+/*VIEJO
+.register {
+  display: block;
+  margin: 10% 30%;
+}
+
+.registerLabel {
+  font-size: 100%;
+}
+
+.registerInput {
+  width:35%;
+  float: right;
+}
+
+.registerSubmit {
+  background-color: white;
+  text-align: center;
+  border: none;
+  color: red;
+  width: 60px;
+  height: 18px;
+  margin: 10px;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 12px;
+  float: right;
+  padding: 0px 85px 0px 30px;
+}*/
+
+
+
+/* Shopping cart */
+div.cart {
+  width: 800px;
+  height: 360px;
+  margin: 50px 80px;
+}
+
+div.cart > div.shoppingList {
+  width: 100%;
+  height: 90%;
+  overflow: auto;
+}
+
+div.cart > div.shoppingList table {
+  font-family: "Arial", Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: fixed;
+}
+
+div.cart > div.shoppingList table td, div.cart > div.shoppingList table th {
+  border-bottom: 1px solid rgb(32, 32, 32);
+  padding: 8px;
+  color: rgb(204, 204, 204);
+}
+
+div.cart > div.shoppingList table th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+}
+
+div.cart > div.shoppingList p {
+  margin-right: 10px;
+  color: rgb(204, 204, 204);
+  background-color: rgb(8, 8, 8);
+  font-family: "Arial", Helvetica, sans-serif;
+  font-size: 1.25em;
+  cursor: pointer;
+}
+
+img.icon {
+  width: 21px;
+  height: 21px;
+  float: right;
+  color: white;
+}
+
+div.cart > div.underList {
+  width: 100%;
+  height: 10%;
+}
+
+p.desc {
+  margin-top: 37px;
+  margin-right: 10px;
+  float: right;
+  display: inline-block;
+  color: rgb(204, 204, 204);
+  font-family: "Arial", Helvetica, sans-serif;
+  font-size: 1.25em;
+}
+
+/* Password strength styles*/
+.short{
+  font-weight:bold;
+  color:#FF0000;
+  font-size:larger;
+}
+
+.weak{
+  font-weight:bold;
+  color:orange;
+  font-size:larger;
+}
+
+.good{
+  font-weight:bold;
+  color:#2D98F3;
+  font-size:larger;
+}
+
+.strong{
+  font-weight:bold;
+  color: limegreen;
+  font-size:larger;
+}
+
+/* AJAX styles */
+.whiteParagraph {
+  color: white;
+  text-align: center;
+  vertical-align: middle;
+  padding: 12px 25px;
+}
+
+
+/* Dropdown */
+.dropDown {
+  overflow: auto;
+}
+
+.dropDownContent {
+  overflow: auto;
+  cursor: default;
+  display: none;
+}

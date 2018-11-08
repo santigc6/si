@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="cart">
+    <div class="shoppingList">
+      <table>
+        <tr>
+          <th>Film</th>
+          <th colspan="3">Price</th>
+        </tr>
+        {% for pelicula in peliculas %}
+          <tr>
+            <td>{{ pelicula.titulo }}</td>
+            <td>{{ pelicula.precio }}</td>
+            <td>
+              <a href="{{ url_for('confirmFilm', film='') }}{{ pelicula.id }}">
+                <img class="icon" src="{{ url_for('static', filename='coin_icon.png') }}" alt="coin icon">
+              </a>
+            </td>
+            <td>
+              <a href="{{ url_for('removeFromCart', film='') }}{{ pelicula.id }}">
+                <img class="icon" src="{{ url_for('static', filename='trash_icon.png') }}" alt="trash icon">
+              </a>
+            </td>
+          </tr>
+        {% endfor %}
+      </table>
+    </div>
+    <div class="underList">
+      <a class="rbutton" href="{{ url_for('confirmAll') }}">Purchase</a>
+      <p class="desc">Total price: {{ total }}€</p>
+    </div>
+  </div>
+  {% if error %}
+    <div>
+      <p class="errorMsg">You have not enough money</p>
+    </div>
+  {% endif %}
+{% endblock %}
