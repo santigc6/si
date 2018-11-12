@@ -1,7 +1,7 @@
 --
 --  Fichero que actualiza la base de datos
 --
-
+-------------------------------------------------------------------------------
 --
 --	Table to represent languages as an integer
 --
@@ -13,6 +13,23 @@ CREATE TABLE public.languages (
 
 
 ALTER TABLE public.languages OWNER TO alumnodb;
+
+-------------------------------------------------------------------------------
+
+CREATE SEQUENCE public.languages_id_lang_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+ALTER TABLE public.languages_id_lang_seq OWNER TO alumnodb;
+
+ALTER SEQUENCE public.languages_id_lang_seq OWNED BY public.languages.id_lang;
+
+ALTER TABLE ONLY public.languages ALTER COLUMN id_lang SET DEFAULT nextval('public.languages_id_lang_seq'::regclass);
+
+-------------------------------------------------------------------------------
 
 --
 --	Table to represent countries as an integer
@@ -26,6 +43,22 @@ CREATE TABLE public.countries (
 
 ALTER TABLE public.countries OWNER TO alumnodb;
 
+-------------------------------------------------------------------------------
+
+CREATE SEQUENCE public.countries_id_country_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+ALTER TABLE public.countries_id_country_seq OWNER TO alumnodb;
+
+ALTER SEQUENCE public.countries_id_country_seq OWNED BY public.countries.id_country;
+
+ALTER TABLE ONLY public.countries ALTER COLUMN id_country SET DEFAULT nextval('public.countries_id_country_seq'::regclass);
+-------------------------------------------------------------------------------
+
 --
 --	Table to represent Categories
 --
@@ -38,6 +71,22 @@ CREATE TABLE public.categories (
 
 ALTER TABLE public.categories OWNER TO alumnodb;
 
+-------------------------------------------------------------------------------
+
+CREATE SEQUENCE public.categories_id_cat_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+ALTER TABLE public.categories_id_cat_seq OWNER TO alumnodb;
+
+ALTER SEQUENCE public.categories_id_cat_seq OWNED BY public.categories.id_cat;
+
+ALTER TABLE ONLY public.categories ALTER COLUMN id_cat SET DEFAULT nextval('public.categories_id_cat_seq'::regclass);
+
+-------------------------------------------------------------------------------
 
 --
 --	Matches each film with its categories
@@ -48,13 +97,58 @@ ALTER TABLE public.imdb_moviegenres
 	ADD CONSTRAINT imdb_moviegenres_genre_fkey FOREIGN KEY (genre)
 		REFERENCES public.categories(id_cat);
 
-DROP TABLE public.imdb_movielanguages;
+-------------------------------------------------------------------------------
 
 --
--- Each film has it's language
+-- Each film has it's language, etc.
 --
-ALTER TABLE public.imdb_movies
-	ADD COLUMN language integer NOT NULL,
-	ADD COLUMN extrainformation text,
-	ADD CONSTRAINT imdb_movies_fkey FOREIGN KEY (language)
+ALTER TABLE public.imdb_movielanguages
+	ALTER COLUMN language integer NOT NULL,
+	ADD CONSTRAINT imdb_movielanguages_language_fkey FOREIGN KEY (language)
 		REFERENCES public.languages(id_lang);
+
+-------------------------------------------------------------------------------
+
+ALTER TABLE public.imdb_actors ALTER COLUMN gender TYPE character varying(1);
+
+-------------------------------------------------------------------------------
+
+ALTER TABLE public.imdb_moviecountries
+	ALTER COLUMN country TYPE integer,
+	ALTER COLUMN country SET NOT NULL,
+	ADD CONSTRAINT imdb_moviecountries_country_fkey FOREIGN KEY (country)
+		REFERENCES public.countries(id_country);
+
+-------------------------------------------------------------------------------
+
+CREATE TABLE public.status (
+	id_status integer NOT NULL,
+	name_status character varying(12),
+	CONSTRAINT status_pkey PRIMARY KEY (id_status)
+);
+
+ALTER TABLE public.status OWNER TO alumnodb;
+
+-------------------------------------------------------------------------------
+
+CREATE SEQUENCE public.status_id_status_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+ALTER TABLE public.status_id_status_seq OWNER TO alumnodb;
+
+ALTER SEQUENCE public.status_id_status_seq OWNED BY public.status.id_status;
+
+ALTER TABLE ONLY public.status ALTER COLUMN id_status SET DEFAULT nextval('public.status_id_status_seq'::regclass);
+
+-------------------------------------------------------------------------------
+
+ALTER TABLE public.orders
+	ALTER COLUMN status TYPE integer NOT NULL,
+	ALTER COLUMN status SET DEFAULT 0,
+	ADD CONSTRAINT orders_fkey FOREIGN KEY (status)
+		REFERENCES public.statuses (id_status);
+
