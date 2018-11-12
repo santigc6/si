@@ -149,6 +149,10 @@ ALTER TABLE ONLY public.status ALTER COLUMN id_status SET DEFAULT nextval('publi
 ALTER TABLE public.orders
 	ALTER COLUMN status TYPE integer NOT NULL,
 	ALTER COLUMN status SET DEFAULT 0,
-	ADD CONSTRAINT orders_fkey FOREIGN KEY (status)
-		REFERENCES public.statuses (id_status);
+	ALTER COLUMN customerid SET NOT NULL,
+	ADD CONSTRAINT orders_status_fkey FOREIGN KEY (status)
+		REFERENCES public.statuses (id_status),	
+	ADD CONSTRAINT orders_customerid_fkey FOREIGN KEY (customerid)
+		REFERENCES public.customers (customerid);
 
+-------------------------------------------------------------------------------
