@@ -249,3 +249,29 @@ ALTER TABLE public.imdb_actormovies
 ALTER TABLE public.imdb_movies ALTER COLUMN year TYPE integer USING (SPLIT_PART(year, '-', 1)::integer);
 
 -------------------------------------------------------------------------------
+
+CREATE OR REPLACE FUNCTION setOrderAmount ()
+    RETURNS void
+AS $$
+BEGIN
+    WITH total AS (
+        SELECT orders.orderid AS id, SUM(products.price) AS suma
+        FROM orders INNER JOIN orderdetail ON orders.orderid = orderdetail.orderid
+            INNER JOIN products ON products.prod_id = orderdetail.prod_id
+        GROUP BY orders.orderid)
+    UPDATE
+        orders
+    SET
+        netamount = total.suma,
+        totalamount = total.suma + tax
+    FROM
+        total
+    WHERE
+        orders.orderid = total.id AND
+        orders.netamount IS NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+SELECT setOrderAmount();
+
+-------------------------------------------------------------------------------
