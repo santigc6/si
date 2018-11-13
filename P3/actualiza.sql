@@ -131,14 +131,28 @@ ALTER SEQUENCE public.categories_id_cat_seq OWNED BY public.categories.id_cat;
 
 ALTER TABLE ONLY public.categories ALTER COLUMN id_cat SET DEFAULT nextval('public.categories_id_cat_seq'::regclass);
 
+-- We insert the categories
+INSERT INTO public.categories (name_cat)
+SELECT DISTINCT public.imdb_moviegenres.genre
+FROM public.imdb_moviegenres;
+
+-- We update every language
+UPDATE public.imdb_moviegenres
+SET genre=public.categories.id_cat
+FROM public.categories
+WHERE public.imdb_moviegenres.genre=public.categories.name_cat;
+
+-- Now we update the data type
+ALTER TABLE public.imdb_moviegenres
+  ALTER COLUMN genre TYPE integer USING (genre::integer),
+  ALTER COLUMN genre SET NOT NULL;
+
 -------------------------------------------------------------------------------
 
 --
 --	Matches each film with its categories
 --
 ALTER TABLE public.imdb_moviegenres 
-	ALTER COLUMN genre TYPE integer USING (trim(genre)::integer),
-	ALTER COLUMN genre SET NOT NULL,
 	DROP CONSTRAINT imdb_moviegenres_movieid_fkey,
 	ADD CONSTRAINT imdb_moviegenres_movieid_fkey FOREIGN KEY (movieid)
       REFERENCES public.imdb_movies (movieid)
@@ -174,39 +188,8 @@ ALTER TABLE public.imdb_moviecountries
 
 -------------------------------------------------------------------------------
 
-CREATE TABLE public.status (
-	id_status integer NOT NULL,
-	name_status character varying(12),
-	CONSTRAINT status_pkey PRIMARY KEY (id_status)
-);
-
-ALTER TABLE public.status OWNER TO alumnodb;
-
--------------------------------------------------------------------------------
-
-CREATE SEQUENCE public.status_id_status_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-ALTER TABLE public.status_id_status_seq OWNER TO alumnodb;
-
-ALTER SEQUENCE public.status_id_status_seq OWNED BY public.status.id_status;
-
-ALTER TABLE ONLY public.status ALTER COLUMN id_status SET DEFAULT nextval('public.status_id_status_seq'::regclass);
-
--------------------------------------------------------------------------------
-
 ALTER TABLE public.orders
-	ALTER COLUMN status TYPE integer USING (trim(status)::integer),
-  ALTER COLUMN status SET NOT NULL,
-	ALTER COLUMN status SET DEFAULT 0,
 	ALTER COLUMN customerid SET NOT NULL,
-	ADD CONSTRAINT orders_status_fkey FOREIGN KEY (status)
-		REFERENCES public.status (id_status)
-		ON UPDATE CASCADE,	
 	ADD CONSTRAINT orders_customerid_fkey FOREIGN KEY (customerid)
 		REFERENCES public.customers (customerid)
 		ON UPDATE CASCADE;
@@ -238,10 +221,6 @@ ALTER TABLE public.inventory
 	ADD CONSTRAINT inventory_fkey FOREIGN KEY (prod_id)
 		REFERENCES public.products (prod_id)
 		ON UPDATE CASCADE;
-
--------------------------------------------------------------------------------
-
---ALTER TABLE public.imdb_movies ALTER COLUMN year TYPE integer USING (trim(year)::integer);
 
 -------------------------------------------------------------------------------
 
