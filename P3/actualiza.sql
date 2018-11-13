@@ -29,6 +29,22 @@ ALTER SEQUENCE public.languages_id_lang_seq OWNED BY public.languages.id_lang;
 
 ALTER TABLE ONLY public.languages ALTER COLUMN id_lang SET DEFAULT nextval('public.languages_id_lang_seq'::regclass);
 
+-- We insert the languages
+INSERT INTO public.languages (name_lang)
+SELECT DISTINCT public.imdb_movielanguages.language
+FROM public.imdb_movielanguages;
+
+-- We update every language
+UPDATE public.imdb_movielanguages
+SET language=public.languages.id_lang
+FROM public.languages
+WHERE public.imdb_movielanguages.language=public.languages.name_lang;
+
+-- Now we update the data type
+ALTER TABLE public.imdb_movielanguages 
+  ALTER COLUMN language TYPE integer USING (language::integer),
+  ALTER COLUMN language SET NOT NULL;
+
 -------------------------------------------------------------------------------
 
 --
@@ -57,6 +73,35 @@ ALTER TABLE public.countries_id_country_seq OWNER TO alumnodb;
 ALTER SEQUENCE public.countries_id_country_seq OWNED BY public.countries.id_country;
 
 ALTER TABLE ONLY public.countries ALTER COLUMN id_country SET DEFAULT nextval('public.countries_id_country_seq'::regclass);
+
+-- We insert the countries
+INSERT INTO public.countries (name_country)
+SELECT DISTINCT public.imdb_moviecountries.country
+FROM public.imdb_moviecountries;
+
+INSERT INTO public.countries (name_country)
+SELECT DISTINCT (TRIM(LEADING FROM public.customers.country))
+FROM public.customers;
+
+-- We update all the countries in the database
+UPDATE public.imdb_moviecountries
+SET country=public.countries.id_country
+FROM public.countries
+WHERE public.imdb_moviecountries.country=public.countries.name_country;
+
+ALTER TABLE imdb_moviecountries
+  ALTER COLUMN country TYPE integer USING (country::integer),
+  ALTER COLUMN country SET NOT NULL;
+
+UPDATE public.customers
+SET country=public.countries.id_country
+FROM public.countries
+WHERE (TRIM(LEADING FROM public.customers.country))=public.countries.name_country;
+
+ALTER TABLE public.customers
+  ALTER COLUMN country TYPE integer USING (country::integer),
+  ALTER COLUMN country SET NOT NULL;
+
 -------------------------------------------------------------------------------
 
 --
@@ -92,7 +137,7 @@ ALTER TABLE ONLY public.categories ALTER COLUMN id_cat SET DEFAULT nextval('publ
 --	Matches each film with its categories
 --
 ALTER TABLE public.imdb_moviegenres 
-	ALTER COLUMN genre TYPE integer,
+	ALTER COLUMN genre TYPE integer USING (trim(genre)::integer),
 	ALTER COLUMN genre SET NOT NULL,
 	DROP CONSTRAINT imdb_moviegenres_movieid_fkey,
 	ADD CONSTRAINT imdb_moviegenres_movieid_fkey FOREIGN KEY (movieid)
@@ -108,7 +153,6 @@ ALTER TABLE public.imdb_moviegenres
 -- Each film has it's language, etc.
 --
 ALTER TABLE public.imdb_movielanguages
-	ALTER COLUMN language integer NOT NULL,
 	DROP CONSTRAINT imdb_movielanguages_movieid_fkey,
 	ADD CONSTRAINT imdb_movielanguages_movieid_fkey FOREIGN KEY (movieid)
       REFERENCES public.imdb_movies (movieid)
@@ -119,13 +163,7 @@ ALTER TABLE public.imdb_movielanguages
 
 -------------------------------------------------------------------------------
 
-ALTER TABLE public.imdb_actors ALTER COLUMN gender TYPE character varying(1);
-
--------------------------------------------------------------------------------
-
 ALTER TABLE public.imdb_moviecountries
-	ALTER COLUMN country TYPE integer,
-	ALTER COLUMN country SET NOT NULL,
 	DROP CONSTRAINT imdb_moviecountries_movieid_fkey,
 	ADD CONSTRAINT imdb_moviecountries_movieid_fkey FOREIGN KEY (movieid)
       	REFERENCES public.imdb_movies (movieid) 
@@ -162,14 +200,15 @@ ALTER TABLE ONLY public.status ALTER COLUMN id_status SET DEFAULT nextval('publi
 -------------------------------------------------------------------------------
 
 ALTER TABLE public.orders
-	ALTER COLUMN status TYPE integer NOT NULL,
+	ALTER COLUMN status TYPE integer USING (trim(status)::integer),
+  ALTER COLUMN status SET NOT NULL,
 	ALTER COLUMN status SET DEFAULT 0,
 	ALTER COLUMN customerid SET NOT NULL,
 	ADD CONSTRAINT orders_status_fkey FOREIGN KEY (status)
-		REFERENCES public.statuses (id_status)
+		REFERENCES public.status (id_status)
 		ON UPDATE CASCADE,	
 	ADD CONSTRAINT orders_customerid_fkey FOREIGN KEY (customerid)
-		REFERENCES public.customer (customerid)
+		REFERENCES public.customers (customerid)
 		ON UPDATE CASCADE;
 
 -------------------------------------------------------------------------------
@@ -202,7 +241,7 @@ ALTER TABLE public.inventory
 
 -------------------------------------------------------------------------------
 
-ALTER TABLE public.imdb_movies ALTER COLUMN year TYPE integer;
+--ALTER TABLE public.imdb_movies ALTER COLUMN year TYPE integer USING (trim(year)::integer);
 
 -------------------------------------------------------------------------------
 
@@ -221,7 +260,7 @@ ALTER TABLE public.imdb_directormovies
 ALTER TABLE public.imdb_actormovies
   ADD CONSTRAINT imdb_actormovies_movieid_fkey FOREIGN KEY (movieid)
     REFERENCES public.imdb_movies (movieid)
-    ON UPDATE CASCADE;
+    ON UPDATE CASCADE,
   ADD CONSTRAINT imdb_actormovies_actorid_fkey FOREIGN KEY (actorid)
     REFERENCES public.imdb_actors (actorid)
     ON UPDATE CASCADE;
