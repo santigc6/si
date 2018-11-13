@@ -243,3 +243,9 @@ ALTER TABLE public.imdb_actormovies
   ADD CONSTRAINT imdb_actormovies_actorid_fkey FOREIGN KEY (actorid)
     REFERENCES public.imdb_actors (actorid)
     ON UPDATE CASCADE;
+    
+-------------------------------------------------------------------------------
+    
+ALTER TABLE public.imdb_movies ALTER COLUMN year TYPE integer USING (SPLIT_PART(year, '-', 1)::integer);
+
+-------------------------------------------------------------------------------
