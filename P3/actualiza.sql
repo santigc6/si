@@ -3,6 +3,18 @@
 --
 -------------------------------------------------------------------------------
 --
+--  Table to represent alerts
+--
+CREATE TABLE public.alertas (
+    prod_id integer NOT NULL,
+    notice character varying(64),
+    stamp timestamp
+);
+
+ALTER TABLE public.alertas OWNER TO alumnodb;
+
+-------------------------------------------------------------------------------
+--
 --	Table to represent languages as an integer
 --
 CREATE TABLE public.languages (
@@ -248,6 +260,13 @@ ALTER TABLE public.imdb_actormovies
     
 ALTER TABLE public.imdb_movies ALTER COLUMN year TYPE integer USING (SPLIT_PART(year, '-', 1)::integer);
 
+-------------------------------------------------------------------------------
+
+ALTER TABLE public.alertas
+  ADD CONSTRAINT alertas_prod_id_fkey FOREIGN KEY (prod_id)
+    REFERENCES public.products (prod_id)
+    ON UPDATE CASCADE;
+    
 -------------------------------------------------------------------------------
 
 CREATE OR REPLACE FUNCTION setOrderAmount ()
