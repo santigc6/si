@@ -9,18 +9,10 @@
 CREATE OR REPLACE FUNCTION updInventoryAux ()
 RETURNS TRIGGER AS $$
 BEGIN
-
     IF NEW.stock < 0 THEN
-        INSERT INTO alertas (prod_id, notice, stamp)
-        VALUES (OLD.prod_id,
-                'Stock insuficiente. Imposible realizar la compra.',
-                current_timestamp);
-        RAISE NOTICE 'Intentando modificar stock a negativo en producto con id %.', OLD.prod_id;
-        RETURN OLD;
+        RAISE EXCEPTION 'Intentando modificar stock a negativo en producto con id %.', OLD.prod_id;
     END IF;
-
     RETURN NEW;
-
 END;
 $$ LANGUAGE plpgsql;
 
@@ -33,6 +25,12 @@ FOR EACH ROW EXECUTE PROCEDURE updInventoryAux();
 
 CREATE OR REPLACE FUNCTION updInventory ()
 RETURNS TRIGGER AS $$
+DECLARE
+	product_id integer := (select MAX(products.prod_id)
+			FROM
+            orderdetail INNER JOIN products ON orderdetail.prod_id = products.prod_id INNER JOIN inventory ON inventory.prod_id=products.prod_id
+        WHERE
+            OLD.orderid = orderdetail.orderid);
 BEGIN
 
     IF NEW.status = 'Paid' THEN
@@ -51,6 +49,11 @@ BEGIN
     END IF;
 
     RETURN NEW;
+EXCEPTION WHEN OTHERS THEN 
+	INSERT INTO alertas (prod_id, notice, stamp)
+      VALUES (product_id, 'Stock insuficiente. Imposible realizar la compra.', current_timestamp);
+      RETURN OLD;
+
 
 END;
 $$ LANGUAGE plpgsql;

@@ -20,7 +20,7 @@ BEGIN
   SELECT tablaaux.year, tablaaux.month, SUM(tablaaux.totalamount), SUM(tablaaux.quantity)
   FROM tablaaux
   GROUP BY tablaaux.year, tablaaux.month
-  HAVING SUM(tablaaux.totalamount) >= umbralimport and SUM(tablaaux.quantity) >= umbralprods
+  HAVING SUM(tablaaux.totalamount) >= umbralimport OR SUM(tablaaux.quantity) >= umbralprods
   ORDER BY tablaaux.year, tablaaux.month;
 END;
 $$ LANGUAGE plpgsql;
