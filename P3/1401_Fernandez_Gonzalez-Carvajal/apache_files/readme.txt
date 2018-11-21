@@ -6,4 +6,6 @@
   -sudo chgrp www-data public_html/
   -sudo chmod g+w public_html/
 
+-El archivo "dump_v1.2.sql" no lo entregamos debido a que su tamaño hace que el ".zip" no pueda ser subido a Moodle.
+
 Autores: Adrián Fernández Amador y Santiago González- Carvajal Centenera. Pareja 11.
