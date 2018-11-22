@@ -19,7 +19,7 @@ BEGIN
         orders
     SET
         netamount = total.suma,
-        totalamount = total.suma + tax
+        totalamount = ROUND(total.suma * (1 + (tax / 100)))
     FROM
         total
     WHERE
