@@ -1,5 +1,6 @@
 from flask import Flask, render_template, json, url_for, request, redirect, session, make_response
 import sqlalchemy
+from sqlalchemy.sql import text
 import os
 import sys
 import md5
@@ -24,15 +25,52 @@ def index():
     oldmask = os.umask(000)
     os.mkdir(users_path, 0777)
     os.umask(oldmask)
-  
+
   try:
-    json_url = os.path.join(SITE_ROOT, "json", "catalogo.json")
+    json_url = os.path.join(SITE_ROOT, "json", "vacio.json")
     file_json = open(json_url)
     json_data = json.load(file_json)
   except IOError:
     return "<h1>There was a problem loading the catalogue</h1>"
-  
+
   file_json.close()
+
+
+  query_ini = "SELECT DISTINCT imdb_movies.movieid, imdb_movies.movietitle, genres.name_genre, imdb_directors.directorname, imdb_movies.year, products.price\
+  FROM imdb_movies INNER JOIN imdb_moviegenres ON imdb_movies.movieid = imdb_moviegenres.movieid\
+  INNER JOIN genres ON imdb_moviegenres.genre = genres.id_genre\
+  INNER JOIN imdb_directormovies ON imdb_movies.movieid = imdb_directormovies.movieid\
+  INNER JOIN imdb_directors ON imdb_directormovies.directorid = imdb_directors.directorid\
+  INNER JOIN products ON imdb_movies.movieid = products.movieid"
+
+  conn_ini = db.connect()
+  res_ini = conn_ini.execute(query_ini)
+  chunk = res_ini.fetchmany(100)
+  for row in chunk:
+    pelicula = {}
+    id = row['movieid']
+    pelicula['id'] = id
+    pelicula['titulo'] = row['movietitle']
+    pelicula['categoria'] = row['name_genre']
+    pelicula['director'] = row['directorname']
+    pelicula['actores'] = []
+    pelicula['anno'] = row['year']
+    pelicula['precio'] = row['price']
+    pelicula['poster'] = "goldfinger.jpg" # No tenemos las fotos en la base de datos
+
+    query_act = "SELECT DISTINCT imdb_actors.actorname\
+    FROM imdb_movies INNER JOIN imdb_actormovies ON imdb_movies.movieid = imdb_actormovies.movieid\
+    INNER JOIN imdb_actors ON imdb_actormovies.actorid = imdb_actors.actorid\
+    WHERE imdb_movies.movieid = " + "'" + str(id) + "'"
+
+    conn_act = db.connect()
+    res_act = conn_act.execute(query_act)
+    actors = res_act.fetchall()
+    for actor in actors:
+      pelicula['actores'].append(actor['actorname'])
+
+    json_data['peliculas'].append(pelicula)
+
   
   cats = set()
   for peli in json_data["peliculas"]:
@@ -47,20 +85,43 @@ def index():
 
 @app.route('/details/<string:pelicula>')
 def details(pelicula):
-  try:
-    SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
-    json_url = os.path.join(SITE_ROOT, "json", "catalogo.json")
-    file_json = open(json_url)
-    json_data = json.load(file_json)
-  except IOError:
-    return "<h1>There was a problem loading the information of the film</h1>"
-  
-  file_json.close()
-  
-  for peli in json_data['peliculas']:
-    if str(peli['id']) == pelicula:
-      context = dict(peli)
-      break
+  id = int(pelicula)
+
+  query_ini = text("SELECT DISTINCT imdb_movies.movieid, imdb_movies.movietitle, genres.name_genre, imdb_directors.directorname, imdb_movies.year, products.price\
+  FROM imdb_movies INNER JOIN imdb_moviegenres ON imdb_movies.movieid = imdb_moviegenres.movieid\
+  INNER JOIN genres ON imdb_moviegenres.genre = genres.id_genre\
+  INNER JOIN imdb_directormovies ON imdb_movies.movieid = imdb_directormovies.movieid\
+  INNER JOIN imdb_directors ON imdb_directormovies.directorid = imdb_directors.directorid\
+  INNER JOIN products ON imdb_movies.movieid = products.movieid\
+  WHERE imdb_movies.movieid = :ide ")
+
+  conn_ini = db.connect()
+  res_ini = conn_ini.execute(query_ini, ide=id)
+  row = res_ini.fetchone()
+
+  pelicula = {}
+  pelicula['id'] = id
+  pelicula['titulo'] = row['movietitle']
+  pelicula['categoria'] = row['name_genre']
+  pelicula['director'] = row['directorname']
+  pelicula['actores'] = []
+  pelicula['anno'] = row['year']
+  pelicula['precio'] = row['price']
+  pelicula['poster'] = "goldfinger.jpg" # No tenemos las fotos en la base de datos
+
+  query_act = text("SELECT DISTINCT imdb_actors.actorname\
+  FROM imdb_movies INNER JOIN imdb_actormovies ON imdb_movies.movieid = imdb_actormovies.movieid\
+  INNER JOIN imdb_actors ON imdb_actormovies.actorid = imdb_actors.actorid\
+  WHERE imdb_movies.movieid = :ide ")
+
+  conn_act = db.connect()
+  res_act = conn_act.execute(query_act, ide=id)
+  actors = res_act.fetchall()
+  for actor in actors:
+    pelicula['actores'].append(actor['actorname'])
+
+  context = pelicula
+
       
   if 'user' in session:
     context['user'] = session['user']
