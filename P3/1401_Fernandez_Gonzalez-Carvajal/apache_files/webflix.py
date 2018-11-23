@@ -285,11 +285,9 @@ def myCart():
 
     for id_pelicula in session['cart']:
 
-      query_ini = text("SELECT DISTINCT imdb_movies.movieid, imdb_movies.movietitle, genres.name_genre, imdb_directors.directorname, imdb_movies.year, products.price\
+      query_ini = text("SELECT DISTINCT imdb_movies.movieid, imdb_movies.movietitle, genres.name_genre, products.price\
       FROM imdb_movies INNER JOIN imdb_moviegenres ON imdb_movies.movieid = imdb_moviegenres.movieid\
       INNER JOIN genres ON imdb_moviegenres.genre = genres.id_genre\
-      INNER JOIN imdb_directormovies ON imdb_movies.movieid = imdb_directormovies.movieid\
-      INNER JOIN imdb_directors ON imdb_directormovies.directorid = imdb_directors.directorid\
       INNER JOIN products ON imdb_movies.movieid = products.movieid\
       WHERE imdb_movies.movieid = :ide")
 
@@ -302,22 +300,7 @@ def myCart():
       pelicula['id'] = id
       pelicula['titulo'] = row['movietitle']
       pelicula['categoria'] = row['name_genre']
-      pelicula['director'] = row['directorname']
-      pelicula['actores'] = []
-      pelicula['anno'] = row['year']
       pelicula['precio'] = row['price']
-      pelicula['poster'] = "goldfinger.jpg" # No tenemos las fotos en la base de datos
-
-      query_act = text("SELECT DISTINCT imdb_actors.actorname\
-      FROM imdb_movies INNER JOIN imdb_actormovies ON imdb_movies.movieid = imdb_actormovies.movieid\
-      INNER JOIN imdb_actors ON imdb_actormovies.actorid = imdb_actors.actorid\
-      WHERE imdb_movies.movieid = :ide")
-
-      conn_act = db.connect()
-      res_act = conn_act.execute(query_act, ide=int(id))
-      actors = res_act.fetchall()
-      for actor in actors:
-        pelicula['actores'].append(actor['actorname'])
 
       context['peliculas'].append(pelicula)
       context['total'] += float(pelicula['precio'])
@@ -550,11 +533,9 @@ def history():
     json_data['money'] = customer['income']
     json_data['fechas'] = {}
 
-    query_ini = text("SELECT DISTINCT imdb_movies.movieid, imdb_movies.movietitle, genres.name_genre, imdb_directors.directorname, imdb_movies.year, products.price, orders.orderdate\
+    query_ini = text("SELECT DISTINCT imdb_movies.movieid, imdb_movies.movietitle, genres.name_genre, products.price, orders.orderdate\
     FROM imdb_movies INNER JOIN imdb_moviegenres ON imdb_movies.movieid = imdb_moviegenres.movieid\
     INNER JOIN genres ON imdb_moviegenres.genre = genres.id_genre\
-    INNER JOIN imdb_directormovies ON imdb_movies.movieid = imdb_directormovies.movieid\
-    INNER JOIN imdb_directors ON imdb_directormovies.directorid = imdb_directors.directorid\
     INNER JOIN products ON imdb_movies.movieid = products.movieid\
     INNER JOIN orderdetail ON products.prod_id = orderdetail.prod_id\
     INNER JOIN orders ON orderdetail.orderid = orders.orderid\
