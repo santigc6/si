@@ -26,15 +26,8 @@ def index():
     os.mkdir(users_path, 0777)
     os.umask(oldmask)
 
-  try:
-    json_url = os.path.join(SITE_ROOT, "json", "vacio.json")
-    file_json = open(json_url)
-    json_data = json.load(file_json)
-  except IOError:
-    return "<h1>There was a problem loading the catalogue</h1>"
-
-  file_json.close()
-
+  json_data = {}
+  json_data['peliculas'] = []
 
   query_ini = "SELECT DISTINCT imdb_movies.movieid, imdb_movies.movietitle, genres.name_genre, imdb_directors.directorname, imdb_movies.year, products.price\
   FROM imdb_movies INNER JOIN imdb_moviegenres ON imdb_movies.movieid = imdb_moviegenres.movieid\
@@ -72,11 +65,16 @@ def index():
     json_data['peliculas'].append(pelicula)
 
   
-  cats = set()
-  for peli in json_data["peliculas"]:
-    cats.add(peli["categoria"])
-  
-  json_data["categorias"]=list(cats)
+  json_data['categorias'] = []
+
+  query_cats = "SELECT DISTINCT genres.name_genre\
+  FROM genres"
+
+  conn_cats = db.connect()
+  res_cats = conn_cats.execute(query_cats)
+  cats = res_cats.fetchall()
+  for cat in cats:
+    json_data['categorias'].append(cat['name_genre'])
   
   if 'user' in session:
     json_data['user'] = session['user']
@@ -135,47 +133,101 @@ def details(pelicula):
     
 @app.route('/filters', methods=['POST', 'GET'])
 def filter():
+  json_data = None
+
   if request.method == 'POST': # We only allow POST requests
-    filmName = request.form['SearchFilm'].lower()
-    category = request.form['CategorySearch'].lower()
-    
-    try:
-      SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
-      json_url = os.path.join(SITE_ROOT, "json", "catalogo.json")
-      file_json = open(json_url)
-      json_data = json.load(file_json)
-    except IOError:
-      return "<h1>There was a problem loading the catalogue</h1>"
-    
-    file_json.close()
-    context = {'peliculas': []}
-    if filmName != '' and filmName != 'search film': # Filtro por nombre y categoria
-      if category != 'default':  
-        for peli in json_data['peliculas']:
-          if peli['titulo'].lower().find(filmName) >= 0 and peli['categoria'].lower() == category:
-            context['peliculas'].append(peli)
+    filmName = request.form['SearchFilm']
+    category = request.form['CategorySearch']
+
+    json_data = {}
+    json_data['peliculas'] = []
+
+    if filmName != '' and filmName != 'Search films by name':
+      if category != 'Default': # Filtro por nombre y categoria
+
+        query_ini = text("SELECT DISTINCT imdb_movies.movieid, imdb_movies.movietitle, genres.name_genre, imdb_directors.directorname, imdb_movies.year, products.price\
+        FROM imdb_movies INNER JOIN imdb_moviegenres ON imdb_movies.movieid = imdb_moviegenres.movieid\
+        INNER JOIN genres ON imdb_moviegenres.genre = genres.id_genre\
+        INNER JOIN imdb_directormovies ON imdb_movies.movieid = imdb_directormovies.movieid\
+        INNER JOIN imdb_directors ON imdb_directormovies.directorid = imdb_directors.directorid\
+        INNER JOIN products ON imdb_movies.movieid = products.movieid\
+        WHERE genres.name_genre = " + "'" + category + "'" + " AND imdb_movies.movietitle LIKE '%" + filmName + "%'")
+
       else: # Filtro por nombre
-        for peli in json_data['peliculas']:
-          if peli['titulo'].lower().find(filmName) >= 0:
-            context['peliculas'].append(peli)
+        
+        query_ini = text("SELECT DISTINCT imdb_movies.movieid, imdb_movies.movietitle, genres.name_genre, imdb_directors.directorname, imdb_movies.year, products.price\
+        FROM imdb_movies INNER JOIN imdb_moviegenres ON imdb_movies.movieid = imdb_moviegenres.movieid\
+        INNER JOIN genres ON imdb_moviegenres.genre = genres.id_genre\
+        INNER JOIN imdb_directormovies ON imdb_movies.movieid = imdb_directormovies.movieid\
+        INNER JOIN imdb_directors ON imdb_directormovies.directorid = imdb_directors.directorid\
+        INNER JOIN products ON imdb_movies.movieid = products.movieid\
+        WHERE imdb_movies.movietitle LIKE '%" + filmName + "%'")
+
     else:
-      if category != 'default':  # Filtro por categoria
-        for peli in json_data['peliculas']:
-          if peli['categoria'].lower() == category:
-            context['peliculas'].append(peli)
+      if category != 'default': # Filtro por categoria
+        
+        query_ini = text("SELECT DISTINCT imdb_movies.movieid, imdb_movies.movietitle, genres.name_genre, imdb_directors.directorname, imdb_movies.year, products.price\
+        FROM imdb_movies INNER JOIN imdb_moviegenres ON imdb_movies.movieid = imdb_moviegenres.movieid\
+        INNER JOIN genres ON imdb_moviegenres.genre = genres.id_genre\
+        INNER JOIN imdb_directormovies ON imdb_movies.movieid = imdb_directormovies.movieid\
+        INNER JOIN imdb_directors ON imdb_directormovies.directorid = imdb_directors.directorid\
+        INNER JOIN products ON imdb_movies.movieid = products.movieid\
+        WHERE genres.name_genre = " + "'" + category + "'")
+
       else: # No hay filtro
-        for peli in json_data['peliculas']:
-          context['peliculas'].append(peli)
-      
-    cats = set()
-    for peli in json_data["peliculas"]:
-      cats.add(peli["categoria"])
+        
+        query_ini = text("SELECT DISTINCT imdb_movies.movieid, imdb_movies.movietitle, genres.name_genre, imdb_directors.directorname, imdb_movies.year, products.price\
+        FROM imdb_movies INNER JOIN imdb_moviegenres ON imdb_movies.movieid = imdb_moviegenres.movieid\
+        INNER JOIN genres ON imdb_moviegenres.genre = genres.id_genre\
+        INNER JOIN imdb_directormovies ON imdb_movies.movieid = imdb_directormovies.movieid\
+        INNER JOIN imdb_directors ON imdb_directormovies.directorid = imdb_directors.directorid\
+        INNER JOIN products ON imdb_movies.movieid = products.movieid")
+
+
+    conn_ini = db.connect()
+    res_ini = conn_ini.execute(query_ini)
+    chunk = res_ini.fetchmany(100)
+    for row in chunk:
+      pelicula = {}
+      id = row['movieid']
+      pelicula['id'] = id
+      pelicula['titulo'] = row['movietitle']
+      pelicula['categoria'] = row['name_genre']
+      pelicula['director'] = row['directorname']
+      pelicula['actores'] = []
+      pelicula['anno'] = row['year']
+      pelicula['precio'] = row['price']
+      pelicula['poster'] = "goldfinger.jpg" # No tenemos las fotos en la base de datos
+
+      query_act = "SELECT DISTINCT imdb_actors.actorname\
+      FROM imdb_movies INNER JOIN imdb_actormovies ON imdb_movies.movieid = imdb_actormovies.movieid\
+      INNER JOIN imdb_actors ON imdb_actormovies.actorid = imdb_actors.actorid\
+      WHERE imdb_movies.movieid = " + "'" + str(id) + "'"
+
+      conn_act = db.connect()
+      res_act = conn_act.execute(query_act)
+      actors = res_act.fetchall()
+      for actor in actors:
+        pelicula['actores'].append(actor['actorname'])
+
+      json_data['peliculas'].append(pelicula)
+
+  
+    json_data['categorias'] = []
+
+    query_cats = "SELECT DISTINCT genres.name_genre\
+    FROM genres"
+
+    conn_cats = db.connect()
+    res_cats = conn_cats.execute(query_cats)
+    cats = res_cats.fetchall()
+    for cat in cats:
+      json_data['categorias'].append(cat['name_genre'])
     
-    context["categorias"]=list(cats)
     if 'user' in session:
-      context['user'] = session['user']
+      json_data['user'] = session['user']
     
-    return render_template('index.html', **context)
+  return render_template('index.html', **json_data)
 
 @app.route('/regform')
 def registerForm():
@@ -250,11 +302,16 @@ def login():
     
     file_json.close()
     
-    cats = set()
-    for peli in json_data["peliculas"]:
-      cats.add(peli["categoria"])
-    
-    json_data["categorias"]=list(cats)
+    json_data['categorias'] = []
+
+    query_cats = "SELECT DISTINCT genres.name_genre\
+    FROM genres"
+
+    conn_cats = db.connect()
+    res_cats = conn_cats.execute(query_cats)
+    cats = res_cats.fetchall()
+    for cat in cats:
+      json_data['categorias'].append(cat['name_genre'])
     
     if 'user' in session:
       json_data['user'] = session['user']
