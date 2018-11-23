@@ -259,7 +259,7 @@ def login():
     if 'user' in session:
       json_data['user'] = session['user']
 
-    response = make_response(render_template('index.html', **json_data))
+    response = make_response(redirect(url_for('index')))
     response.set_cookie('lastUser', user)    
         
     return response
@@ -282,20 +282,45 @@ def myCart():
   context['peliculas'] = []
   context['total'] = 0.0
   if 'cart' in session:
-    try:
-      SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
-      json_url = os.path.join(SITE_ROOT, "json", "catalogo.json")
-      file_json = open(json_url)
-      json_data = json.load(file_json)
-    except IOError:
-      return "<h1>There was a problem loading the catalogue</h1>"
-    file_json.close()
 
-    for pelicula in json_data['peliculas']:
-      for idPelicula in session['cart']:
-        if str(pelicula['id']) == idPelicula:
-          context['peliculas'].append(pelicula)
-          context['total'] += pelicula['precio']
+    for id_pelicula in session['cart']:
+
+      query_ini = text("SELECT DISTINCT imdb_movies.movieid, imdb_movies.movietitle, genres.name_genre, imdb_directors.directorname, imdb_movies.year, products.price\
+      FROM imdb_movies INNER JOIN imdb_moviegenres ON imdb_movies.movieid = imdb_moviegenres.movieid\
+      INNER JOIN genres ON imdb_moviegenres.genre = genres.id_genre\
+      INNER JOIN imdb_directormovies ON imdb_movies.movieid = imdb_directormovies.movieid\
+      INNER JOIN imdb_directors ON imdb_directormovies.directorid = imdb_directors.directorid\
+      INNER JOIN products ON imdb_movies.movieid = products.movieid\
+      WHERE imdb_movies.movieid = :ide")
+
+      conn_ini = db.connect()
+      res_ini = conn_ini.execute(query_ini, ide=int(id_pelicula))
+      row = res_ini.fetchone()
+
+      pelicula = {}
+      id = row['movieid']
+      pelicula['id'] = id
+      pelicula['titulo'] = row['movietitle']
+      pelicula['categoria'] = row['name_genre']
+      pelicula['director'] = row['directorname']
+      pelicula['actores'] = []
+      pelicula['anno'] = row['year']
+      pelicula['precio'] = row['price']
+      pelicula['poster'] = "goldfinger.jpg" # No tenemos las fotos en la base de datos
+
+      query_act = text("SELECT DISTINCT imdb_actors.actorname\
+      FROM imdb_movies INNER JOIN imdb_actormovies ON imdb_movies.movieid = imdb_actormovies.movieid\
+      INNER JOIN imdb_actors ON imdb_actormovies.actorid = imdb_actors.actorid\
+      WHERE imdb_movies.movieid = :ide")
+
+      conn_act = db.connect()
+      res_act = conn_act.execute(query_act, ide=int(id))
+      actors = res_act.fetchall()
+      for actor in actors:
+        pelicula['actores'].append(actor['actorname'])
+
+      context['peliculas'].append(pelicula)
+      context['total'] += float(pelicula['precio'])
 
   if 'user' in session:
     context['user'] = session['user']
@@ -507,42 +532,49 @@ def confirmAll():
 @app.route('/shoppingHistory')
 def history():
   SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
-  
   json_data=None
-  try:
-    json_url = os.path.join(SITE_ROOT, 'usuarios', session['user'], 'historial.json')
-    file_json = open(json_url)  
-    json_data = json.load(file_json)
-  except IOError:
-    pass
-  
-  if json_data != None:
-    json_data['fechas']={} 
-    for pelicula in json_data['peliculas']:
-      if pelicula['fecha'] not in json_data['fechas']:
-        json_data['fechas'][pelicula['fecha']]=[]
-          
-      json_data['fechas'][pelicula['fecha']].append(pelicula)
+
+  if session:
+    query_customer = text("SELECT customerid, income\
+    FROM customers\
+    WHERE username = :cname")
+
+    conn_customer = db.connect()
+    res_customer = conn_customer.execute(query_customer, cname=str(session['user']))
+    customer = res_customer.fetchone()
+    
+    id_costumer = customer['customerid']
+
+    json_data = {}
+    json_data['user'] = session['user']
+    json_data['money'] = customer['income']
+    json_data['fechas'] = {}
+
+    query_ini = text("SELECT DISTINCT imdb_movies.movieid, imdb_movies.movietitle, genres.name_genre, imdb_directors.directorname, imdb_movies.year, products.price, orders.orderdate\
+    FROM imdb_movies INNER JOIN imdb_moviegenres ON imdb_movies.movieid = imdb_moviegenres.movieid\
+    INNER JOIN genres ON imdb_moviegenres.genre = genres.id_genre\
+    INNER JOIN imdb_directormovies ON imdb_movies.movieid = imdb_directormovies.movieid\
+    INNER JOIN imdb_directors ON imdb_directormovies.directorid = imdb_directors.directorid\
+    INNER JOIN products ON imdb_movies.movieid = products.movieid\
+    INNER JOIN orderdetail ON products.prod_id = orderdetail.prod_id\
+    INNER JOIN orders ON orderdetail.orderid = orders.orderid\
+    WHERE orders.customerid = :cid")
+
+    conn_ini = db.connect()
+    res_ini = conn_ini.execute(query_ini, cid=int(id_costumer))
+    chunk = res_ini.fetchall()
+    for row in chunk:
+      pelicula = {}
+      id = row['movieid']
+      pelicula['id'] = id
+      pelicula['pelicula'] = row['movietitle']
+      pelicula['categoria'] = row['name_genre']
+      pelicula['precio'] = row['price']
       
-  if json_data == None:
-    json_data={}
-    json_data['user']=session['user']
-
-  json_data.pop('peliculas', None)
-  json_data['user']=session['user']
-  
-  try:
-    data_url = os.path.join(SITE_ROOT, 'usuarios', session['user'], 'datos.dat')
-    file_data = open(data_url, 'r')  
-  except IOError:
-    return "<h1>There was a problem with your operation</h1>"
-  
-  lines = file_data.readlines()
-  money = lines[-1].split()[1]
-
-  file_data.close()
-  
-  json_data['money']=money
+      if row['orderdate'] not in json_data['fechas']:
+        json_data['fechas'][row['orderdate']]=[]
+          
+      json_data['fechas'][row['orderdate']].append(pelicula)
   
   return render_template('history.html', **json_data)
   
