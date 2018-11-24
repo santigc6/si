@@ -276,6 +276,17 @@ ALTER TABLE public.alertas
     
 -------------------------------------------------------------------------------
 
+UPDATE
+    orderdetail
+SET
+    price = ROUND(products.price / POWER(1.02, date_part('year', current_date) - imdb_movies.year))
+FROM
+    products INNER JOIN imdb_movies ON imdb_movies.movieid = products.movieid
+WHERE
+    products.prod_id = orderdetail.prod_id;
+    
+-------------------------------------------------------------------------------
+
 CREATE OR REPLACE FUNCTION setOrderAmount ()
     RETURNS void
 AS $$
@@ -301,3 +312,91 @@ $$ LANGUAGE plpgsql;
 SELECT setOrderAmount();
 
 -------------------------------------------------------------------------------
+
+UPDATE orders 
+SET status='Shipped'
+WHERE status IS NULL;
+
+-------------------------------------------------------------------------------
+-- TRIGGERS
+CREATE OR REPLACE FUNCTION updInventoryAux ()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.stock < 0 THEN
+        RAISE EXCEPTION 'Intentando modificar stock a negativo en producto con id %.', OLD.prod_id;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER t_updInventoryAux on inventory;
+
+CREATE TRIGGER t_updInventoryAux BEFORE UPDATE ON inventory
+FOR EACH ROW EXECUTE PROCEDURE updInventoryAux();
+
+-------------------------------------------------------------------------------
+
+CREATE OR REPLACE FUNCTION updInventory ()
+RETURNS TRIGGER AS $$
+DECLARE
+  product_id integer := (select MAX(products.prod_id)
+      FROM
+            orderdetail INNER JOIN products ON orderdetail.prod_id = products.prod_id INNER JOIN inventory ON inventory.prod_id=products.prod_id
+        WHERE
+            OLD.orderid = orderdetail.orderid);
+BEGIN
+
+    IF NEW.status = 'Paid' THEN
+
+        UPDATE
+            inventory
+        SET
+            stock = stock - orderdetail.quantity,
+            sales = sales + orderdetail.quantity
+        FROM
+            orderdetail INNER JOIN products ON orderdetail.prod_id = products.prod_id
+        WHERE
+            OLD.orderid = orderdetail.orderid AND
+            inventory.prod_id = products.prod_id;
+
+    END IF;
+
+    RETURN NEW;
+EXCEPTION WHEN OTHERS THEN 
+  INSERT INTO alertas (prod_id, notice, stamp)
+      VALUES (product_id, 'Stock insuficiente. Imposible realizar la compra.', current_timestamp);
+      RETURN OLD;
+
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER t_updInventory on orders;
+
+CREATE TRIGGER t_updInventory BEFORE UPDATE OF status ON orders
+FOR EACH ROW EXECUTE PROCEDURE updInventory();
+
+--
+
+CREATE OR REPLACE FUNCTION updOrders ()
+  RETURNS TRIGGER AS $$
+BEGIN
+  IF TG_OP = 'INSERT' THEN --It is an insert into
+    UPDATE orders
+    SET netamount = (netamount + (NEW.price * NEW.quantity)),
+        totalamount = (totalamount + (NEW.price * NEW.quantity))
+    WHERE orders.orderid=NEW.orderid;
+  ELSE --It is a delete
+    UPDATE orders
+    SET netamount = (netamount - (OLD.price * OLD.quantity)),
+        totalamount = (totalamount - (OLD.price * OLD.quantity))
+    WHERE orders.orderid=OLD.orderid;
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+--DROP TRIGGER t_updOrders on orderdetail;
+
+CREATE TRIGGER t_updOrders AFTER INSERT OR DELETE ON orderdetail
+FOR EACH ROW EXECUTE PROCEDURE updOrders();
