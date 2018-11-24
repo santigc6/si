@@ -119,14 +119,13 @@ def details(pelicula):
     pelicula['actores'].append(actor['actorname'])
 
   context = pelicula
-
       
   if 'user' in session:
     context['user'] = session['user']
     
   context['inCart'] = False
   if 'cart' in session:
-    if pelicula in session['cart']:
+    if str(id) in session['cart']:
       context['inCart'] = True # The film has already been added
   
   return render_template('details.html', **context)  
@@ -284,11 +283,13 @@ def login():
       return render_template('login.html', error=True)
 
     # Update the session
+    session['userid']=str(result[0])
     session['user']=str(result[-5])
     session['email']=str(result[-10])
     session['creditcard']=str(result[-7])
     session['balance']=str(result[-2])
     session['cash']=False
+    session['generatedOrder']=False
     session.modified=True
  
     SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
@@ -368,6 +369,7 @@ def myCart():
   if 'cash' not in session:
     session['cash']=False
 
+  session['total']=context['total']
   context['error']=session['cash']
   session['cash']=False
   session.modified=True
@@ -379,6 +381,17 @@ def removeFromCart(film):
   session['cart'].remove(film)
   session.modified=True
   
+  if 'user' in session and session['generatedOrder']==True: 
+    consult="SELECT products.prod_id\
+    FROM products\
+    WHERE products.movieid="+film
+    results = db.execute(consult)
+    prodid = results.fetchall()[0][0]
+ 
+    consult="DELETE FROM orderdetail\
+    WHERE orderdetail.prod_id="+str(prodid)+" and orderdetail.orderid="+session['orderid']
+    db.execute(consult)
+
   if request.referrer:
     url = request.referrer
         
@@ -390,10 +403,37 @@ def removeFromCart(film):
 def addToCart(film):
   if 'cart' not in session:
     session['cart']=[]
-  
+
+  if 'user' in session and session['generatedOrder']==False:
+    # We get the current orderid and update it
+    results = db.execute("SELECT MAX(orders.orderid) FROM orders")
+    id_ord = results.fetchall()[0][0]
+    id_ord += 1
+    session['orderid']=str(id_ord) # orderid to use later
+    session['generatedOrder']=True
+    session.modified=True
+    
+    consult="INSERT INTO orders(orderid, orderdate, customerid, netamount, tax, totalamount, status)\
+    VALUES ("+str(id_ord)+", CURRENT_DATE, "+session['userid']+", 0, 15, 0, NULL)"
+    db.execute(consult)
+
   session['cart'].append(film)
   session.modified=True
   
+  # Triggers do the rest of the job
+  if 'user' in session:
+    consult="SELECT products.prod_id, products.price\
+    FROM products\
+    WHERE products.movieid="+film
+    res = db.execute(consult)
+    aux = res.fetchall()[0]
+    prodid = aux[0]
+    priceFilm = aux[1]
+
+    consult="INSERT INTO orderdetail(orderid, prod_id, price, quantity)\
+    VALUES ("+session['orderid']+", "+str(prodid)+", "+str(priceFilm)+", 1)"
+    db.execute(consult)
+
   return redirect(url_for('details', pelicula=film))
 
 @app.route('/confirmFilm/<string:film>')
@@ -620,28 +660,11 @@ def history():
 def cash():
   if request.method == 'POST': # We only allow POST requests
     cash = request.form['cash']
-
-    SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
-
-    try:
-      data_url = os.path.join(SITE_ROOT, 'usuarios', session['user'], 'datos.dat')
-      file_data = open(data_url, 'r')  
-    except IOError:
-      return "<h1>There was a problem with your operation</h1>"
     
     session['balance'] = str(float(session['balance']) + float(cash))
-    lines = file_data.readlines()
-    lines[-1] = 'balance: '+session['balance'] # New balance
-
-    file_data.close()
-    
-    try:
-      file_data = open(data_url, 'w')
-      file_data.writelines(lines)
-    except IOError:
-      return "<h1>There was a problem with your operation</h1>" 
-    
-    file_data.close()
+    consult="UPDATE customers\
+    SET income="+session['balance']+" WHERE customers.customerid="+session['userid']
+    db.execute(consult)
     
     return redirect(url_for('history'))
   
