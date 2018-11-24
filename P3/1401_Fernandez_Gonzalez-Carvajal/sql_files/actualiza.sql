@@ -220,7 +220,7 @@ ALTER TABLE public.orderdetail
 	ALTER COLUMN prod_id SET NOT NULL,
 	ADD CONSTRAINT orderdetail_orderid_fkey FOREIGN KEY (orderid)
 		REFERENCES public.orders (orderid)
-		ON UPDATE CASCADE,
+		ON UPDATE CASCADE ON DELETE CASCADE,
 	ADD CONSTRAINT orderdetail_prod_id_fkey FOREIGN KEY (prod_id)
 		REFERENCES public.products (prod_id)
 		ON UPDATE CASCADE;

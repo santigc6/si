@@ -15,6 +15,34 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 db_route = "postgres://alumnodb:alumnodb@localhost:5432/si1"
 db = sqlalchemy.create_engine(db_route)
 
+def addToCartAux(film):
+  if 'user' in session and session['generatedOrder']==False:
+    # We get the current orderid and update it
+    results = db.execute("SELECT MAX(orders.orderid) FROM orders")
+    id_ord = results.fetchall()[0][0]
+    id_ord += 1
+    session['orderid']=str(id_ord) # orderid to use later
+    session['generatedOrder']=True
+    session.modified=True
+    
+    consult="INSERT INTO orders(orderid, orderdate, customerid, netamount, tax, totalamount, status)\
+    VALUES ("+str(id_ord)+", CURRENT_DATE, "+session['userid']+", 0, 15, 0, NULL)"
+    db.execute(consult)
+  
+  # Triggers do the rest of the job
+  if 'user' in session:
+    consult="SELECT products.prod_id, products.price\
+    FROM products\
+    WHERE products.movieid="+film
+    res = db.execute(consult)
+    aux = res.fetchall()[0]
+    prodid = aux[0]
+    priceFilm = aux[1]
+
+    consult="INSERT INTO orderdetail(orderid, prod_id, price, quantity)\
+    VALUES ("+session['orderid']+", "+str(prodid)+", "+str(priceFilm)+", 1)"
+    db.execute(consult)
+
 @app.route('/')
 @app.route('/index')
 def index():
@@ -34,11 +62,12 @@ def index():
   INNER JOIN genres ON imdb_moviegenres.genre = genres.id_genre\
   INNER JOIN imdb_directormovies ON imdb_movies.movieid = imdb_directormovies.movieid\
   INNER JOIN imdb_directors ON imdb_directormovies.directorid = imdb_directors.directorid\
-  INNER JOIN products ON imdb_movies.movieid = products.movieid"
+  INNER JOIN products ON imdb_movies.movieid = products.movieid\
+  LIMIT 100"
 
   conn_ini = db.connect()
   res_ini = conn_ini.execute(query_ini)
-  chunk = res_ini.fetchmany(100)
+  chunk = res_ini.fetchall()
   for row in chunk:
     pelicula = {}
     id = row['movieid']
@@ -291,31 +320,12 @@ def login():
     session['cash']=False
     session['generatedOrder']=False
     session.modified=True
- 
-    SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
 
-    try:
-      json_url = os.path.join(SITE_ROOT, "json", "catalogo.json")
-      file_json = open(json_url)
-      json_data = json.load(file_json)
-    except IOError:
-      return "<h1>There was a problem loading the catalogue</h1>"
-    
-    file_json.close()
-    
-    json_data['categorias'] = []
-
-    query_cats = "SELECT DISTINCT genres.name_genre\
-    FROM genres"
-
-    conn_cats = db.connect()
-    res_cats = conn_cats.execute(query_cats)
-    cats = res_cats.fetchall()
-    for cat in cats:
-      json_data['categorias'].append(cat['name_genre'])
-    
-    if 'user' in session:
-      json_data['user'] = session['user']
+    # We create a order for the given cart with the given films in orderdetail
+    if 'cart' in session:
+      if len(session['cart']) > 0:
+        for peli in session['cart']:
+          addToCartAux(peli) # We can do this since user is already in session
 
     response = make_response(redirect(url_for('index')))
     response.set_cookie('lastUser', user)    
@@ -331,7 +341,24 @@ def logOut():
   
   if 'cart' in session:
     session['cart']=[]
-     
+  
+  # Check if there is a NULL status order
+  consult="SELECT * FROM orders WHERE status IS NULL"
+  results=db.execute(consult)
+  rows=results.fetchall()
+  if len(rows) > 0:
+    order_id = str(rows[0][0])
+
+    # Delete all the orderdetail products attached to the order
+    consult="DELETE FROM orderdetail\
+    WHERE orderdetail.orderid="+order_id
+    db.execute(consult)
+
+    # Delete the current order (because it hasnt been purchased)
+    consult="DELETE FROM orders\
+    WHERE orders.status IS NULL"
+    db.execute(consult)
+
   return redirect(url_for('index'))
 
 @app.route('/mycart')
@@ -403,6 +430,7 @@ def removeFromCart(film):
 def addToCart(film):
   if 'cart' not in session:
     session['cart']=[]
+    session.modified=True
 
   if 'user' in session and session['generatedOrder']==False:
     # We get the current orderid and update it
@@ -538,4 +566,5 @@ def numberOfUsers():
   return '<div><p>Users: '+str(random.randint(1, 1001))+'</p></div>'
   
 if __name__ == '__main__':
+  db.execute("DELETE FROM orders WHERE orders.status IS NULL") # We have on delete cascade, this is necessary because the user might close the browser in the middle of the session
   app.run(host='0.0.0.0')
