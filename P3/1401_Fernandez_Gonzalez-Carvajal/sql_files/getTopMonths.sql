@@ -9,13 +9,13 @@ BEGIN
   RETURN QUERY
   WITH tablaaux AS (
     SELECT 
-	    DATE_PART('year', orders.orderdate) as year, 
-	    DATE_PART('month', orders.orderdate) as month, 
-	    orders.totalamount, 
-	    orderdetail.quantity
+      orders.orderid,
+      DATE_PART('year', orders.orderdate) as year, 
+      DATE_PART('month', orders.orderdate) as month, 
+      orders.totalamount, 
+      SUM(orderdetail.quantity) as quantity
   FROM orders INNER JOIN orderdetail ON (orders.orderid=orderdetail.orderid)
-	  INNER JOIN products ON (products.prod_id=orderdetail.prod_id)
-  ORDER BY year, month
+  GROUP BY orders.orderid, year, month, totalamount
   )
   SELECT tablaaux.year, tablaaux.month, SUM(tablaaux.totalamount), SUM(tablaaux.quantity)
   FROM tablaaux
