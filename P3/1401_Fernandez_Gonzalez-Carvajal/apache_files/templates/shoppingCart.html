@@ -13,11 +13,6 @@
             <td>{{ pelicula.titulo }}</td>
             <td>{{ pelicula.precio }}</td>
             <td>
-              <a href="{{ url_for('confirmFilm', film='') }}{{ pelicula.id }}">
-                <img class="icon" src="{{ url_for('static', filename='coin_icon.png') }}" alt="coin icon">
-              </a>
-            </td>
-            <td>
               <a href="{{ url_for('removeFromCart', film='') }}{{ pelicula.id }}">
                 <img class="icon" src="{{ url_for('static', filename='trash_icon.png') }}" alt="trash icon">
               </a>

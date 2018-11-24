@@ -435,176 +435,41 @@ def addToCart(film):
     db.execute(consult)
 
   return redirect(url_for('details', pelicula=film))
-
-@app.route('/confirmFilm/<string:film>')
-def confirmFilm(film):
-  if 'user' not in session:
-    return redirect(url_for('loginForm'))
-    
-  SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
-
-  try:
-    json_url = os.path.join(SITE_ROOT, "json", "catalogo.json")
-    file_json = open(json_url)
-    json_data = json.load(file_json)
-  except IOError:
-    return "<h1>There was a problem with your operation</h1>"
-  
-  file_json.close()
-  
-  today = datetime.datetime.now()
-  aux={}
-  price = 0.0
-  for peli in json_data['peliculas']:
-    if str(peli['id']) == film:
-      price = peli['precio']
-      aux['id']=peli['id']
-      aux['pelicula']=peli['titulo']
-      aux['precio']=peli['precio']
-      aux['fecha']=str(today.day)+'/'+str(today.month)+'/'+str(today.year)
-      
-  if float(session['balance']) < price:
-    session['cash']=True
-    session.modified=True
-    
-    return redirect(url_for('myCart'))
-    
-  session['balance'] = str(float(session['balance']) - price)
-  
-  try:
-    data_url = os.path.join(SITE_ROOT, 'usuarios', session['user'], 'datos.dat')
-    file_data = open(data_url, 'r')  
-  except IOError:
-    return "<h1>There was a problem with your operation</h1>"
-  
-  lines = file_data.readlines()
-  lines[-1] = 'balance: '+session['balance'] # New balance
-
-  file_data.close()
-  
-  try:
-    file_data = open(data_url, 'w')
-    file_data.writelines(lines)
-  except IOError:
-    return "<h1>There was a problem with your operation</h1>" 
-  
-  file_data.close()
-  
-  json_data = None
-  try:
-    json_url = os.path.join(SITE_ROOT, 'usuarios', session['user'], 'historial.json')
-    file_json = open(json_url)  
-    json_data = json.load(file_json)
-  except IOError:
-    pass
-  
-  if json_data != None:
-    file_json.close()
-    
-    json_data['peliculas'].append(aux)
-  else:
-    json_data = {}
-    json_data['peliculas']=[]
-    json_data['peliculas'].append(aux)
-
-  try:
-    file_json = open(json_url, 'w+')  
-    json.dump(json_data, file_json)
-  except IOError:
-    return "<h1>There was a problem with your operation</h1>" 
-   
-  file_json.close()
-  
-  session['cart'].remove(film)
-  session.modified = True
-  
-  return redirect(url_for('myCart'))
   
 @app.route('/confirmAll')
 def confirmAll():
   if 'user' not in session:
     return redirect(url_for('loginForm'))
 
-  SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
-
-  try:
-    json_url = os.path.join(SITE_ROOT, "json", "catalogo.json")
-    file_json = open(json_url)
-    json_data = json.load(file_json)
-  except IOError:
-    return "<h1>There was a problem with your operation</h1>"
-  
-  file_json.close()
-  
-  today = datetime.datetime.now()
-  l_diccs=[]
-  if 'cart' in session:
-    price = 0.0
-    for film in session['cart']:
-      aux={}
-      for peli in json_data['peliculas']:
-        if str(peli['id']) == film:
-          price += peli['precio']
-          aux['id']=peli['id']
-          aux['pelicula']=peli['titulo']
-          aux['precio']=peli['precio']
-          aux['fecha']=str(today.day)+'/'+str(today.month)+'/'+str(today.year)
-          l_diccs.append(aux)
-  else:
+  if 'cart' not in session or len(session['cart']) == 0:
     return redirect(url_for('myCart'))
-          
-  if float(session['balance']) < price:
-    session['cash']=True
+  
+  consult="SELECT *\
+  FROM orders\
+  WHERE orders.status IS NULL"
+  results = db.execute(consult)
+  res = results.fetchall()[0] # We get the current order
+  totalPrice = res[5]
+
+  if float(session['balance']) < float(totalPrice): # User has not enough money
+    session['cash']=True # Money error
     session.modified=True
     
     return redirect(url_for('myCart'))
   
-  session['balance'] = str(float(session['balance']) - price)
-  
-  try:
-    data_url = os.path.join(SITE_ROOT, 'usuarios', session['user'], 'datos.dat')
-    file_data = open(data_url, 'r')  
-  except IOError:
-    return "<h1>There was a problem with your operation</h1>"
-  
-  lines = file_data.readlines()
-  lines[-1] = 'balance: '+session['balance'] # New balance
+  session['balance'] = str(float(session['balance']) - float(totalPrice))
 
-  file_data.close()
+  consult="UPDATE customers\
+  SET income="+session['balance']+" WHERE customers.customerid="+session['userid']
+  db.execute(consult)
   
-  try:
-    file_data = open(data_url, 'w')
-    file_data.writelines(lines)
-  except IOError:
-    return "<h1>There was a problem with your operation</h1>" 
-  
-  file_data.close()
-  
-  json_data = None
-  try:
-    json_url = os.path.join(SITE_ROOT, 'usuarios', session['user'], 'historial.json')
-    file_json = open(json_url)  
-    json_data = json.load(file_json)
-  except IOError:
-    pass
-  
-  if json_data != None:
-    file_json.close()
-    for item in l_diccs:
-      json_data['peliculas'].append(item)
-  else:
-    json_data = {}
-    json_data['peliculas']=l_diccs
-  
-  try:
-    file_json = open(json_url, 'w+')  
-    json.dump(json_data, file_json)
-  except IOError:
-    return "<h1>There was a problem with your operation</h1>" 
-   
-  file_json.close()
+  # The order has been paid
+  db.execute("UPDATE orders\
+    SET status='Paid'\
+    WHERE orders.status IS NULL")
   
   session['cart']=[]
+  session['generatedOrder']=False
   session.modified = True
   
   return redirect(url_for('myCart'))
@@ -630,7 +495,7 @@ def history():
     json_data['money'] = customer['income']
     json_data['fechas'] = {}
 
-    query_ini = text("SELECT DISTINCT imdb_movies.movieid, imdb_movies.movietitle, genres.name_genre, products.price, orders.orderdate\
+    query_ini = text("SELECT DISTINCT ON (imdb_movies.movietitle) imdb_movies.movieid, imdb_movies.movietitle, genres.name_genre, products.price, orders.orderdate\
     FROM imdb_movies INNER JOIN imdb_moviegenres ON imdb_movies.movieid = imdb_moviegenres.movieid\
     INNER JOIN genres ON imdb_moviegenres.genre = genres.id_genre\
     INNER JOIN products ON imdb_movies.movieid = products.movieid\
