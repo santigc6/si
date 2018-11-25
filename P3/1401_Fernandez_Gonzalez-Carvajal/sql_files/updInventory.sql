@@ -27,8 +27,12 @@ CREATE OR REPLACE FUNCTION updInventory ()
 RETURNS TRIGGER AS $$
 DECLARE
 	product_id integer := (select MAX(products.prod_id)
-			FROM
-            orderdetail INNER JOIN products ON orderdetail.prod_id = products.prod_id INNER JOIN inventory ON inventory.prod_id=products.prod_id
+			  FROM
+            orderdetail
+            INNER JOIN products ON
+              orderdetail.prod_id = products.prod_id
+            INNER JOIN inventory ON
+              inventory.prod_id=products.prod_id
         WHERE
             OLD.orderid = orderdetail.orderid);
 BEGIN
@@ -41,7 +45,9 @@ BEGIN
             stock = stock - orderdetail.quantity,
             sales = sales + orderdetail.quantity
         FROM
-            orderdetail INNER JOIN products ON orderdetail.prod_id = products.prod_id
+            orderdetail
+            INNER JOIN products ON
+              orderdetail.prod_id = products.prod_id
         WHERE
             OLD.orderid = orderdetail.orderid AND
             inventory.prod_id = products.prod_id;
@@ -50,9 +56,11 @@ BEGIN
 
     RETURN NEW;
 EXCEPTION WHEN OTHERS THEN 
-	INSERT INTO alertas (prod_id, notice, stamp)
-      VALUES (product_id, 'Stock insuficiente. Imposible realizar la compra.', current_timestamp);
-      RETURN OLD;
+	INSERT INTO
+	  alertas (prod_id, notice, stamp)
+  VALUES
+    (product_id, 'Stock insuficiente. Imposible realizar la compra.', current_timestamp);
+  RETURN OLD;
 
 
 END;
