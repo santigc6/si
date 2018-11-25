@@ -15,7 +15,7 @@ ALTER TABLE public.alertas OWNER TO alumnodb;
 
 -------------------------------------------------------------------------------
 --
---	Table to represent languages as an integer
+--  Table to represent languages as an integer
 --
 CREATE TABLE public.languages (
     id_lang integer NOT NULL,
@@ -67,7 +67,7 @@ ALTER TABLE public.imdb_movielanguages
 -------------------------------------------------------------------------------
 
 --
---	Table to represent countries as an integer
+--  Table to represent countries as an integer
 --
 CREATE TABLE public.countries (
     id_country integer NOT NULL,
@@ -138,7 +138,7 @@ ALTER TABLE public.customers
 -------------------------------------------------------------------------------
 
 --
---	Table to represent Genres
+--  Table to represent Genres
 --
 CREATE TABLE public.genres (
     id_genre integer NOT NULL,
@@ -190,16 +190,16 @@ ALTER TABLE public.imdb_moviegenres
 -------------------------------------------------------------------------------
 
 --
---	Matches each film with its genres
+--  Matches each film with its genres
 --
 ALTER TABLE public.imdb_moviegenres 
-	DROP CONSTRAINT imdb_moviegenres_movieid_fkey,
-	ADD CONSTRAINT imdb_moviegenres_movieid_fkey FOREIGN KEY (movieid)
+  DROP CONSTRAINT imdb_moviegenres_movieid_fkey,
+  ADD CONSTRAINT imdb_moviegenres_movieid_fkey FOREIGN KEY (movieid)
       REFERENCES public.imdb_movies (movieid)
       ON UPDATE CASCADE,
-	ADD CONSTRAINT imdb_moviegenres_genre_fkey FOREIGN KEY (genre)
-		REFERENCES public.genres(id_genre)
-		ON UPDATE CASCADE;
+  ADD CONSTRAINT imdb_moviegenres_genre_fkey FOREIGN KEY (genre)
+    REFERENCES public.genres(id_genre)
+    ON UPDATE CASCADE;
 
 -------------------------------------------------------------------------------
 
@@ -207,24 +207,24 @@ ALTER TABLE public.imdb_moviegenres
 -- Each film has it's language, etc.
 --
 ALTER TABLE public.imdb_movielanguages
-	DROP CONSTRAINT imdb_movielanguages_movieid_fkey,
-	ADD CONSTRAINT imdb_movielanguages_movieid_fkey FOREIGN KEY (movieid)
+  DROP CONSTRAINT imdb_movielanguages_movieid_fkey,
+  ADD CONSTRAINT imdb_movielanguages_movieid_fkey FOREIGN KEY (movieid)
       REFERENCES public.imdb_movies (movieid)
       ON UPDATE CASCADE,
-	ADD CONSTRAINT imdb_movielanguages_language_fkey FOREIGN KEY (language)
-		REFERENCES public.languages(id_lang)
-		ON UPDATE CASCADE;
+  ADD CONSTRAINT imdb_movielanguages_language_fkey FOREIGN KEY (language)
+    REFERENCES public.languages(id_lang)
+    ON UPDATE CASCADE;
 
 -------------------------------------------------------------------------------
 
 ALTER TABLE public.imdb_moviecountries
-	DROP CONSTRAINT imdb_moviecountries_movieid_fkey,
-	ADD CONSTRAINT imdb_moviecountries_movieid_fkey FOREIGN KEY (movieid)
-      	REFERENCES public.imdb_movies (movieid) 
-    	ON UPDATE CASCADE,
-	ADD CONSTRAINT imdb_moviecountries_country_fkey FOREIGN KEY (country)
-		REFERENCES public.countries(id_country)
-		ON UPDATE CASCADE;
+  DROP CONSTRAINT imdb_moviecountries_movieid_fkey,
+  ADD CONSTRAINT imdb_moviecountries_movieid_fkey FOREIGN KEY (movieid)
+        REFERENCES public.imdb_movies (movieid) 
+      ON UPDATE CASCADE,
+  ADD CONSTRAINT imdb_moviecountries_country_fkey FOREIGN KEY (country)
+    REFERENCES public.countries(id_country)
+    ON UPDATE CASCADE;
 
 -------------------------------------------------------------------------------
 
@@ -236,46 +236,46 @@ ALTER TABLE public.customers
 -------------------------------------------------------------------------------
 
 ALTER TABLE public.orders
-	ALTER COLUMN customerid SET NOT NULL,
-	ADD CONSTRAINT orders_customerid_fkey FOREIGN KEY (customerid)
-		REFERENCES public.customers (customerid)
-		ON UPDATE CASCADE;
+  ALTER COLUMN customerid SET NOT NULL,
+  ADD CONSTRAINT orders_customerid_fkey FOREIGN KEY (customerid)
+    REFERENCES public.customers (customerid)
+    ON UPDATE CASCADE;
 
 -------------------------------------------------------------------------------
 
 ALTER TABLE public.orderdetail
-	ALTER COLUMN orderid SET NOT NULL,
-	ALTER COLUMN prod_id SET NOT NULL,
-	ADD CONSTRAINT orderdetail_orderid_fkey FOREIGN KEY (orderid)
-		REFERENCES public.orders (orderid)
-		ON UPDATE CASCADE ON DELETE CASCADE,
-	ADD CONSTRAINT orderdetail_prod_id_fkey FOREIGN KEY (prod_id)
-		REFERENCES public.products (prod_id)
-		ON UPDATE CASCADE;
+  ALTER COLUMN orderid SET NOT NULL,
+  ALTER COLUMN prod_id SET NOT NULL,
+  ADD CONSTRAINT orderdetail_orderid_fkey FOREIGN KEY (orderid)
+    REFERENCES public.orders (orderid)
+    ON UPDATE CASCADE ON DELETE CASCADE,
+  ADD CONSTRAINT orderdetail_prod_id_fkey FOREIGN KEY (prod_id)
+    REFERENCES public.products (prod_id)
+    ON UPDATE CASCADE;
 
 -------------------------------------------------------------------------------
 
 ALTER TABLE public.products
-	DROP CONSTRAINT products_movieid_fkey,
-	ADD CONSTRAINT products_movieid_fkey FOREIGN KEY (movieid)
+  DROP CONSTRAINT products_movieid_fkey,
+  ADD CONSTRAINT products_movieid_fkey FOREIGN KEY (movieid)
       REFERENCES public.imdb_movies (movieid)
       ON UPDATE CASCADE;
 
 -------------------------------------------------------------------------------
 
 ALTER TABLE public.inventory
-	DROP CONSTRAINT inventory_pkey,
-	ADD CONSTRAINT inventory_fkey FOREIGN KEY (prod_id)
-		REFERENCES public.products (prod_id)
-		ON UPDATE CASCADE;
+  DROP CONSTRAINT inventory_pkey,
+  ADD CONSTRAINT inventory_fkey FOREIGN KEY (prod_id)
+    REFERENCES public.products (prod_id)
+    ON UPDATE CASCADE;
 
 -------------------------------------------------------------------------------
 
 ALTER TABLE public.imdb_directormovies
-	DROP CONSTRAINT imdb_directormovies_directorid_fkey,
-	DROP CONSTRAINT imdb_directormovies_movieid_fkey,
-	ADD CONSTRAINT imdb_directormovies_directorid_fkey FOREIGN KEY (directorid)
-   	REFERENCES public.imdb_directors (directorid)
+  DROP CONSTRAINT imdb_directormovies_directorid_fkey,
+  DROP CONSTRAINT imdb_directormovies_movieid_fkey,
+  ADD CONSTRAINT imdb_directormovies_directorid_fkey FOREIGN KEY (directorid)
+    REFERENCES public.imdb_directors (directorid)
     ON UPDATE CASCADE,
   ADD CONSTRAINT imdb_directormovies_movieid_fkey FOREIGN KEY (movieid)
     REFERENCES public.imdb_movies (movieid)
