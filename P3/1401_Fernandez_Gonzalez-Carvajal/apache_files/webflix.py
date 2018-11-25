@@ -51,7 +51,7 @@ def index():
   json_data = {}
   json_data['peliculas'] = []
 
-  query_ini = "SELECT DISTINCT imdb_movies.movieid, imdb_movies.movietitle, genres.name_genre, imdb_directors.directorname, imdb_movies.year, products.price\
+  query_ini = "SELECT DISTINCT ON (imdb_movies.movietitle) imdb_movies.movieid, imdb_movies.movietitle, genres.name_genre, imdb_directors.directorname, imdb_movies.year, products.price\
   FROM imdb_movies INNER JOIN imdb_moviegenres ON imdb_movies.movieid = imdb_moviegenres.movieid\
   INNER JOIN genres ON imdb_moviegenres.genre = genres.id_genre\
   INNER JOIN imdb_directormovies ON imdb_movies.movieid = imdb_directormovies.movieid\
@@ -118,7 +118,7 @@ def index():
 def details(pelicula):
   id = int(pelicula)
 
-  query_ini = text("SELECT DISTINCT imdb_movies.movieid, imdb_movies.movietitle, genres.name_genre, imdb_directors.directorname, imdb_movies.year, products.price\
+  query_ini = text("SELECT DISTINCT ON (imdb_movies.movietitle) imdb_movies.movieid, imdb_movies.movietitle, genres.name_genre, imdb_directors.directorname, imdb_movies.year, products.price\
   FROM imdb_movies INNER JOIN imdb_moviegenres ON imdb_movies.movieid = imdb_moviegenres.movieid\
   INNER JOIN genres ON imdb_moviegenres.genre = genres.id_genre\
   INNER JOIN imdb_directormovies ON imdb_movies.movieid = imdb_directormovies.movieid\
@@ -177,7 +177,7 @@ def filter():
     if filmName != '' and filmName != 'Search films by name':
       if category != 'Default': # Filtro por nombre y categoria
 
-        query_ini = text("SELECT DISTINCT imdb_movies.movieid, imdb_movies.movietitle, genres.name_genre, imdb_directors.directorname, imdb_movies.year, products.price\
+        query_ini = text("SELECT DISTINCT ON (imdb_movies.movietitle) imdb_movies.movieid, imdb_movies.movietitle, genres.name_genre, imdb_directors.directorname, imdb_movies.year, products.price\
         FROM imdb_movies INNER JOIN imdb_moviegenres ON imdb_movies.movieid = imdb_moviegenres.movieid\
         INNER JOIN genres ON imdb_moviegenres.genre = genres.id_genre\
         INNER JOIN imdb_directormovies ON imdb_movies.movieid = imdb_directormovies.movieid\
@@ -187,7 +187,7 @@ def filter():
 
       else: # Filtro por nombre
         
-        query_ini = text("SELECT DISTINCT imdb_movies.movieid, imdb_movies.movietitle, genres.name_genre, imdb_directors.directorname, imdb_movies.year, products.price\
+        query_ini = text("SELECT DISTINCT ON (imdb_movies.movietitle) imdb_movies.movieid, imdb_movies.movietitle, genres.name_genre, imdb_directors.directorname, imdb_movies.year, products.price\
         FROM imdb_movies INNER JOIN imdb_moviegenres ON imdb_movies.movieid = imdb_moviegenres.movieid\
         INNER JOIN genres ON imdb_moviegenres.genre = genres.id_genre\
         INNER JOIN imdb_directormovies ON imdb_movies.movieid = imdb_directormovies.movieid\
@@ -198,7 +198,7 @@ def filter():
     else:
       if category != 'default': # Filtro por categoria
         
-        query_ini = text("SELECT DISTINCT imdb_movies.movieid, imdb_movies.movietitle, genres.name_genre, imdb_directors.directorname, imdb_movies.year, products.price\
+        query_ini = text("SELECT DISTINCT ON (imdb_movies.movietitle) imdb_movies.movieid, imdb_movies.movietitle, genres.name_genre, imdb_directors.directorname, imdb_movies.year, products.price\
         FROM imdb_movies INNER JOIN imdb_moviegenres ON imdb_movies.movieid = imdb_moviegenres.movieid\
         INNER JOIN genres ON imdb_moviegenres.genre = genres.id_genre\
         INNER JOIN imdb_directormovies ON imdb_movies.movieid = imdb_directormovies.movieid\
@@ -208,7 +208,7 @@ def filter():
 
       else: # No hay filtro
         
-        query_ini = text("SELECT DISTINCT imdb_movies.movieid, imdb_movies.movietitle, genres.name_genre, imdb_directors.directorname, imdb_movies.year, products.price\
+        query_ini = text("SELECT DISTINCT ON (imdb_movies.movietitle) imdb_movies.movieid, imdb_movies.movietitle, genres.name_genre, imdb_directors.directorname, imdb_movies.year, products.price\
         FROM imdb_movies INNER JOIN imdb_moviegenres ON imdb_movies.movieid = imdb_moviegenres.movieid\
         INNER JOIN genres ON imdb_moviegenres.genre = genres.id_genre\
         INNER JOIN imdb_directormovies ON imdb_movies.movieid = imdb_directormovies.movieid\
@@ -374,7 +374,7 @@ def myCart():
 
     for id_pelicula in session['cart']:
 
-      query_ini = text("SELECT DISTINCT imdb_movies.movieid, imdb_movies.movietitle, genres.name_genre, products.price\
+      query_ini = text("SELECT DISTINCT ON (imdb_movies.movietitle) imdb_movies.movieid, imdb_movies.movietitle, genres.name_genre, products.price\
       FROM imdb_movies INNER JOIN imdb_moviegenres ON imdb_movies.movieid = imdb_moviegenres.movieid\
       INNER JOIN genres ON imdb_moviegenres.genre = genres.id_genre\
       INNER JOIN products ON imdb_movies.movieid = products.movieid\
