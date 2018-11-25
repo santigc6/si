@@ -48,12 +48,6 @@ def addToCartAux(film):
 def index():
   SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
 
-  users_path = os.path.join(SITE_ROOT, 'usuarios')
-  if os.path.exists(users_path) == False: # If users' directory doesnt exist we create it
-    oldmask = os.umask(000)
-    os.mkdir(users_path, 0777)
-    os.umask(oldmask)
-
   json_data = {}
   json_data['peliculas'] = []
 
@@ -539,7 +533,7 @@ def history():
     INNER JOIN products ON imdb_movies.movieid = products.movieid\
     INNER JOIN orderdetail ON products.prod_id = orderdetail.prod_id\
     INNER JOIN orders ON orderdetail.orderid = orders.orderid\
-    WHERE orders.customerid = :cid")
+    WHERE orders.customerid = :cid AND orders.status IS NOT NULL")
 
     conn_ini = db.connect()
     res_ini = conn_ini.execute(query_ini, cid=int(id_costumer))
