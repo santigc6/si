@@ -51,6 +51,15 @@
 
     <!-- Side list -->
     <ul class="sideList">
+      {% if showTop %}
+      <li><p>TOP VENTAS (year / film / sales)</p></li>
+      {% for id in topVentas %}
+      <li><a href="{{ url_for('details', pelicula='') }}{{ id }}">
+      	{{ topVentas[id][0] }}&nbsp;/&nbsp;{{ topVentas[id][1] }}&nbsp;/&nbsp;{{ topVentas[id][2] }}
+        </a>
+  	  </li>
+	  {% endfor %}
+      {% else %}
       <li><a href="{{ url_for('index') }}">2019</a></li>
       <li><a href="{{ url_for('index') }}">2018</a></li>
       <li><a href="{{ url_for('index') }}">2017</a></li>
@@ -61,6 +70,7 @@
       <li><a href="{{ url_for('index') }}">2012</a></li>
       <li><a href="{{ url_for('index') }}">2011</a></li>
       <li><a href="{{ url_for('index') }}">2010 and before</a></li>
+      {% endif %}
     </ul>
 
     <!-- Content -->
