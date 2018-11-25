@@ -108,6 +108,16 @@ def index():
   if 'user' in session:
     json_data['user'] = session['user']
   
+  topventasaux = db.execute("SELECT * FROM getTopVentasForIndex(2016)")
+  topventas = topventasaux.fetchall()
+
+  json_data['showTop'] = True
+  json_data['topVentas']={
+    topventas[0][3]: [int(topventas[0][0]), topventas[0][1], topventas[0][2]],
+    topventas[1][3]: [int(topventas[1][0]), topventas[1][1], topventas[1][2]],
+    topventas[2][3]: [int(topventas[2][0]), topventas[2][1], topventas[2][2]]
+  }
+
   return render_template('index.html', **json_data)
 
 @app.route('/details/<string:pelicula>')
@@ -211,7 +221,6 @@ def filter():
         INNER JOIN imdb_directors ON imdb_directormovies.directorid = imdb_directors.directorid\
         INNER JOIN products ON imdb_movies.movieid = products.movieid")
 
-
     conn_ini = db.connect()
     res_ini = conn_ini.execute(query_ini)
     chunk = res_ini.fetchmany(100)
@@ -240,7 +249,8 @@ def filter():
 
       json_data['peliculas'].append(pelicula)
 
-  
+    
+
     json_data['categorias'] = []
 
     query_cats = "SELECT DISTINCT genres.name_genre\
