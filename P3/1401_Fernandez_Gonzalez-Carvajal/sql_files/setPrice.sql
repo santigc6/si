@@ -10,9 +10,7 @@ UPDATE
 SET
     price = ROUND(products.price / POWER(1.02, date_part('year', current_date) - imdb_movies.year))
 FROM
-    products
-    INNER JOIN imdb_movies ON
-      imdb_movies.movieid = products.movieid
+    products INNER JOIN imdb_movies ON imdb_movies.movieid = products.movieid
 WHERE
     products.prod_id = orderdetail.prod_id;
 

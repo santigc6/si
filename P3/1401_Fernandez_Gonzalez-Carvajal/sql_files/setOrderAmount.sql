@@ -11,15 +11,9 @@ CREATE OR REPLACE FUNCTION setOrderAmount ()
 AS $$
 BEGIN
     WITH total AS (
-        SELECT
-          orders.orderid AS id,
-          SUM(products.price) AS suma
-        FROM
-          orders 
-          INNER JOIN orderdetail ON
-            orders.orderid = orderdetail.orderid
-          INNER JOIN products ON
-            products.prod_id = orderdetail.prod_id
+        SELECT orders.orderid AS id, SUM(products.price) AS suma
+        FROM orders INNER JOIN orderdetail ON orders.orderid = orderdetail.orderid
+            INNER JOIN products ON products.prod_id = orderdetail.prod_id
         GROUP BY orders.orderid)
     UPDATE
         orders
