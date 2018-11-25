@@ -329,7 +329,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-DROP TRIGGER t_updInventoryAux on inventory;
+--DROP TRIGGER t_updInventoryAux on inventory;
 
 CREATE TRIGGER t_updInventoryAux BEFORE UPDATE ON inventory
 FOR EACH ROW EXECUTE PROCEDURE updInventoryAux();
@@ -371,7 +371,7 @@ EXCEPTION WHEN OTHERS THEN
 END;
 $$ LANGUAGE plpgsql;
 
-DROP TRIGGER t_updInventory on orders;
+--DROP TRIGGER t_updInventory on orders;
 
 CREATE TRIGGER t_updInventory BEFORE UPDATE OF status ON orders
 FOR EACH ROW EXECUTE PROCEDURE updInventory();
