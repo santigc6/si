@@ -15,7 +15,7 @@ ALTER TABLE public.alertas OWNER TO alumnodb;
 
 -------------------------------------------------------------------------------
 --
---  Table to represent languages as an integer
+--	Table to represent languages as an integer
 --
 CREATE TABLE public.languages (
     id_lang integer NOT NULL,
@@ -42,15 +42,22 @@ ALTER SEQUENCE public.languages_id_lang_seq OWNED BY public.languages.id_lang;
 ALTER TABLE ONLY public.languages ALTER COLUMN id_lang SET DEFAULT nextval('public.languages_id_lang_seq'::regclass);
 
 -- We insert the languages
-INSERT INTO public.languages (name_lang)
-SELECT DISTINCT public.imdb_movielanguages.language
-FROM public.imdb_movielanguages;
+INSERT INTO
+  public.languages (name_lang)
+SELECT DISTINCT
+  public.imdb_movielanguages.language
+FROM
+  public.imdb_movielanguages;
 
 -- We update every language
-UPDATE public.imdb_movielanguages
-SET language=public.languages.id_lang
-FROM public.languages
-WHERE public.imdb_movielanguages.language=public.languages.name_lang;
+UPDATE
+  public.imdb_movielanguages
+SET
+  language=public.languages.id_lang
+FROM
+  public.languages
+WHERE
+  public.imdb_movielanguages.language=public.languages.name_lang;
 
 -- Now we update the data type
 ALTER TABLE public.imdb_movielanguages 
@@ -60,7 +67,7 @@ ALTER TABLE public.imdb_movielanguages
 -------------------------------------------------------------------------------
 
 --
---  Table to represent countries as an integer
+--	Table to represent countries as an integer
 --
 CREATE TABLE public.countries (
     id_country integer NOT NULL,
@@ -87,28 +94,42 @@ ALTER SEQUENCE public.countries_id_country_seq OWNED BY public.countries.id_coun
 ALTER TABLE ONLY public.countries ALTER COLUMN id_country SET DEFAULT nextval('public.countries_id_country_seq'::regclass);
 
 -- We insert the countries
-INSERT INTO public.countries (name_country)
-SELECT DISTINCT public.imdb_moviecountries.country
-FROM public.imdb_moviecountries;
+INSERT INTO
+  public.countries (name_country)
+SELECT DISTINCT
+  public.imdb_moviecountries.country
+FROM
+  public.imdb_moviecountries;
 
-INSERT INTO public.countries (name_country)
-SELECT DISTINCT (TRIM(LEADING FROM public.customers.country))
-FROM public.customers;
+INSERT INTO
+  public.countries (name_country)
+SELECT DISTINCT
+  (TRIM(LEADING FROM public.customers.country))
+FROM
+  public.customers;
 
 -- We update all the countries in the database
-UPDATE public.imdb_moviecountries
-SET country=public.countries.id_country
-FROM public.countries
-WHERE public.imdb_moviecountries.country=public.countries.name_country;
+UPDATE
+  public.imdb_moviecountries
+SET
+  country=public.countries.id_country
+FROM
+  public.countries
+WHERE
+  public.imdb_moviecountries.country=public.countries.name_country;
 
 ALTER TABLE imdb_moviecountries
   ALTER COLUMN country TYPE integer USING (country::integer),
   ALTER COLUMN country SET NOT NULL;
 
-UPDATE public.customers
-SET country=public.countries.id_country
-FROM public.countries
-WHERE (TRIM(LEADING FROM public.customers.country))=public.countries.name_country;
+UPDATE
+  public.customers
+SET
+  country=public.countries.id_country
+FROM
+  public.countries
+WHERE
+  (TRIM(LEADING FROM public.customers.country))=public.countries.name_country;
 
 ALTER TABLE public.customers
   ALTER COLUMN country TYPE integer USING (country::integer),
@@ -117,7 +138,7 @@ ALTER TABLE public.customers
 -------------------------------------------------------------------------------
 
 --
---  Table to represent Genres
+--	Table to represent Genres
 --
 CREATE TABLE public.genres (
     id_genre integer NOT NULL,
@@ -144,15 +165,22 @@ ALTER SEQUENCE public.genres_id_genre_seq OWNED BY public.genres.id_genre;
 ALTER TABLE ONLY public.genres ALTER COLUMN id_genre SET DEFAULT nextval('public.genres_id_genre_seq'::regclass);
 
 -- We insert the genres
-INSERT INTO public.genres (name_genre)
-SELECT DISTINCT public.imdb_moviegenres.genre
-FROM public.imdb_moviegenres;
+INSERT INTO
+  public.genres (name_genre)
+SELECT DISTINCT
+  public.imdb_moviegenres.genre
+FROM
+  public.imdb_moviegenres;
 
 -- We update every language
-UPDATE public.imdb_moviegenres
-SET genre=public.genres.id_genre
-FROM public.genres
-WHERE public.imdb_moviegenres.genre=public.genres.name_genre;
+UPDATE
+  public.imdb_moviegenres
+SET
+  genre=public.genres.id_genre
+FROM
+  public.genres
+WHERE
+  public.imdb_moviegenres.genre=public.genres.name_genre;
 
 -- Now we update the data type
 ALTER TABLE public.imdb_moviegenres
@@ -162,16 +190,16 @@ ALTER TABLE public.imdb_moviegenres
 -------------------------------------------------------------------------------
 
 --
---  Matches each film with its genres
+--	Matches each film with its genres
 --
 ALTER TABLE public.imdb_moviegenres 
-  DROP CONSTRAINT imdb_moviegenres_movieid_fkey,
-  ADD CONSTRAINT imdb_moviegenres_movieid_fkey FOREIGN KEY (movieid)
+	DROP CONSTRAINT imdb_moviegenres_movieid_fkey,
+	ADD CONSTRAINT imdb_moviegenres_movieid_fkey FOREIGN KEY (movieid)
       REFERENCES public.imdb_movies (movieid)
       ON UPDATE CASCADE,
-  ADD CONSTRAINT imdb_moviegenres_genre_fkey FOREIGN KEY (genre)
-    REFERENCES public.genres(id_genre)
-    ON UPDATE CASCADE;
+	ADD CONSTRAINT imdb_moviegenres_genre_fkey FOREIGN KEY (genre)
+		REFERENCES public.genres(id_genre)
+		ON UPDATE CASCADE;
 
 -------------------------------------------------------------------------------
 
@@ -179,24 +207,24 @@ ALTER TABLE public.imdb_moviegenres
 -- Each film has it's language, etc.
 --
 ALTER TABLE public.imdb_movielanguages
-  DROP CONSTRAINT imdb_movielanguages_movieid_fkey,
-  ADD CONSTRAINT imdb_movielanguages_movieid_fkey FOREIGN KEY (movieid)
+	DROP CONSTRAINT imdb_movielanguages_movieid_fkey,
+	ADD CONSTRAINT imdb_movielanguages_movieid_fkey FOREIGN KEY (movieid)
       REFERENCES public.imdb_movies (movieid)
       ON UPDATE CASCADE,
-  ADD CONSTRAINT imdb_movielanguages_language_fkey FOREIGN KEY (language)
-    REFERENCES public.languages(id_lang)
-    ON UPDATE CASCADE;
+	ADD CONSTRAINT imdb_movielanguages_language_fkey FOREIGN KEY (language)
+		REFERENCES public.languages(id_lang)
+		ON UPDATE CASCADE;
 
 -------------------------------------------------------------------------------
 
 ALTER TABLE public.imdb_moviecountries
-  DROP CONSTRAINT imdb_moviecountries_movieid_fkey,
-  ADD CONSTRAINT imdb_moviecountries_movieid_fkey FOREIGN KEY (movieid)
-        REFERENCES public.imdb_movies (movieid) 
-      ON UPDATE CASCADE,
-  ADD CONSTRAINT imdb_moviecountries_country_fkey FOREIGN KEY (country)
-    REFERENCES public.countries(id_country)
-    ON UPDATE CASCADE;
+	DROP CONSTRAINT imdb_moviecountries_movieid_fkey,
+	ADD CONSTRAINT imdb_moviecountries_movieid_fkey FOREIGN KEY (movieid)
+      	REFERENCES public.imdb_movies (movieid) 
+    	ON UPDATE CASCADE,
+	ADD CONSTRAINT imdb_moviecountries_country_fkey FOREIGN KEY (country)
+		REFERENCES public.countries(id_country)
+		ON UPDATE CASCADE;
 
 -------------------------------------------------------------------------------
 
@@ -208,46 +236,46 @@ ALTER TABLE public.customers
 -------------------------------------------------------------------------------
 
 ALTER TABLE public.orders
-  ALTER COLUMN customerid SET NOT NULL,
-  ADD CONSTRAINT orders_customerid_fkey FOREIGN KEY (customerid)
-    REFERENCES public.customers (customerid)
-    ON UPDATE CASCADE;
+	ALTER COLUMN customerid SET NOT NULL,
+	ADD CONSTRAINT orders_customerid_fkey FOREIGN KEY (customerid)
+		REFERENCES public.customers (customerid)
+		ON UPDATE CASCADE;
 
 -------------------------------------------------------------------------------
 
 ALTER TABLE public.orderdetail
-  ALTER COLUMN orderid SET NOT NULL,
-  ALTER COLUMN prod_id SET NOT NULL,
-  ADD CONSTRAINT orderdetail_orderid_fkey FOREIGN KEY (orderid)
-    REFERENCES public.orders (orderid)
-    ON UPDATE CASCADE ON DELETE CASCADE,
-  ADD CONSTRAINT orderdetail_prod_id_fkey FOREIGN KEY (prod_id)
-    REFERENCES public.products (prod_id)
-    ON UPDATE CASCADE;
+	ALTER COLUMN orderid SET NOT NULL,
+	ALTER COLUMN prod_id SET NOT NULL,
+	ADD CONSTRAINT orderdetail_orderid_fkey FOREIGN KEY (orderid)
+		REFERENCES public.orders (orderid)
+		ON UPDATE CASCADE ON DELETE CASCADE,
+	ADD CONSTRAINT orderdetail_prod_id_fkey FOREIGN KEY (prod_id)
+		REFERENCES public.products (prod_id)
+		ON UPDATE CASCADE;
 
 -------------------------------------------------------------------------------
 
 ALTER TABLE public.products
-  DROP CONSTRAINT products_movieid_fkey,
-  ADD CONSTRAINT products_movieid_fkey FOREIGN KEY (movieid)
+	DROP CONSTRAINT products_movieid_fkey,
+	ADD CONSTRAINT products_movieid_fkey FOREIGN KEY (movieid)
       REFERENCES public.imdb_movies (movieid)
       ON UPDATE CASCADE;
 
 -------------------------------------------------------------------------------
 
 ALTER TABLE public.inventory
-  DROP CONSTRAINT inventory_pkey,
-  ADD CONSTRAINT inventory_fkey FOREIGN KEY (prod_id)
-    REFERENCES public.products (prod_id)
-    ON UPDATE CASCADE;
+	DROP CONSTRAINT inventory_pkey,
+	ADD CONSTRAINT inventory_fkey FOREIGN KEY (prod_id)
+		REFERENCES public.products (prod_id)
+		ON UPDATE CASCADE;
 
 -------------------------------------------------------------------------------
 
 ALTER TABLE public.imdb_directormovies
-  DROP CONSTRAINT imdb_directormovies_directorid_fkey,
-  DROP CONSTRAINT imdb_directormovies_movieid_fkey,
-  ADD CONSTRAINT imdb_directormovies_directorid_fkey FOREIGN KEY (directorid)
-    REFERENCES public.imdb_directors (directorid)
+	DROP CONSTRAINT imdb_directormovies_directorid_fkey,
+	DROP CONSTRAINT imdb_directormovies_movieid_fkey,
+	ADD CONSTRAINT imdb_directormovies_directorid_fkey FOREIGN KEY (directorid)
+   	REFERENCES public.imdb_directors (directorid)
     ON UPDATE CASCADE,
   ADD CONSTRAINT imdb_directormovies_movieid_fkey FOREIGN KEY (movieid)
     REFERENCES public.imdb_movies (movieid)
@@ -277,13 +305,13 @@ ALTER TABLE public.alertas
 -------------------------------------------------------------------------------
 
 UPDATE
-    orderdetail
+  orderdetail
 SET
-    price = ROUND(products.price / POWER(1.02, date_part('year', current_date) - imdb_movies.year))
+  price = ROUND(products.price / POWER(1.02, date_part('year', current_date) - imdb_movies.year))
 FROM
-    products INNER JOIN imdb_movies ON imdb_movies.movieid = products.movieid
+  products INNER JOIN imdb_movies ON imdb_movies.movieid = products.movieid
 WHERE
-    products.prod_id = orderdetail.prod_id;
+  products.prod_id = orderdetail.prod_id;
     
 -------------------------------------------------------------------------------
 
@@ -292,24 +320,29 @@ CREATE OR REPLACE FUNCTION setOrderAmount ()
 AS $$
 BEGIN
     WITH total AS (
-        SELECT orders.orderid AS id, SUM(products.price) AS suma
-        FROM orders INNER JOIN orderdetail ON orders.orderid = orderdetail.orderid
-            INNER JOIN products ON products.prod_id = orderdetail.prod_id
+        SELECT
+          orders.orderid AS id, SUM(products.price) AS suma
+        FROM orders
+          INNER JOIN orderdetail ON 
+            orders.orderid = orderdetail.orderid
+          INNER JOIN products ON 
+            products.prod_id = orderdetail.prod_id
         GROUP BY orders.orderid)
     UPDATE
-        orders
+      orders
     SET
-        netamount = total.suma,
-        totalamount = ROUND(total.suma * (1 + (tax / 100)))
+      netamount = total.suma,
+      totalamount = ROUND(total.suma * (1 + (tax / 100)))
     FROM
-        total
+      total
     WHERE
-        orders.orderid = total.id AND
-        orders.netamount IS NULL;
+      orders.orderid = total.id AND
+      orders.netamount IS NULL;
 END;
 $$ LANGUAGE plpgsql;
 
-SELECT setOrderAmount();
+SELECT
+  setOrderAmount();
 
 -------------------------------------------------------------------------------
 
@@ -322,19 +355,35 @@ CREATE OR REPLACE FUNCTION getTopVentas (anio integer)
 BEGIN
   RETURN QUERY
   WITH tablaaux AS (
-  SELECT DATE_PART('year', orders.orderdate) as anyo, imdb_movies.movietitle as titulo, SUM(orderdetail.quantity) as sales
-  FROM orders INNER JOIN orderdetail ON (orders.orderid=orderdetail.orderid)
-    INNER JOIN products ON (products.prod_id=orderdetail.prod_id)
-    INNER JOIN imdb_movies ON (imdb_movies.movieid=products.movieid)
+  SELECT
+    DATE_PART('year', orders.orderdate) as anyo,
+    imdb_movies.movietitle as titulo,
+    SUM(orderdetail.quantity) as sales
+  FROM orders 
+    INNER JOIN orderdetail ON (
+      orders.orderid=orderdetail.orderid)
+    INNER JOIN products ON (
+      products.prod_id=orderdetail.prod_id)
+    INNER JOIN imdb_movies ON (
+      imdb_movies.movieid=products.movieid)
   GROUP BY imdb_movies.movietitle, anyo
   )
-  SELECT top.anyo, top.titulo, top.sales
+  SELECT
+    top.anyo,
+    top.titulo,
+    top.sales
   FROM (
-    SELECT *, ROW_NUMBER() OVER (
-      PARTITION BY tablaaux.anyo ORDER BY tablaaux.sales DESC) as rowid
-    FROM tablaaux
+    SELECT
+      *,
+      ROW_NUMBER() OVER (
+        PARTITION BY tablaaux.anyo
+        ORDER BY tablaaux.sales DESC) as rowid
+    FROM 
+      tablaaux
   ) as top
-  WHERE rowid < 2 and top.anyo >= anio
+  WHERE 
+    rowid < 2
+    and top.anyo >= anio
   ORDER BY top.anyo;
 END;
 $$ LANGUAGE plpgsql;
@@ -351,28 +400,47 @@ CREATE OR REPLACE FUNCTION getTopVentasForIndex (anio integer)
 BEGIN
   RETURN QUERY
   WITH tablaaux AS (
-  SELECT DATE_PART('year', orders.orderdate) as anyo, imdb_movies.movietitle as titulo, SUM(orderdetail.quantity) as sales, imdb_movies.movieid as id
-  FROM orders INNER JOIN orderdetail ON (orders.orderid=orderdetail.orderid)
-    INNER JOIN products ON (products.prod_id=orderdetail.prod_id)
-    INNER JOIN imdb_movies ON (imdb_movies.movieid=products.movieid)
+  SELECT
+    DATE_PART('year', orders.orderdate) as anyo,
+    imdb_movies.movietitle as titulo, SUM(orderdetail.quantity) as sales,
+    imdb_movies.movieid as id
+  FROM orders 
+    INNER JOIN orderdetail ON (
+      orders.orderid=orderdetail.orderid)
+    INNER JOIN products ON (
+      products.prod_id=orderdetail.prod_id)
+    INNER JOIN imdb_movies ON (
+      imdb_movies.movieid=products.movieid)
   GROUP BY imdb_movies.movietitle, anyo, imdb_movies.movieid
   )
-  SELECT top.anyo, top.titulo, top.sales, top.id
+  SELECT
+    top.anyo,
+    top.titulo,
+    top.sales,
+    top.id
   FROM (
-    SELECT *, ROW_NUMBER() OVER (
-      PARTITION BY tablaaux.anyo ORDER BY tablaaux.sales DESC) as rowid
-    FROM tablaaux
+    SELECT
+      *,
+      ROW_NUMBER() OVER (
+        PARTITION BY tablaaux.anyo ORDER BY tablaaux.sales DESC) as rowid
+    FROM
+      tablaaux
   ) as top
-  WHERE rowid < 2 and top.anyo >= anio
+  WHERE
+    rowid < 2
+    and top.anyo >= anio
   ORDER BY top.anyo;
 END;
 $$ LANGUAGE plpgsql;
 
 -------------------------------------------------------------------------------
 
-UPDATE orders 
-SET status='Shipped'
-WHERE status IS NULL;
+UPDATE
+  orders 
+SET
+  status='Shipped'
+WHERE
+  status IS NULL;
 
 -------------------------------------------------------------------------------
 -- TRIGGERS
@@ -397,8 +465,12 @@ CREATE OR REPLACE FUNCTION updInventory ()
 RETURNS TRIGGER AS $$
 DECLARE
   product_id integer := (select MAX(products.prod_id)
-      FROM
-            orderdetail INNER JOIN products ON orderdetail.prod_id = products.prod_id INNER JOIN inventory ON inventory.prod_id=products.prod_id
+        FROM
+            orderdetail
+            INNER JOIN products ON
+              orderdetail.prod_id = products.prod_id
+            INNER JOIN inventory ON
+              inventory.prod_id=products.prod_id
         WHERE
             OLD.orderid = orderdetail.orderid);
 BEGIN
@@ -411,7 +483,9 @@ BEGIN
             stock = stock - orderdetail.quantity,
             sales = sales + orderdetail.quantity
         FROM
-            orderdetail INNER JOIN products ON orderdetail.prod_id = products.prod_id
+            orderdetail
+            INNER JOIN products ON
+              orderdetail.prod_id = products.prod_id
         WHERE
             OLD.orderid = orderdetail.orderid AND
             inventory.prod_id = products.prod_id;
@@ -420,9 +494,11 @@ BEGIN
 
     RETURN NEW;
 EXCEPTION WHEN OTHERS THEN 
-  INSERT INTO alertas (prod_id, notice, stamp)
-      VALUES (product_id, 'Stock insuficiente. Imposible realizar la compra.', current_timestamp);
-      RETURN OLD;
+  INSERT INTO
+    alertas (prod_id, notice, stamp)
+  VALUES
+    (product_id, 'Stock insuficiente. Imposible realizar la compra.', current_timestamp);
+  RETURN OLD;
 
 
 END;
@@ -439,15 +515,21 @@ CREATE OR REPLACE FUNCTION updOrders ()
   RETURNS TRIGGER AS $$
 BEGIN
   IF TG_OP = 'INSERT' THEN --It is an insert into
-    UPDATE orders
-    SET netamount = (netamount + (NEW.price * NEW.quantity)),
-        totalamount = (totalamount + (NEW.price * NEW.quantity))
-    WHERE orders.orderid=NEW.orderid;
+    UPDATE
+      orders
+    SET
+      netamount = (netamount + (NEW.price * NEW.quantity)),
+      totalamount = (totalamount + (NEW.price * NEW.quantity))
+    WHERE
+      orders.orderid=NEW.orderid;
   ELSE --It is a delete
-    UPDATE orders
-    SET netamount = (netamount - (OLD.price * OLD.quantity)),
-        totalamount = (totalamount - (OLD.price * OLD.quantity))
-    WHERE orders.orderid=OLD.orderid;
+    UPDATE
+      orders
+    SET
+      netamount = (netamount - (OLD.price * OLD.quantity)),
+      totalamount = (totalamount - (OLD.price * OLD.quantity))
+    WHERE
+      orders.orderid=OLD.orderid;
   END IF;
   RETURN NEW;
 END;
