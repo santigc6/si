@@ -3,22 +3,36 @@
 -----------------------------------------------------------------------------------------
 
 -- Query inicial
-SELECT COUNT(DISTINCT customers.customerid)
-FROM customers INNER JOIN orders ON (customers.customerid=orders.customerid)
-WHERE orders.totalamount > 100 AND TO_CHAR(orders.orderdate, 'YYYYMM') = '201504';
+SELECT 
+  COUNT(DISTINCT customers.customerid)
+FROM 
+  customers 
+  INNER JOIN orders ON (
+    customers.customerid=orders.customerid)
+WHERE 
+  orders.totalamount > 100 AND 
+  EXTRACT(year from orders.orderdate) = 2015 AND
+  EXTRACT(month from orders.orderdate) = 4;
 
 -----------------------------------------------------------------------------------------
 
 -- Query en forma de funcion
-CREATE OR REPLACE FUNCTION clientesDistintos (importe numeric, fecha char(6))
+CREATE OR REPLACE FUNCTION clientesDistintos (importe numeric, yearin integer, monthin integer)
   RETURNS TABLE (
-    n_clientes integer
+    n_clientes bigint
   ) as $$
 BEGIN
   RETURN QUERY
-  SELECT COUNT(DISTINCT customers.customerid)
-  FROM customers INNER JOIN orders ON (customers.customerid=orders.customerid)
-  WHERE orders.totalamount > importe AND TO_CHAR(orders.orderdate, 'YYYYMM') = fecha;
+  SELECT 
+    COUNT(DISTINCT customers.customerid)
+	FROM 
+	  customers 
+	  INNER JOIN orders ON (
+		customers.customerid=orders.customerid)
+	WHERE 
+	  orders.totalamount > importe AND 
+	  EXTRACT(year from orders.orderdate) = yearin AND
+	  EXTRACT(month from orders.orderdate) = monthin;
 END;
 $$ LANGUAGE plpgsql;
 
