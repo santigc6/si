@@ -38,11 +38,9 @@ $$ LANGUAGE plpgsql;
 
 -----------------------------------------------------------------------------------------
 
--- Borrar la primary key de customers
-ALTER TABLE customers DROP CONSTRAINT customers_pkey CASCADE;
-
 -- Indice en orders.totalamount
-CREATE INDEX idx_totalamount_orders ON orders(totalamount);
+CREATE INDEX idx_amount ON orders(totalamount);
 
--- Indice en orders.orderdate
-CREATE INDEX idx_orderdate_orders ON orders(orderdate);
+-- Indices en orders.orderdate
+CREATE INDEX idx_year ON orders(EXTRACT(year from orders.orderdate));
+CREATE INDEX idx_month ON orders(EXTRACT(month from orders.orderdate));
