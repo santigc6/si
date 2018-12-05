@@ -14,30 +14,53 @@ def dbConnect():
 def dbCloseConnect(db_conn):
     db_conn.close()
 
-def getListaCliMes(db_conn, mes, anio, iumbral, iintervalo, use_prepare, break0, niter):
-
-    # TODO: implementar la consulta; asignar nombre 'cc' al contador resultante
-    consulta = " ... "
-    
-    # TODO: ejecutar la consulta 
-    # - mediante PREPARE, EXECUTE, DEALLOCATE si use_prepare es True
-    # - mediante db_conn.execute() si es False
-
+def getListaCliMes(db_conn, mes, anio, iumbral, iintervalo, use_prepare, break0, niter):    
+    if use_prepare:
+      # code for prepare
+      db_conn.execute("PREPARE cons AS SELECT\
+        COUNT(DISTINCT customers.customerid) AS cc\
+      FROM\
+        customers\
+        INNER JOIN orders ON (\
+          customers.customerid=orders.customerid)\
+      WHERE\
+        orders.totalamount > $1 AND\
+        EXTRACT(year from orders.orderdate) = $2 AND\
+        EXTRACT(month from orders.orderdate) = $3")
+  
     # Array con resultados de la consulta para cada umbral
     dbr=[]
 
     for ii in range(niter):
+        if use_prepare:
+          result = db_conn.execute("EXECUTE cons (%s, %s, %s)", (iumbral, int(anio), int(mes)))
+          res = result.fetchone()
+        else:
+          result = db_conn.execute("SELECT\
+            COUNT(DISTINCT customers.customerid) AS cc\
+          FROM\
+            customers\
+            INNER JOIN orders ON (\
+              customers.customerid=orders.customerid)\
+          WHERE\
+            orders.totalamount > "+ str(iumbral) +" AND\
+            EXTRACT(year from orders.orderdate) = "+ str(anio) +" AND\
+            EXTRACT(month from orders.orderdate) = "+ str(mes))
 
-        # TODO: ...
+          res = result.fetchone()
 
         # Guardar resultado de la query
         dbr.append({"umbral":iumbral,"contador":res['cc']})
 
-        # TODO: si break0 es True, salir si contador resultante es cero
-        
+        if break0 and res['cc'] == 0:
+          break
+
         # Actualizacion de umbral
         iumbral = iumbral + iintervalo
-                
+    
+    if use_prepare:            
+      db_conn.execute("DEALLOCATE cons")
+
     return dbr
 
 def getMovies(anio):
@@ -90,12 +113,14 @@ def delCustomer(customerid, bFallo, bSQL, duerme, bCommit):
     
     try:
         # TODO: ejecutar consultas
+        print("HOLA")
 
     except Exception as e:
         # TODO: deshacer en caso de error
-
+        print("H")
     else:
         # TODO: confirmar cambios si todo va bien
+        print("HOLA")
 
         
     return dbr

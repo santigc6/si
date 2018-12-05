@@ -47,7 +47,7 @@ def listaClientesMes():
         anio   = request.form['anio']
         umbral = request.form['minimo']
         intervalo = request.form['intervalo']
-        use_prepare = 'prepare'  in request.form
+        use_prepare = 'prepare' in request.form
         break0 = 'break0' in request.form
         niter  = request.form['iter']
         # connect fuera para comparar tiempos con más precisión
