@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------------------
--- Autores: Adrian Fernandez Amador y Santiago González- Carvajal Centenera
+-- Autores: Adrián Fernández Amador y Santiago González-Carvajal Centenera
 -----------------------------------------------------------------------------------------
 
 -- Query inicial
