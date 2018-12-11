@@ -6,13 +6,17 @@ ADD COLUMN
 CREATE OR REPLACE FUNCTION updPromo()
   RETURNS TRIGGER AS $$
 BEGIN
+  PERFORM pg_sleep(3);
+
   UPDATE
     orders
   SET
     netamount = netamount - (netamount * NEW.promo),
-    totalamount = tatalamount - (totalamount * NEW.promo)
+    totalamount = totalamount - (totalamount * NEW.promo)
   WHERE
-    orders.customerid = NEW.customerid
+    orders.customerid = NEW.customerid;
+
+  RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
