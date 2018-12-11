@@ -1,0 +1,1 @@
+ImmutableMultiDict([('txnSQL', u'1'), ('duerme', u'0'), ('customerid', u'2')])
