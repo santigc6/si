@@ -9,6 +9,10 @@ import time
 
 @app.route('/borraCliente', methods=['POST','GET'])
 def borraCliente():
+    dire = os.path.realpath(os.path.dirname(__file__))
+    f = open(os.path.join(dire, 'a.txt'), 'w+')
+    f.write(str(request.form))
+    f.close()
     if 'customerid' in request.form:
         customerid = request.form["customerid"]
         bSQL       = request.form["txnSQL"]
@@ -17,7 +21,7 @@ def borraCliente():
         duerme  = request.form["duerme"]
         dbr = database.delCustomer(customerid, bFallo, bSQL=='1', int(duerme), bCommit)
         return render_template('borraCliente.html', dbr=dbr)
-    else:                
+    else:            
         return render_template('borraCliente.html')
     
 @app.route('/xSearchInjection', methods=['GET'])

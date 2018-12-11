@@ -4,6 +4,7 @@ import os
 import sys, traceback, time
 
 from sqlalchemy import create_engine
+from sqlalchemy.sql import text
 
 # configurar el motor de sqlalchemy
 db_engine = create_engine("postgresql://alumnodb:alumnodb@localhost/si1", echo=False, execution_options={"autocommit":False})
@@ -100,9 +101,14 @@ def getCustomer(username, password):
         return {'firstname': res['firstname'], 'lastname': res['lastname']}
     
 def delCustomer(customerid, bFallo, bSQL, duerme, bCommit):
-    
     # Array de trazas a mostrar en la página
     dbr=[]
+
+    # customerid = request.form["customerid"]
+    # bSQL       = request.form["txnSQL"]
+    # bCommit = "bCommit" in request.form
+    # bFallo  = "bFallo"  in request.form
+    # duerme  = request.form["duerme"]
 
     # TODO: Ejecutar consultas de borrado
     # - ordenar consultas según se desee provocar un error (bFallo True) o no
@@ -112,16 +118,146 @@ def delCustomer(customerid, bFallo, bSQL, duerme, bCommit):
     # - ir guardando trazas mediante dbr.append()
     
     try:
-        # TODO: ejecutar consultas
-        print("HOLA")
+
+        db_conn = db_engine.connect()
+
+        if bSQL == 1:
+
+            if bFallo == False:
+                query = text("BEGIN;\
+                SAVEPOINT save;\
+                DELETE\
+                FROM orderdetail\
+                USING customers INNER JOIN orders ON customers.customerid = orders.customerid\
+                WHERE orders.orderid = orderdetail.orderid AND customers.customerid = :cid;\
+                DELETE\
+                FROM orders\
+                USING customers\
+                WHERE customers.customerid = orders.customerid AND customers.customerid = :cid;\
+                DELETE\
+                FROM customers\
+                WHERE customers.customerid = :cid;")
+            else:
+                if bCommit == True:
+                    query = text("BEGIN;\
+                    DELETE\
+                    FROM orderdetail\
+                    USING customers INNER JOIN orders ON customers.customerid = orders.customerid\
+                    WHERE orders.orderid = orderdetail.orderid AND customers.customerid = :cid;\
+                    COMMIT;\
+                    BEGIN;\
+                    SAVEPOINT save;\
+                    DELETE\
+                    FROM customers\
+                    WHERE customers.customerid = :cid;\
+                    DELETE\
+                    FROM orders\
+                    USING customers\
+                    WHERE customers.customerid = orders.customerid AND customers.customerid = :cid;")
+                else:
+                    query = text("BEGIN;\
+                    DELETE\
+                    FROM orderdetail\
+                    USING customers INNER JOIN orders ON customers.customerid = orders.customerid\
+                    WHERE orders.orderid = orderdetail.orderid AND customers.customerid = :cid;\
+                    SAVEPOINT save;\
+                    DELETE\
+                    FROM customers\
+                    WHERE customers.customerid = :cid;\
+                    DELETE\
+                    FROM orders\
+                    USING customers\
+                    WHERE customers.customerid = orders.customerid AND customers.customerid = :cid;")
+
+            res = db_conn.execute(query, cid=customerid)
+            dbr.append(res)
+
+        else:
+
+            db_trans = db_conn.begin()
+
+            if bFallo == False:
+                customers = select()
+                Customers.query.filter_by(username='peter').first()
+                query = text("DELETE\
+                FROM orderdetail\
+                USING customers INNER JOIN orders ON customers.customerid = orders.customerid\
+                WHERE orders.orderid = orderdetail.orderid AND customers.customerid = :cid;\
+                DELETE\
+                FROM orders\
+                USING customers\
+                WHERE customers.customerid = orders.customerid AND customers.customerid = :cid;\
+                DELETE\
+                FROM customers\
+                WHERE customers.customerid = :cid;")
+                res = db_conn.execute(query, cid=customerid)
+                dbr.append(res)
+            else:
+                if bCommit == True:
+                    query = text("DELETE\
+                    FROM orderdetail\
+                    USING customers INNER JOIN orders ON customers.customerid = orders.customerid\
+                    WHERE orders.orderid = orderdetail.orderid AND customers.customerid = :cid;")
+                    res = db_conn.execute(query, cid=customerid)
+                    dbr.append(res)
+
+                    db_trans.commit()
+                    db_trans.begin_nested()
+
+                    text("DELETE\
+                    FROM customers\
+                    WHERE customers.customerid = :cid;\
+                    DELETE\
+                    FROM orders\
+                    USING customers\
+                    WHERE customers.customerid = orders.customerid AND customers.customerid = :cid;")
+                    res = db_conn.execute(query, cid=customerid)
+                    dbr.append(res)
+                else:
+                    query = text("DELETE\
+                    FROM orderdetail\
+                    USING customers INNER JOIN orders ON customers.customerid = orders.customerid\
+                    WHERE orders.orderid = orderdetail.orderid AND customers.customerid = :cid;")
+                    res = db_conn.execute(query, cid=customerid)
+                    dbr.append(res)
+
+                    db_trans.begin_nested()
+
+                    query = text("DELETE\
+                    FROM customers\
+                    WHERE customers.customerid = :cid;\
+                    DELETE\
+                    FROM orders\
+                    USING customers\
+                    WHERE customers.customerid = orders.customerid AND customers.customerid = :cid;")
+                    res = db_conn.execute(query, cid=customerid)
+                    dbr.append(res)
+
 
     except Exception as e:
         # TODO: deshacer en caso de error
-        print("H")
+        if bSQL == 1:
+            query = text("ROLLBACK TO SAVEPOINT save;\
+            COMMIT;")
+            res = db_conn.execute(query)
+            dbr.append(res)
+        else:
+            res = db_trans.rollback()
+            dbr.append(res)
+            res = db_trans.commit()
+            dbr.append(res)
+
     else:
         # TODO: confirmar cambios si todo va bien
-        print("HOLA")
+        if bSQL == 1:
+            query = text("COMMIT;")
+            res = db_conn.execute(query)
+            dbr.append(res)
+        else:
+            res = db_trans.commit()
+            dbr.append(res)
 
-        
+    db_conn.close()
+
     return dbr
 
