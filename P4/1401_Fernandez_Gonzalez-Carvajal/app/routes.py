@@ -9,10 +9,6 @@ import time
 
 @app.route('/borraCliente', methods=['POST','GET'])
 def borraCliente():
-    dire = os.path.realpath(os.path.dirname(__file__))
-    f = open(os.path.join(dire, 'a.txt'), 'w+')
-    f.write(str(request.form))
-    f.close()
     if 'customerid' in request.form:
         customerid = request.form["customerid"]
         bSQL       = request.form["txnSQL"]

@@ -125,7 +125,6 @@ def delCustomer(customerid, bFallo, bSQL, duerme, bCommit):
 
             if bFallo == False:
                 query = text("BEGIN;\
-                SAVEPOINT save;\
                 DELETE\
                 FROM orderdetail\
                 USING customers INNER JOIN orders ON customers.customerid = orders.customerid\
@@ -146,7 +145,6 @@ def delCustomer(customerid, bFallo, bSQL, duerme, bCommit):
                     WHERE orders.orderid = orderdetail.orderid AND customers.customerid = :cid;\
                     COMMIT;\
                     BEGIN;\
-                    SAVEPOINT save;\
                     DELETE\
                     FROM customers\
                     WHERE customers.customerid = :cid;\
@@ -160,7 +158,6 @@ def delCustomer(customerid, bFallo, bSQL, duerme, bCommit):
                     FROM orderdetail\
                     USING customers INNER JOIN orders ON customers.customerid = orders.customerid\
                     WHERE orders.orderid = orderdetail.orderid AND customers.customerid = :cid;\
-                    SAVEPOINT save;\
                     DELETE\
                     FROM customers\
                     WHERE customers.customerid = :cid;\
@@ -177,8 +174,6 @@ def delCustomer(customerid, bFallo, bSQL, duerme, bCommit):
             db_trans = db_conn.begin()
 
             if bFallo == False:
-                customers = select()
-                Customers.query.filter_by(username='peter').first()
                 query = text("DELETE\
                 FROM orderdetail\
                 USING customers INNER JOIN orders ON customers.customerid = orders.customerid\
@@ -202,7 +197,7 @@ def delCustomer(customerid, bFallo, bSQL, duerme, bCommit):
                     dbr.append(res)
 
                     db_trans.commit()
-                    db_trans.begin_nested()
+                    db_trans = db_conn.begin()
 
                     text("DELETE\
                     FROM customers\
@@ -217,13 +212,8 @@ def delCustomer(customerid, bFallo, bSQL, duerme, bCommit):
                     query = text("DELETE\
                     FROM orderdetail\
                     USING customers INNER JOIN orders ON customers.customerid = orders.customerid\
-                    WHERE orders.orderid = orderdetail.orderid AND customers.customerid = :cid;")
-                    res = db_conn.execute(query, cid=customerid)
-                    dbr.append(res)
-
-                    db_trans.begin_nested()
-
-                    query = text("DELETE\
+                    WHERE orders.orderid = orderdetail.orderid AND customers.customerid = :cid;\
+                    DELETE\
                     FROM customers\
                     WHERE customers.customerid = :cid;\
                     DELETE\
@@ -237,14 +227,12 @@ def delCustomer(customerid, bFallo, bSQL, duerme, bCommit):
     except Exception as e:
         # TODO: deshacer en caso de error
         if bSQL == 1:
-            query = text("ROLLBACK TO SAVEPOINT save;\
+            query = text("ROLLBACK;\
             COMMIT;")
             res = db_conn.execute(query)
             dbr.append(res)
         else:
             res = db_trans.rollback()
-            dbr.append(res)
-            res = db_trans.commit()
             dbr.append(res)
 
     else:
