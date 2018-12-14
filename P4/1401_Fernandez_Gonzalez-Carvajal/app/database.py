@@ -121,6 +121,36 @@ def delCustomer(customerid, bFallo, bSQL, duerme, bCommit):
 
         db_conn = db_engine.connect()
 
+        query1 = text("SELECT customerid, firstname, lastname\
+        FROM customers\
+        WHERE customerid = :cid;")
+
+        result = db_conn.execute(query1, cid=customerid).fetchall()
+        if len(result) != 0:
+            res = result[0]
+            traza = "Antes de la consulta (id, nombre, apellido, numero de productos en pedidos): " + str(res[0]) + '\t' + res[1].encode('utf-8') + '\t' + res[2].encode('utf-8')
+        else:
+            traza = "Antes de la consulta: no existe el usuario"
+            dbr.append(traza)
+            db_conn.close()
+            return dbr
+
+        query2 = text("SELECT orders.customerid, COUNT(*)\
+        FROM orderdetail INNER JOIN orders ON orderdetail.orderid = orders.orderid\
+        WHERE orders.customerid = :cid\
+        GROUP BY orders.customerid;")
+
+        result = db_conn.execute(query2, cid=customerid).fetchall()
+        if len(result) != 0:
+            res = result[0]
+            traza += '\t' + str(res[1])
+            dbr.append(traza)
+        else:
+            traza += '\t' + "0"
+            dbr.append(traza)
+            db_conn.close()
+            return dbr
+
         if bSQL == 1:
 
             if bFallo == False:
@@ -166,8 +196,7 @@ def delCustomer(customerid, bFallo, bSQL, duerme, bCommit):
                     USING customers\
                     WHERE customers.customerid = orders.customerid AND customers.customerid = :cid;")
 
-            res = db_conn.execute(query, cid=customerid)
-            dbr.append(res)
+            db_conn.execute(query, cid=customerid)
 
         else:
 
@@ -185,16 +214,14 @@ def delCustomer(customerid, bFallo, bSQL, duerme, bCommit):
                 DELETE\
                 FROM customers\
                 WHERE customers.customerid = :cid;")
-                res = db_conn.execute(query, cid=customerid)
-                dbr.append(res)
+                db_conn.execute(query, cid=customerid)
             else:
                 if bCommit == True:
                     query = text("DELETE\
                     FROM orderdetail\
                     USING customers INNER JOIN orders ON customers.customerid = orders.customerid\
                     WHERE orders.orderid = orderdetail.orderid AND customers.customerid = :cid;")
-                    res = db_conn.execute(query, cid=customerid)
-                    dbr.append(res)
+                    db_conn.execute(query, cid=customerid)
 
                     db_trans.commit()
                     db_trans = db_conn.begin()
@@ -206,8 +233,7 @@ def delCustomer(customerid, bFallo, bSQL, duerme, bCommit):
                     FROM orders\
                     USING customers\
                     WHERE customers.customerid = orders.customerid AND customers.customerid = :cid;")
-                    res = db_conn.execute(query, cid=customerid)
-                    dbr.append(res)
+                    db_conn.execute(query, cid=customerid)
                 else:
                     query = text("DELETE\
                     FROM orderdetail\
@@ -220,8 +246,7 @@ def delCustomer(customerid, bFallo, bSQL, duerme, bCommit):
                     FROM orders\
                     USING customers\
                     WHERE customers.customerid = orders.customerid AND customers.customerid = :cid;")
-                    res = db_conn.execute(query, cid=customerid)
-                    dbr.append(res)
+                    db_conn.execute(query, cid=customerid)
 
 
     except Exception as e:
@@ -229,21 +254,48 @@ def delCustomer(customerid, bFallo, bSQL, duerme, bCommit):
         if bSQL == 1:
             query = text("ROLLBACK;\
             COMMIT;")
-            res = db_conn.execute(query)
-            dbr.append(res)
+            db_conn.execute(query)
         else:
-            res = db_trans.rollback()
-            dbr.append(res)
+            db_trans.rollback()
 
     else:
         # TODO: confirmar cambios si todo va bien
         if bSQL == 1:
             query = text("COMMIT;")
-            res = db_conn.execute(query)
-            dbr.append(res)
+            db_conn.execute(query)
         else:
-            res = db_trans.commit()
-            dbr.append(res)
+            db_trans.commit()
+
+
+    query1 = text("SELECT customerid, firstname, lastname\
+    FROM customers\
+    WHERE customerid = :cid;")
+
+    result = db_conn.execute(query1, cid=customerid).fetchall()
+    if len(result) != 0:
+        res = result[0]
+        traza = "Despues de la consulta (id, nombre, apellido, numero de productos en pedidos): " + str(res[0]) + '\t' + res[1].encode('utf-8') + '\t' + res[2].encode('utf-8')
+    else:
+        traza = "Despues de la consulta: no existe el usuario"
+        dbr.append(traza)
+        db_conn.close()
+        return dbr
+
+    query2 = text("SELECT orders.customerid, COUNT(*)\
+    FROM orderdetail INNER JOIN orders ON orderdetail.orderid = orders.orderid\
+    WHERE orders.customerid = :cid\
+    GROUP BY orders.customerid;")
+
+    result = db_conn.execute(query2, cid=customerid).fetchall()
+    if len(result) != 0:
+        res = result[0]
+        traza += '\t' + str(res[1])
+        dbr.append(traza)
+    else:
+        traza += '\t' + "0"
+        dbr.append(traza)
+        db_conn.close()
+        return dbr
 
     db_conn.close()
 
