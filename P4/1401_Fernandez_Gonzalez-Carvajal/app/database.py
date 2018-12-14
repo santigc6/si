@@ -165,7 +165,8 @@ def delCustomer(customerid, bFallo, bSQL, duerme, bCommit):
                 WHERE customers.customerid = orders.customerid AND customers.customerid = :cid;\
                 DELETE\
                 FROM customers\
-                WHERE customers.customerid = :cid;")
+                WHERE customers.customerid = :cid;\
+                SELECT pg_sleep("+str(duerme)+");")
             else:
                 if bCommit == True:
                     query = text("BEGIN;\
@@ -213,7 +214,8 @@ def delCustomer(customerid, bFallo, bSQL, duerme, bCommit):
                 WHERE customers.customerid = orders.customerid AND customers.customerid = :cid;\
                 DELETE\
                 FROM customers\
-                WHERE customers.customerid = :cid;")
+                WHERE customers.customerid = :cid;\
+                SELECT pg_sleep("+str(duerme)+");")
                 db_conn.execute(query, cid=customerid)
             else:
                 if bCommit == True:
